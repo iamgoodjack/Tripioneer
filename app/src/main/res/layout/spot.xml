@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="360dp"
+        android:layout_height="65dp"
+        android:id="@+id/imageView"
+        android:layout_weight="0.32"
+        android:src="@drawable/test" />
+    //android:id="@+id/"
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:rowCount="1"
+        android:columnCount="3"
+        android:layout_weight="0.03"
+        android:columnOrderPreserved="false"
+        android:background="#ff8f9393">
+
+        <TextView
+            android:layout_width="204dp"
+            android:layout_height="fill_parent"
+            android:text="名稱"
+            android:id="@+id/titletext"
+            android:background="#ff8f9393"
+            android:layout_weight="0.03" />
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/favoritebutton"
+        android:background="@drawable/round_button"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_vertical|right"
+        android:layout_weight="0.05" />
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/guidebutton"
+            android:background="@drawable/round_button"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="0.05"
+            android:layout_gravity="center_vertical" />
+
+    </GridLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:text="地址"
+        android:id="@+id/addresstext"
+        android:layout_weight="0.07"
+        android:background="#ff8f9393" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:text="時間"
+        android:id="@+id/timetext"
+        android:layout_weight="0.04"
+        android:background="#ff8f9393" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="介紹"
+        android:id="@+id/infotext"
+        android:layout_weight="0.32" />
+
+</LinearLayout>
