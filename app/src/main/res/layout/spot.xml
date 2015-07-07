@@ -5,16 +5,16 @@
     android:weightSum="1">
 
     <ImageView
-        android:layout_width="360dp"
-        android:layout_height="65dp"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
         android:id="@+id/imageView"
-        android:layout_weight="0.32"
-        android:src="@drawable/test" />
+        android:src="@drawable/test"
+        android:layout_weight="0.20" />
     //android:id="@+id/"
 
     <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:orientation="horizontal"
         android:rowCount="1"
         android:columnCount="3"
@@ -37,16 +37,25 @@
         android:background="@drawable/round_button"
         android:gravity="center_vertical|center_horizontal"
         android:layout_gravity="center_vertical|right"
-        android:layout_weight="0.05" />
+        android:layout_weight="0.05"
+        android:src="@drawable/ic_star_outline_grey600_48dp"
+        android:scaleType="fitXY"
+        android:backgroundTint="#ffffeb3b"
+        />
 
         <ImageButton
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:scaleType="fitXY"
             android:id="@+id/guidebutton"
             android:background="@drawable/round_button"
             android:gravity="center_vertical|center_horizontal"
             android:layout_weight="0.05"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_directions_grey600_48dp"
+            android:backgroundTint="#0277bd"
+            android:layout_marginLeft="8dp"
+            />
 
     </GridLayout>
 
