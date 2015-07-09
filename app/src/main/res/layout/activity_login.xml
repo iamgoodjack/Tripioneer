@@ -15,7 +15,7 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/editText"
-        android:text="123456"
+        android:text="password"
         android:layout_above="@+id/login"
         android:layout_centerHorizontal="true" />
 
@@ -25,7 +25,7 @@
         android:id="@+id/username"
         android:inputType = "text"
         android:autoText="false"
-        android:text="teemo@gmail.com"
+        android:text="username"
         android:layout_above="@+id/editText"
         android:layout_alignLeft="@+id/editText"
         android:layout_alignStart="@+id/editText"
