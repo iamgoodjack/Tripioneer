@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class login extends ActionBarActivity
 {
+thisisisis gina.
     private String pwd="";
     private String ret_pwd="";
     private String ret_register_status="";
