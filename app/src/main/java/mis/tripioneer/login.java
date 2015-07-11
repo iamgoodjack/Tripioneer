@@ -1,5 +1,6 @@
 package mis.tripioneer;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
@@ -38,9 +39,11 @@ public class login extends ActionBarActivity
     private String CASE="";
     final String URL_LOGIN = "http://140.115.80.224:8080/Login_Authentication.php";
     final String URL_REGISTER = "http://140.115.80.224:8080/SignUp.php";
-    final int MAX_NUM_PARAM = 2;
-    String[] request_name = new String[MAX_NUM_PARAM];
-    String[] request_value = new String[MAX_NUM_PARAM];
+    final int LOGIN_NUM_PARAM = 1;
+    final int REGISTER_NUM_PARAM = 2;
+    final int MAX_NUM_PARAM = Math.max(LOGIN_NUM_PARAM,REGISTER_NUM_PARAM);
+    private String[] request_name = new String[MAX_NUM_PARAM];
+    private String[] request_value = new String[MAX_NUM_PARAM];
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,6 +54,7 @@ public class login extends ActionBarActivity
         Button register = (Button) findViewById(R.id.register);
         final TextView password = (TextView)findViewById(R.id.editText);
         final TextView account = (TextView)findViewById(R.id.username);
+
         View.OnClickListener login_listener = new View.OnClickListener()
         {
             @Override
@@ -63,6 +67,7 @@ public class login extends ActionBarActivity
                 new Thread(run_login).start();
             }
         };
+
         View.OnClickListener register_listener = new View.OnClickListener()
         {
             @Override
@@ -73,6 +78,7 @@ public class login extends ActionBarActivity
                 request_name[1] = "requestname1";
                 request_value[0] = account.getText().toString();
                 request_value[1] = password.getText().toString();
+
                 new Thread(run_register).start();
             }
         };
@@ -91,6 +97,12 @@ public class login extends ActionBarActivity
         //return true;
     }
 
+    protected void onPause() {
+        super.onPause();
+
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -99,14 +111,9 @@ public class login extends ActionBarActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        //if (id == R.id.action_settings) {
-        //    return true;
-        //}
-
-
         return super.onOptionsItemSelected(item);
     }
+
     Handler handler_Success = new Handler()
     {
         @Override
@@ -118,11 +125,12 @@ public class login extends ActionBarActivity
                 case "LOGIN":
                     if(pwd.equals(ret_pwd))
                     {
-                        Toast.makeText(getApplicationContext(), "Hi "+request_value[0], Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Hi", Toast.LENGTH_LONG).show();
+                        gotoRecommendation();
                      }
                     else
                     {
-                        Toast.makeText(getApplicationContext(), "Wrong Password!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Wrong Account/Password!", Toast.LENGTH_LONG).show();
                     }
                     break;
                 case "REGISTER":
@@ -143,6 +151,7 @@ public class login extends ActionBarActivity
             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
         }
     };
+
     Handler handler_Nodata = new Handler()
     {
         @Override
@@ -152,13 +161,14 @@ public class login extends ActionBarActivity
             Toast.makeText(getApplicationContext(), "Nodata", Toast.LENGTH_LONG).show();
         }
     };
+
     Runnable run_login = new Runnable()
     {
         @Override
         public void run()
         {
             ConnectServer connection = new ConnectServer(URL_LOGIN);
-            ret_pwd = connection.connect(request_name, request_value,1);
+            ret_pwd = connection.connect(request_name,request_value,LOGIN_NUM_PARAM,CASE);
 
             if(ret_pwd == null)
             {
@@ -177,7 +187,7 @@ public class login extends ActionBarActivity
         public void run()
         {
             ConnectServer connection = new ConnectServer(URL_REGISTER);
-            ret_register_status = connection.connect(request_name, request_value,2);
+            ret_register_status = connection.connect(request_name,request_value,REGISTER_NUM_PARAM,CASE);
 
             if(ret_register_status == null)
             {
@@ -189,4 +199,11 @@ public class login extends ActionBarActivity
             }
         }
     };
+
+    public void gotoRecommendation()
+    {
+        Intent GO_TO_RECOMM = new Intent(login.this, Recommendation.class);
+        startActivity(GO_TO_RECOMM);
+    }
+
 }
