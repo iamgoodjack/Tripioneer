@@ -20,8 +20,13 @@
             </intent-filter>
         </activity>
         <activity
+<<<<<<< Updated upstream
             android:name=".Recommendation"
             android:label="@string/title_activity_recommendation" >
+=======
+            android:name=".drawer"
+            android:label="@string/title_activity_drawer" >
+>>>>>>> Stashed changes
         </activity>
     </application>
 
