@@ -1,7 +1,6 @@
 package mis.tripioneer;
 
 import android.app.Activity;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -18,69 +17,157 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 
-public class drawer extends Activity {
+public class drawer extends ActionBarActivity
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    private DrawerLayout layDrawer;
-    private ListView lstDrawer;
+    /**
+     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+     */
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    private ActionBarDrawerToggle drawerToggle;
-    private CharSequence mDrawerTitle;
+    /**
+     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+     */
     private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        initActionBar();
-        initDrawer();
-        initDrawerList();
-    }
-
-    private void initActionBar(){
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-    }
-
-    private void initDrawer(){
         setContentView(R.layout.activity_drawer);
 
-        layDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        lstDrawer = (ListView) findViewById(R.id.left_drawer);
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
 
-        layDrawer.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        mTitle = mDrawerTitle = getTitle();
-        drawerToggle = new ActionBarDrawerToggle(
+        //set up drawer toggle
+       /* mDrawerToggle = new drawer(
                 this,
-                layDrawer,
-                R.drawable.ic_drawer,
-                R.string.drawer_open,
-                R.string.drawer_close) {
-
-            @Override
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getActionBar().setTitle(mTitle);
-            }
-
+                mDrawerLayout,    // 讓 Drawer Toggle 知道母體介面是誰
+                R.drawable.ic_drawer, // Drawer 的 Icon
+                R.string.open_left_drawer, // Drawer 被打開時的描述
+                R.string.close_left_drawer // Drawer 被關閉時的描述
+        ) {
+            //被打開後要做的事情
             @Override
             public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getActionBar().setTitle(mDrawerTitle);
+                // 將 Title 設定為自定義的文字
+                getSupportActionBar().setTitle(R.string.open_left_drawer);
             }
+
+            //被關上後要做的事情
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // 將 Title 設定回 APP 的名稱
+                getSupportActionBar().setTitle(R.string.app_name);
+            }*/
         };
-        drawerToggle.syncState();
-
-        layDrawer.setDrawerListener(drawerToggle);
     }
 
-    private void initDrawerList(){
-        String[] drawer_menu = this.getResources().getStringArray(R.array.drawer_menu);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item, drawer_menu);
-        lstDrawer.setAdapter(adapter);
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        // update the main content by replacing fragments
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .commit();
     }
+
+    public void onSectionAttached(int number) {
+        switch (number) {
+            case 1:
+                mTitle = getString(R.string.title_section1);
+                break;
+            case 2:
+                mTitle = getString(R.string.title_section2);
+                break;
+            case 3:
+                mTitle = getString(R.string.title_section3);
+                break;
+        }
+    }
+
+    public void restoreActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(mTitle);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            // Only show items in the action bar relevant to this screen
+            // if the drawer is not showing. Otherwise, let the drawer
+            // decide what to show in the action bar.
+            getMenuInflater().inflate(R.menu.drawer, menu);
+            restoreActionBar();
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_drawer, container, false);
+            return rootView;
+        }
+
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+            ((drawer) activity).onSectionAttached(
+                    getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+    }
+
 }
