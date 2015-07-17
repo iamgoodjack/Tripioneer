@@ -20,7 +20,7 @@ import java.util.List;
 
 /************************************************************************************************************
  *  Name : ConnectServer.java
- *  Function : Connecting to URL by using a http post method
+ *  Functionf : Connecting to URL by using a http post method
  *
  ************************************************************************************************************/
 public class ConnectServer
@@ -45,7 +45,7 @@ public class ConnectServer
      * Definition : Connecting to URL by using a http post method
      * Return : String ret from http response
      ************************************************************************************************************/
-    public String connect( String request_name[], String request_value[], int param_num,String CASE )
+    public String connect( String request_name[], String request_value[], int param_num )
     {
         String name[]=request_name;
         String value[]=request_value;
@@ -62,6 +62,7 @@ public class ConnectServer
             conn.setDoOutput(true);
             conn.setDoInput(true);
             DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+
             for(int i=0;i<param_num;i++)
             {
                 if(i == param_num-1)
@@ -87,14 +88,8 @@ public class ConnectServer
 
             reader.close();
 
-            if(CASE.equals("LOGIN"))
-            {
-                ret = JsonParser(response.toString());
-            }
-            else
-            {
-                ret = response.toString();
-            }
+            ret = response.toString();
+            Log.d("Gina",ret);
 
         }
         catch (Exception e)
@@ -106,29 +101,5 @@ public class ConnectServer
             return ret;
         }
     }
-    /************************************************************************************************************
-     * Function : JsonParser
-     * Definition : Parse json format to get useful info
-     * Return : String json
-     ************************************************************************************************************/
-    public String JsonParser(String val)
-    {
-        String json ="";
-        try
-        {
-            JSONArray object = (JSONArray)new JSONTokener(val).nextValue();
-            json = object.getJSONObject(0).getString("user_Pwd");
-
-        }
-        catch(JSONException e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            return json;
-        }
-    }
-
 }
 

@@ -37,11 +37,11 @@ public class login extends ActionBarActivity
     private String ret_pwd="";
     private String ret_register_status="";
     private String CASE="";
-    final String URL_LOGIN = "http://140.115.80.224:8080/Login_Authentication.php";
-    final String URL_REGISTER = "http://140.115.80.224:8080/SignUp.php";
-    final int LOGIN_NUM_PARAM = 1;
-    final int REGISTER_NUM_PARAM = 2;
-    final int MAX_NUM_PARAM = Math.max(LOGIN_NUM_PARAM,REGISTER_NUM_PARAM);
+    private final String URL_LOGIN = "http://140.115.80.224:8080/Login_Authentication.php";
+    private final String URL_REGISTER = "http://140.115.80.224:8080/SignUp.php";
+    private final int LOGIN_NUM_PARAM = 1;
+    private final int REGISTER_NUM_PARAM = 2;
+    private final int MAX_NUM_PARAM = Math.max(LOGIN_NUM_PARAM,REGISTER_NUM_PARAM);
     private String[] request_name = new String[MAX_NUM_PARAM];
     private String[] request_value = new String[MAX_NUM_PARAM];
 
@@ -167,8 +167,16 @@ public class login extends ActionBarActivity
         @Override
         public void run()
         {
+
+            final int RET_PARAM_NUM = 1;
+            String[] ret;
+
             ConnectServer connection = new ConnectServer(URL_LOGIN);
-            ret_pwd = connection.connect(request_name,request_value,LOGIN_NUM_PARAM,CASE);
+            ret_pwd = connection.connect(request_name, request_value, LOGIN_NUM_PARAM);
+
+            JsonParser parser = new JsonParser(RET_PARAM_NUM,CASE);
+            ret = parser.Parse(ret_pwd,"user_Pwd");
+            ret_pwd = ret[0];
 
             if(ret_pwd == null)
             {
@@ -186,8 +194,9 @@ public class login extends ActionBarActivity
         @Override
         public void run()
         {
+
             ConnectServer connection = new ConnectServer(URL_REGISTER);
-            ret_register_status = connection.connect(request_name,request_value,REGISTER_NUM_PARAM,CASE);
+            ret_register_status = connection.connect(request_name,request_value,REGISTER_NUM_PARAM);
 
             if(ret_register_status == null)
             {
