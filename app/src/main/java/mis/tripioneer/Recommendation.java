@@ -86,7 +86,7 @@ public class Recommendation extends Activity
                         {
                             if(!"".equals(ret_place_Pic[i]) )
                             {
-                                ViewModel row = new ViewModel(ret_place_Name[i], URL_PREFIX_IMAGE
+                                ViewModel row = new ViewModel(ret_place_Name[i] + "test test test test test test test test", URL_PREFIX_IMAGE
                                         + URLEncoder.encode(ret_place_Pic[i], "UTF-8") + ".jpg");
                                 viewModels.add(row);
                             }

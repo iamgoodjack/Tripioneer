@@ -1,8 +1,5 @@
 package mis.tripioneer;
 
-/**
- * Created by iamgo_000 on 2015/7/2.
- */
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
