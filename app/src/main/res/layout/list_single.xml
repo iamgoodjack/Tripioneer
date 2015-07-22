@@ -8,15 +8,39 @@
             android:layout_width="100dp"
             android:layout_height="60dp"/>
 
-        <TextView
-            android:id="@+id/txt"
+
+
+        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:rowCount="2"
+            android:columnCount="1" >
+
+            <!-- 這邊是景點標題 -->　
+            <TextView
+            android:id="@+id/txt"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="1dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
             />
+
+            <!-- 這邊是景點簡介文字 -->
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:paddingLeft="1dp"
+                android:paddingRight="1dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                />
+
+        </GridLayout>
 
     </TableRow>
 </TableLayout>
