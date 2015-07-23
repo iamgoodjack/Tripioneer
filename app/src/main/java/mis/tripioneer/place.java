@@ -25,7 +25,7 @@ import java.util.List;
 
 
 public class place extends ActionBarActivity {
-    //protected Integer placenum = 0;
+    private Integer placeid ;
     private final static int DOWNLOAD_COMPLETE = 1;
     private String ret ;
     private final String CASE = "PLACE";
@@ -47,8 +47,13 @@ public class place extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
+
+        Bundle placedata = this.getIntent().getExtras();
+        //placeid = placedata.getInt(specifyid);
+        //bundle data = specifyid ,placeid is local data and have to translate into string,for request_value[0]
+        
         request_name[0] = "place_ID";
-        request_values[0] = "200";
+        request_values[0] = placeid.toString();
         place = (TextView)findViewById(R.id.titletext);
         address = (TextView)findViewById(R.id.addresstext);
         hours = (TextView)findViewById(R.id.timetext);
