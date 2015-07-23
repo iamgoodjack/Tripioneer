@@ -16,7 +16,6 @@ public class ViewAdapter extends BaseAdapter
 {
 
     private final List<ViewModel> viewModels;
-
     private final Context context;
     private final LayoutInflater inflater;
 

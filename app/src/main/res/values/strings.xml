@@ -26,5 +26,6 @@
     <item>行程</item>
     <item>登入</item>
     </string-array>
+    <string name="title_activity_place">place</string>
 
 </resources>

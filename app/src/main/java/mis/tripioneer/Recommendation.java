@@ -78,7 +78,7 @@ public class Recommendation extends Activity
             switch (msg.what)
             {
                 case DOWNLOAD_COMPLETE:
-                    Log.d("Gina","Enter download complete");
+                    Log.d("Nick","Enter download complete");
 
                     try
                     {

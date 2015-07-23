@@ -22,6 +22,8 @@ public class JsonParser
 
     }
 
+
+
     public String[] Parse(String val, String match)
     {
         String json[] = new String[array_length];
@@ -50,6 +52,12 @@ public class JsonParser
                     }
 
                     break;
+                case "PLACE":
+                    object = new JSONArray(val);
+                    for(int i=0;i<object.length();i++)
+                    {
+                        json[i] = object.getString(i);
+                    }
                 default:
                     break;
             }
