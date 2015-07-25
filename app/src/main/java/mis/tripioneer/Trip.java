@@ -20,15 +20,11 @@ import java.util.List;
 public class Trip extends Activity
 {
     private final static int DOWNLOAD_COMPLETE = 1;
-    private final String URL_TRIP = "http://140.115.80.224:8080/group4/Android_trip.php";
-    private static final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/image/";
-    private final String CASE = "TRIP";
+
     private static final int TRIP_NUM_PARAM = 1;
-    private static final int RET_PARAM_NUM=7 ;
-    private String ret;
-    private static int num;
-    private static String[] ret_place_Pic = new String[num];
-    private static String[] ret_place_Name = new String[num];
+    private static int RET_PARAM_NUM;
+    private static ArrayList<String> ret_place_Pic = new ArrayList<String>();
+    private static ArrayList<String> ret_place_Name = new ArrayList<String>();
     private String[] request_name = new String[TRIP_NUM_PARAM];
     private String[] request_value = new String[TRIP_NUM_PARAM];
     private static ListView listView;
@@ -86,16 +82,22 @@ public class Trip extends Activity
     {
         public void handleMessage(Message msg)
         {
+            final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/image/";
             switch(msg.what)
             {
                 case  DOWNLOAD_COMPLETE :
                     try
                     {
-                        Log.d("haha",Integer.toString(num));
-                        for(int i=0;i<7;i++) {
-                            if ("".equals(ret_place_Pic[i]))
+
+                        for(int i=0;i<RET_PARAM_NUM;i++) {
+                            if ("".equals( ret_place_Pic.get(i) ) )
                             {
-                                ViewModel row = new ViewModel(ret_place_Name[i],URL_PREFIX_IMAGE + URLEncoder.encode(ret_place_Pic[i],"UTF-8")+".jpg");
+                                ViewModel row = new ViewModel
+                                        (
+                                                ret_place_Name.get(i),
+                                                URL_PREFIX_IMAGE + URLEncoder.encode(ret_place_Pic.get(i), "UTF-8") + ".jpg",
+                                                ""
+                                        );
                                 viewModels.add(row);
                             }
                         }
@@ -118,22 +120,26 @@ public class Trip extends Activity
         @Override
         public void run()
         {
+            final String URL_TRIP = "http://140.115.80.224:8080/group4/Android_trip.php";
+            final String CASE = "TRIP";
+            String ret;
+
             ConnectServer connection = new ConnectServer(URL_TRIP);
             ret = connection.connect(request_name, request_value, 1);
-            Log.d("Gina2",ret);
-            JsonParser parser = new JsonParser(RET_PARAM_NUM,CASE);
-            ret_place_Pic = parser.Parse(ret,"place_Pic");
-            ret_place_Name = parser.Parse(ret,"place_Name");
-            num = ret_place_Name.length;
-            Log.d("XD",Integer.toString(num));
 
-            for(int i=0; i<num;i++)
+            JsonParser parser = new JsonParser(CASE);
+            ret_place_Pic = parser.Parse(ret, "place_Pic");
+            ret_place_Name = parser.Parse(ret, "place_Name");
+            RET_PARAM_NUM = ret_place_Name.size();
+
+
+            for(int i=0; i<RET_PARAM_NUM;i++)
             {
-                Log.d("Jenny",ret_place_Name[i]+"\n");
-                Log.d("Gina", ret_place_Pic[i] + "\n");
+                Log.d("Jenny",ret_place_Name.get(i)+"\n");
+                Log.d("Gina", ret_place_Pic.get(i) + "\n");
             }
             handler.sendEmptyMessage(DOWNLOAD_COMPLETE);
-            Log.d("uuu", "zzzz");
+
         }
     };
 

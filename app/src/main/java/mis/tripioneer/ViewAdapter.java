@@ -48,7 +48,7 @@ public class ViewAdapter extends BaseAdapter
     @Override
     public long getItemId(int position) {
         // We only need to implement this if we have multiple rows with a different layout. All your rows use the same layout so we can just return 0.
-        return 0;
+        return position;
     }
 
     @Override

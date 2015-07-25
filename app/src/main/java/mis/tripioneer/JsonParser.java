@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
+import java.util.ArrayList;
+
 /************************************************************************************************************
  * File : JsonParser
  * Function: Parse json format to get useful info
@@ -13,22 +15,20 @@ import org.json.JSONTokener;
  ************************************************************************************************************/
 public class JsonParser
 {
-    private int array_length = 0;   //
+
     private String key ="";
     private String CASE ="";
 
-    public JsonParser(int param_num, String scenario)
+    public JsonParser(String scenario)
     {
-        array_length = param_num;
         CASE = scenario;
-
     }
 
 
-    public String[] Parse(String val, String match)
+    public ArrayList<String> Parse(String val, String match)
 
     {
-        String json[] = new String[array_length];
+        ArrayList<String> json = new ArrayList<String>();
         JSONArray object;
         key = match;
 
@@ -41,7 +41,7 @@ public class JsonParser
 
                     for(int i=0;i<object.length();i++)
                     {
-                        json[i] = object.getJSONObject(i).getString(key);
+                        json.add(object.getJSONObject(i).getString(key));
                     }
 
                     break;
@@ -50,7 +50,7 @@ public class JsonParser
 
                     for(int i=0;i<object.length();i++)
                     {
-                        json[i] = object.getJSONObject(i).getString(key);
+                        json.add(object.getJSONObject(i).getString(key));
                     }
                     break;
                 case "TRIP":
@@ -58,15 +58,23 @@ public class JsonParser
 
                     for(int i=0;i<object.length();i++)
                     {
-                        json[i] = object.getJSONObject(i).getString(key);
+                        json.add(object.getJSONObject(i).getString(key));
                         Log.d("trip", Integer.toString(object.length()));
+                    }
+                    break;
+                case "CHANNEL_CONTENT":
+                    object = (JSONArray)new JSONTokener(val).nextValue();
+
+                    for(int i=0;i<object.length();i++)
+                    {
+                        json.add(object.getJSONObject(i).getString(key));
                     }
                     break;
                 case "PLACE":
                     object = new JSONArray(val);
                     for(int i=0;i<object.length();i++)
                     {
-                        json[i] = object.getString(i);
+                        json.add(object.getString(i));
                     }
                 default:
                     break;

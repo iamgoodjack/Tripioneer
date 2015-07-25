@@ -32,7 +32,7 @@ public class Channel_category extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView");
-        return inflater.inflate(R.layout.list_single, container, false);
+        return inflater.inflate(R.layout.fragment_channel_category, container, false);
 
     }
     @Override
@@ -40,9 +40,7 @@ public class Channel_category extends Fragment
     {
         super.onActivityCreated(savedInstanceState);
         Log.d(TAG, "onActivityCreated");
-        TextView mText = (TextView) getView().findViewById(R.id.text);
-        mText.setText("This is info tab");
-        Log.d(TAG, mText.getText().toString());
+
     }
 
     @Override

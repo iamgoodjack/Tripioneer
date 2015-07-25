@@ -21,21 +21,17 @@ import com.squareup.picasso.Picasso;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class place extends ActionBarActivity {
-    private Integer placeid ;
+
     private final static int DOWNLOAD_COMPLETE = 1;
-    private String ret ;
-    private final String CASE = "PLACE";
     private static final int PLACE_PARAM_NUM = 1;
-    private static final int RET_PARAM_NUM = 4;
     private String[] request_name  = new String[PLACE_PARAM_NUM];
     private String[] request_values = new String[PLACE_PARAM_NUM];
-    private static String[] ret_place  = new String[RET_PARAM_NUM];
-    final String URL_PLACEGRAB = "http://140.115.80.224:8080/Place_Grab.php";
-    private static final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/image/";
+    private static ArrayList<String> ret_place  = new ArrayList<String>();
     private TextView place ;
     private TextView address;
     private TextView hours;
@@ -48,12 +44,12 @@ public class place extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place);
 
+        String placeid ;
         Bundle placedata = this.getIntent().getExtras();
-        //placeid = placedata.getInt(specifyid);
-        //bundle data = specifyid ,placeid is local data and have to translate into string,for request_value[0]
+        placeid = placedata.getString("specifyid");
         
         request_name[0] = "place_ID";
-        request_values[0] = placeid.toString();
+        request_values[0] = placeid;
         place = (TextView)findViewById(R.id.titletext);
         address = (TextView)findViewById(R.id.addresstext);
         hours = (TextView)findViewById(R.id.timetext);
@@ -89,19 +85,21 @@ public class place extends ActionBarActivity {
     {
         @Override
         public void handleMessage(Message msg)
-        {   super.handleMessage(msg);
+        {
+            final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/image/";
+            super.handleMessage(msg);
                  switch(msg.what)
                 {   case DOWNLOAD_COMPLETE:
-                        place.setText(ret_place[0]);
-                        hours.setText(ret_place[1]);
-                        address.setText(ret_place[2]);
-                        intro.setText(ret_place[3]);
+                        place.setText(ret_place.get(0));
+                        hours.setText(ret_place.get(1));
+                        address.setText(ret_place.get(2));
+                        intro.setText(ret_place.get(3));
 
                     try
                     {
                         Picasso.with(getApplicationContext())
                         .load(URL_PREFIX_IMAGE
-                            + URLEncoder.encode(ret_place[0], "UTF-8") + ".jpg")
+                            + URLEncoder.encode(ret_place.get(0), "UTF-8") + ".jpg")
                                 .into(photo);
                     }
                     catch (UnsupportedEncodingException e)
@@ -116,16 +114,22 @@ public class place extends ActionBarActivity {
         }
     };
 
-    Runnable getdata = new Runnable() {
+    Runnable getdata = new Runnable()
+    {
+        private String ret ;
+        private final String CASE = "PLACE";
+        private final String URL_PLACEGRAB = "http://140.115.80.224:8080/Place_Grab.php";
+        private int RET_PARAM_NUM;
         @Override
         public void run() {
             ConnectServer conncetion = new ConnectServer(URL_PLACEGRAB);
             ret = conncetion.connect(request_name, request_values, PLACE_PARAM_NUM);
-            JsonParser parser = new JsonParser(RET_PARAM_NUM,CASE);
+            JsonParser parser = new JsonParser(CASE);
             ret_place = parser.Parse(ret,"");
+            RET_PARAM_NUM = ret_place.size();
 
             for(int i=0; i< RET_PARAM_NUM;i++)
-            Log.d("Nick", ret_place[i]);
+            Log.d("Nick", ret_place.get(i));
             handler.sendEmptyMessage(DOWNLOAD_COMPLETE);
         }
     };

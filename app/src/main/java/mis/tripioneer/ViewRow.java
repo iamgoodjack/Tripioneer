@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by user on 2015/7/16.
  */
@@ -16,17 +18,20 @@ public class ViewRow {
     public static final int LAYOUT = R.layout.list_single;
 
     private final Context context;
-    private final TextView textView;
+    private final TextView textView_title;
+    private final TextView textView_info;
     private final ImageView imageView;
 
     public ViewRow(Context context, View convertView) {
         this.context = context;
         this.imageView = (ImageView) convertView.findViewById(R.id.img);
-        this.textView = (TextView) convertView.findViewById(R.id.txt);
+        this.textView_title = (TextView) convertView.findViewById(R.id.txt);
+        this.textView_info = (TextView) convertView.findViewById(R.id.info);
     }
 
-    public void bind(ViewModel exampleViewModel) {
-        this.textView.setText(exampleViewModel.getText());
-        Picasso.with(this.context).load(exampleViewModel.getImageUrl()).into(this.imageView);
+    public void bind(ViewModel Model) {
+        this.textView_title.setText(Model.getTitle());
+        this.textView_info.setText(Model.getInfo());
+        Picasso.with(this.context).load(Model.getImageUrl()).into(this.imageView);
     }
 }

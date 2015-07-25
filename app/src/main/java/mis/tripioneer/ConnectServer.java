@@ -89,7 +89,7 @@ public class ConnectServer
             reader.close();
 
             ret = response.toString();
-            Log.d("Gina",ret);
+            Log.d("Gina","ret in connect="+ret);
 
         }
         catch (Exception e)

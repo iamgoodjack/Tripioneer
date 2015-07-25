@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:id="@+id/imageView"
-        android:src="@drawable/test"
         android:layout_weight="0.20" />
     //android:id="@+id/"
 
