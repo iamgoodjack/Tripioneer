@@ -1,5 +1,7 @@
 package mis.tripioneer;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
@@ -11,7 +13,7 @@ import org.json.JSONTokener;
  ************************************************************************************************************/
 public class JsonParser
 {
-    private int array_length = 0;
+    private int array_length = 0;   //
     private String key ="";
     private String CASE ="";
 
@@ -23,8 +25,8 @@ public class JsonParser
     }
 
 
-
     public String[] Parse(String val, String match)
+
     {
         String json[] = new String[array_length];
         JSONArray object;
@@ -50,7 +52,15 @@ public class JsonParser
                     {
                         json[i] = object.getJSONObject(i).getString(key);
                     }
+                    break;
+                case "TRIP":
+                    object = (JSONArray)new JSONTokener(val).nextValue();
 
+                    for(int i=0;i<object.length();i++)
+                    {
+                        json[i] = object.getJSONObject(i).getString(key);
+                        Log.d("trip", Integer.toString(object.length()));
+                    }
                     break;
                 case "PLACE":
                     object = new JSONArray(val);

@@ -27,11 +27,19 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".Recommendation"
-            android:label="@string/title_activity_recommendation" />
+            android:label="@string/title_activity_recommendation" >
+
+        </activity>
+        <activity
+            android:name=".Trip"
+            android:label="@string/title_tripioneer_tour_listview" >
+
+
+        </activity>
+
         <activity
             android:name=".drawer"
             android:label="@string/title_activity_drawer" >

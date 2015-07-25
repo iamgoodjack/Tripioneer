@@ -19,6 +19,7 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="title_activity_trip">trip</string>
 
     <string-array name="drawer_menu">
     <item>推播</item>
@@ -27,5 +28,6 @@
     <item>登入</item>
     </string-array>
     <string name="title_activity_place">place</string>
+    <string name="title_tripioneer_tour_listview">tripioneer_tour_listview</string>
 
 </resources>

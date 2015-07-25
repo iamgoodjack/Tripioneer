@@ -1,6 +1,7 @@
 package mis.tripioneer;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
