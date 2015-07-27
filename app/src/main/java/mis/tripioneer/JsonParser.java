@@ -76,6 +76,14 @@ public class JsonParser
                     {
                         json.add(object.getString(i));
                     }
+                case "CHANNEL_INFO":
+                    object = (JSONArray)new JSONTokener(val).nextValue();
+
+                    for(int i=0;i<object.length();i++)
+                    {
+                        json.add(object.getJSONObject(i).getString(key));
+                    }
+                    break;
                 default:
                     break;
             }
