@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,7 +23,7 @@ import java.util.List;
 
 
 
-public class Recommendation extends Activity implements OnItemClickListener
+public class Recommendation extends ActionBarActivity implements OnItemClickListener
 {
     private final static int DOWNLOAD_COMPLETE = 1;
     private final String CASE = "RECOMMENDATION";
@@ -56,8 +58,11 @@ public class Recommendation extends Activity implements OnItemClickListener
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_recommendation, menu);
-        return true;
+        //getMenuInflater().inflate(R.menu.menu_recommendation, menu);
+        //return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_recommendation, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
