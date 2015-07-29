@@ -2,6 +2,7 @@ package mis.tripioneer;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,8 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 /**
  * Created by user on 2015/7/20.
@@ -20,12 +25,12 @@ public class Channel_category extends Fragment
 {
     private final String TAG = "Channel_category";
     private static int RET_PARAM_NUM;
+    private String ID;
+
     private final static int DOWNLOAD_COMPLETE = 1;
     private final String CASE = "CHANNEL_CATEGORY";
-    private static ArrayList<String> ret_place_ID = new ArrayList<String>();
-    private static ArrayList<String> ret_place_Pic = new ArrayList<String>();
-    private static ArrayList<String> ret_place_Name = new ArrayList<String>();
-    private static ArrayList<String> ret_place_ShortIntro = new ArrayList<String>();
+    private static ArrayList<String> ret_channel_category = new ArrayList<String>();
+
     private static ListView listView;
     private static List<ViewModel> viewModels;
     private static ViewAdapter adapter;
@@ -105,34 +110,35 @@ public class Channel_category extends Fragment
     }
 
    Runnable run_Channel_category = new Runnable()
-   {     private final String URL_Channel_Category = "";
-         private static final int CHANNEL_CATEGORY_NUM_PARAM = 1;
-         private String[] request_name = new String[CHANNEL_CATEGORY_NUM_PARAM];
-         private String[] request_value = new String[CHANNEL_CATEGORY_NUM_PARAM];
-         private String ret = "";
+   {
+       private final String URL_Channel_Category = "http://140.115.80.224:8080/channel_category.php";
+       private static final int CHANNEL_CATEGORY_NUM_PARAM = 1;
+       private String[] request_name = new String[CHANNEL_CATEGORY_NUM_PARAM];
+       private String[] request_value = new String[CHANNEL_CATEGORY_NUM_PARAM];
+       private String ret = "";
        @Override
        public void run() {
+           request_name[0] = "channel_id";
+           request_value[0] = ID;
            ConnectServer connection = new ConnectServer(URL_Channel_Category);
 
            ret = connection.connect(request_name, request_value, CHANNEL_CATEGORY_NUM_PARAM);
 
            JsonParser parser = new JsonParser(CASE);
-           /*ret_place_Pic = parser.Parse(ret,"place_Pic");
-           ret_place_Name = parser.Parse(ret,"place_Name");
-           ret_place_ShortIntro = parser.Parse(ret,"place_ShortIntro");
-           ret_place_ID = parser.Parse(ret,"place_ID");*/
+           ret_channel_category = parser.Parse(ret,"");
 
-           /*RET_PARAM_NUM = ret_place_Name.size();
+
+           RET_PARAM_NUM = ret_channel_category.size();
 
            for(int i=0; i<RET_PARAM_NUM;i++)
            {
-               Log.d("Gina",ret_place_Name.get(i)+"\n");
-               Log.d("Gina", ret_place_Pic.get(i) + "\n");
-               Log.d("Gina", ret_place_ShortIntro.get(i) + "\n");
-               Log.d("Gina", ret_place_ID.get(i) + "\n");
-           }*/
+               Log.d("test",ret_channel_category.get(i)+"\n");
 
-           //handler.sendEmptyMessage(DOWNLOAD_COMPLETE);
+           }
+
+          // handler.sendEmptyMessage(DOWNLOAD_COMPLETE);
        }
+
+
    };
 }

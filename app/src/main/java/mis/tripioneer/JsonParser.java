@@ -84,6 +84,8 @@ public class JsonParser
                         json.add(object.getJSONObject(i).getString(key));
                     }
                     break;
+                case "CHANNEL_CATEGORY":
+                    object = (JSONArray)new JSONTokener(val).nextValue();
                 default:
                     break;
             }
