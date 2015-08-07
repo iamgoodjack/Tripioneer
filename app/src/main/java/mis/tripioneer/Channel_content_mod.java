@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by user on 2015/7/20.
  */
-public class Channel_content extends Fragment implements AdapterView.OnItemClickListener
+public class Channel_content_mod extends Fragment implements AdapterView.OnItemClickListener
 {
     private static int RET_PARAM_NUM;
     private static int TYPE;
@@ -47,16 +47,14 @@ public class Channel_content extends Fragment implements AdapterView.OnItemClick
     {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-        Log.d(TAG,"id ="+id);
-        setHasOptionsMenu(true);//??
-
+        Log.d(TAG, "id =" + id);
+        id = this.getArguments().getString("channelid");
     }
     @Override
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
         Log.d(TAG, "onAttach");
-        Log.d(TAG, "id =" + id);
         context = getActivity();
     }
 
@@ -74,19 +72,17 @@ public class Channel_content extends Fragment implements AdapterView.OnItemClick
         return v;
     }
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
-    {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d(TAG, "onActivityCreated");
-        Log.d(TAG, "id =" + id);
 
     }
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
         Log.d(TAG, "onStart");
-        Log.d(TAG,"id ="+id);
     }
 
     @Override
@@ -94,9 +90,6 @@ public class Channel_content extends Fragment implements AdapterView.OnItemClick
     {
         super.onResume();
         Log.d(TAG, "onResume");
-        Log.d(TAG,"id ="+id);
-        id = ((ChannelMain)context).id;
-        Log.d(TAG,"after get id from main"+id);
         new Thread(run_Channel_content).start();
     }
 
@@ -121,7 +114,6 @@ public class Channel_content extends Fragment implements AdapterView.OnItemClick
     {
         super.onDestroyView();
         Log.d(TAG, "onDestroyView");
-        Log.d(TAG,"id ="+id);
     }
 
     @Override
@@ -129,7 +121,6 @@ public class Channel_content extends Fragment implements AdapterView.OnItemClick
     {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-        Log.d(TAG,"id ="+id);
     }
 
     @Override
@@ -137,7 +128,7 @@ public class Channel_content extends Fragment implements AdapterView.OnItemClick
     {
         super.onDetach();
         Log.d(TAG, "onDetach");
-        Log.d(TAG,"id ="+id);
+
     }
 
     Runnable run_Channel_content = new Runnable()

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.List;
 public class Trip extends Activity
 {
     private final static int DOWNLOAD_COMPLETE = 1;
-
+    private static final String TAG ="Trip";
     private static final int TRIP_NUM_PARAM = 1;
     private static int RET_PARAM_NUM;
     private static ArrayList<String> ret_place_Pic = new ArrayList<String>();
@@ -39,17 +38,18 @@ public class Trip extends Activity
 
         //bundle參考資料http://tomkuo139.blogspot.tw/2010/01/android-activity-bundle-activity.html
         //http://tomkuo139.blogspot.tw/2010/01/android-activity-bundle-activity.html
-       /* Bundle b = this.getIntent().getExtras();
-                int id = b.getInt("id");   //接收id參數
-                String ID = Integer.toString(id);*/
-        String ID = Integer.toString( 97);
+
+        String ID ;
+        Bundle tripdata = this.getIntent().getExtras();
+        ID = tripdata.getString("tripid");
         request_value[0] = ID;
-        request_name[0]="trip_ID";
+        request_name[0]="ID";
+
 
         new Thread(run_Trip).start();
         viewModels = new ArrayList<ViewModel>();
         adapter = new ViewAdapter(this, viewModels);
-        listView =(ListView)findViewById(R.id.listViewXD);
+        listView =(ListView)findViewById(R.id.listView);
     }
 
 
@@ -105,10 +105,10 @@ public class Trip extends Activity
                         e.printStackTrace();
                     }
                     listView.setAdapter(adapter);
-                    Log.d("SET_ADAPTER","OK");
+
                     break;
                 default:
-                    Log.d("Jeny","Download Failure");
+                    Log.d(TAG,"Download Failure");
 
             }
         }
@@ -135,14 +135,12 @@ public class Trip extends Activity
 
             for(int i=0; i<RET_PARAM_NUM;i++)
             {
-                Log.d("Jenny",ret_place_Name.get(i)+"\n");
-                Log.d("Gina", ret_place_Pic.get(i) + "\n");
+                Log.d(TAG,ret_place_Name.get(i)+"\n");
+                Log.d(TAG, ret_place_Pic.get(i) + "\n");
             }
             handler.sendEmptyMessage(DOWNLOAD_COMPLETE);
 
         }
     };
-
-
 
 }

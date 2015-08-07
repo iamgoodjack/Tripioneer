@@ -1,6 +1,5 @@
 package mis.tripioneer;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
@@ -8,27 +7,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.squareup.picasso.Picasso;
-
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class place extends ActionBarActivity {
 
     private final static int DOWNLOAD_COMPLETE = 1;
     private static final int PLACE_PARAM_NUM = 1;
+    private static final String TAG = "PLACE";
     private String[] request_name  = new String[PLACE_PARAM_NUM];
     private String[] request_values = new String[PLACE_PARAM_NUM];
     private static ArrayList<String> ret_place  = new ArrayList<String>();
@@ -37,8 +28,7 @@ public class place extends ActionBarActivity {
     private TextView hours;
     private TextView intro ;
     private ImageView photo;
-    private static List<ViewModel> viewModels;
-    private static ViewAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +98,7 @@ public class place extends ActionBarActivity {
                     }
                     break;
                     default:
-                        Log.d("Nick","Download Failed");
+                        Log.d(TAG,"Download Failed");
                         break;
             }
         }
@@ -129,7 +119,7 @@ public class place extends ActionBarActivity {
             RET_PARAM_NUM = ret_place.size();
 
             for(int i=0; i< RET_PARAM_NUM;i++)
-            Log.d("Nick", ret_place.get(i));
+            Log.d(TAG, ret_place.get(i));
             handler.sendEmptyMessage(DOWNLOAD_COMPLETE);
         }
     };

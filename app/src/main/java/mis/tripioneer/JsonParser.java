@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.ArrayList;
@@ -46,12 +47,21 @@ public class JsonParser
 
                     break;
                 case "RECOMMENDATION":
-                    object = (JSONArray)new JSONTokener(val).nextValue();
-
-                    for(int i=0;i<object.length();i++)
+                    try
                     {
-                        json.add(object.getJSONObject(i).getString(key));
+                        object = (JSONArray)new JSONTokener(val).nextValue();
+                        for(int i=0;i<object.length();i++)
+                        {
+                            json.add(object.getJSONObject(i).getString(key));
+                        }
                     }
+                    catch(ClassCastException e)
+                    {
+                        JSONObject obj = new JSONObject(val);
+                        json.add(obj.getString(key));
+
+                    }
+
                     break;
                 case "TRIP":
                     object = (JSONArray)new JSONTokener(val).nextValue();
@@ -59,7 +69,7 @@ public class JsonParser
                     for(int i=0;i<object.length();i++)
                     {
                         json.add(object.getJSONObject(i).getString(key));
-                        Log.d("trip", Integer.toString(object.length()));
+
                     }
                     break;
                 case "CHANNEL_CONTENT":

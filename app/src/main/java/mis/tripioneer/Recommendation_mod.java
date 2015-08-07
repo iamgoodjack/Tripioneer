@@ -1,16 +1,16 @@
 package mis.tripioneer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -23,10 +23,10 @@ import java.util.List;
 
 
 
-public class Recommendation extends ActionBarActivity implements OnItemClickListener
+public class Recommendation_mod extends Fragment implements OnItemClickListener
 {
     private final static int DOWNLOAD_COMPLETE = 1;
-    private static final String TAG = "RECOMMENDATION";
+    private static final String TAG = "RECOMMENDATION_mod";
     private static final String CASE = "RECOMMENDATION";
     private static final int PLACE = 0;
     private static final int TRIP = 1;
@@ -40,48 +40,102 @@ public class Recommendation extends ActionBarActivity implements OnItemClickList
     private static ListView listView;
     private static List<ViewModel> viewModels;
     private static ViewAdapter adapter;
+    public Context context;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recommendation);
+        Log.d(TAG, "onCreate");
+
+    }
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        Log.d(TAG, "onAttach");
+        context = getActivity();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        Log.d(TAG, "onCreateView");
+        View  v = inflater.inflate(R.layout.activity_recommendation, container, false);
         TYPE = PLACE;
         new Thread(run_Place).start();
+        listView =(ListView)v.findViewById(R.id.list);
         viewModels = new ArrayList<ViewModel>();
-        adapter = new ViewAdapter(this, viewModels);
-        listView =(ListView)findViewById(R.id.list);
+        adapter = new ViewAdapter(getActivity(), viewModels);
+
         listView.setOnItemClickListener(this);
+        return v;
     }
-
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
+    public void onActivityCreated(Bundle savedInstanceState)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_recommendation, menu);
-        //return true;
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_recommendation, menu);
-        return super.onCreateOptionsMenu(menu);
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated");
+
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart");
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
-        {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        Log.d(TAG, "onResume");
+
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        Log.d(TAG, "onPause");
+
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        Log.d(TAG, "onStop");
+
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView");
+
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy");
+
+    }
+
+    @Override
+    public void onDetach()
+    {
+        super.onDetach();
+        Log.d(TAG, "onDetach");
+
+    }
+
+
+
 
     static Handler handler = new Handler()
     {
@@ -100,14 +154,14 @@ public class Recommendation extends ActionBarActivity implements OnItemClickList
                             {
                                 ViewModel row = new ViewModel
                                         (
-                                            ret_place_Name.get(i),
-                                            URL_PREFIX_IMAGE + URLEncoder.encode(ret_place_Pic.get(i), "UTF-8") + ".jpg",
-                                            ret_place_ShortIntro.get(i)
+                                                ret_place_Name.get(i),
+                                                URL_PREFIX_IMAGE + URLEncoder.encode(ret_place_Pic.get(i), "UTF-8") + ".jpg",
+                                                ret_place_ShortIntro.get(i)
                                         );
                                 row.setType(TYPE);
                                 row.setID(ret_place_ID.get(i));
                                 viewModels.add(row);
-                           }
+                            }
                         }
                         switch (TYPE)
                         {
@@ -254,7 +308,7 @@ public class Recommendation extends ActionBarActivity implements OnItemClickList
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         ViewModel item = (ViewModel) listView.getItemAtPosition(row);
         Log.d(TAG, "item = " + item.getTitle() + "type=" + item.getType() + "id=" + item.getID());
-        Toast.makeText(getBaseContext(), "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
 
         TYPE = item.getType();
 
@@ -263,15 +317,15 @@ public class Recommendation extends ActionBarActivity implements OnItemClickList
         switch (TYPE)
         {
             case PLACE:
-                intent.setClass(Recommendation.this, place.class);
+                intent.setClass(context, place.class);
                 bundle.putString("specifyid", item.getID());
                 break;
             case TRIP:
-                intent.setClass(Recommendation.this, Trip.class);
+                intent.setClass(context, Trip.class);
                 bundle.putString("tripid", item.getID());
                 break;
-           case CHANNEL:
-                intent.setClass(Recommendation.this, ChannelMain.class);
+            case CHANNEL:
+                intent.setClass(context, ChannelMain.class);
                 bundle.putString("channelid", item.getID());
                 break;
             default:

@@ -3,8 +3,8 @@ package mis.tripioneer;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class Login extends ActionBarActivity
+public class Login extends AppCompatActivity
 {
     private String pwd="";
     private String ret_pwd="";
@@ -68,6 +68,7 @@ public class Login extends ActionBarActivity
         register.setOnClickListener(register_listener);
     }
 
+    //TODO:登入需要ACTION BAR嗎? 要長怎樣?
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -75,8 +76,7 @@ public class Login extends ActionBarActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_login, menu);
         return super.onCreateOptionsMenu(menu);
-        //getMenuInflater().inflate(R.menu.menu_login, menu);
-        //return true;
+
     }
 
     protected void onPause() {

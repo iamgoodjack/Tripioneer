@@ -18,7 +18,7 @@ import java.util.logging.LogRecord;
 /**
  * Created by user on 2015/7/20.
  */
-public class Channel_info extends Fragment
+public class Channel_info_mod extends Fragment
 {
     private final String TAG = "Channel_info";
     private String ID;
@@ -32,7 +32,7 @@ public class Channel_info extends Fragment
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         Log.d(TAG,"id ="+ID);
-
+        ID = this.getArguments().getString("channelid");
     }
     @Override
     public void onAttach(Activity activity)
@@ -86,7 +86,7 @@ public class Channel_info extends Fragment
 
     };
 
-     Handler handler = new Handler()
+    Handler handler = new Handler()
     {
         public void handleMessage(Message msg)
         {
@@ -106,19 +106,18 @@ public class Channel_info extends Fragment
 
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
         Log.d(TAG, "onStart");
         Log.d(TAG,"id ="+ID);
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         Log.d(TAG, "onResume");
-        Log.d(TAG, "id =" + ID);
-        ID = ((ChannelMain)context).id;
-        Log.d(TAG,"after get id from main="+ID);
         new Thread(run_Channel_info).start();
     }
 
