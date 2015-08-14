@@ -139,7 +139,7 @@ public class Recommendation_mod extends Fragment implements OnItemClickListener
 
     static Handler handler = new Handler()
     {
-        private final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/image/";
+        private final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/tainan_pic/";
         public void handleMessage(Message msg)
         {
             switch (msg.what)
@@ -323,6 +323,7 @@ public class Recommendation_mod extends Fragment implements OnItemClickListener
             case TRIP:
                 intent.setClass(context, Trip.class);
                 bundle.putString("tripid", item.getID());
+                Log.d(TAG,"tripid="+item.getID());
                 break;
             case CHANNEL:
                 intent.setClass(context, ChannelMain.class);

@@ -76,7 +76,7 @@ public class place extends ActionBarActivity {
         @Override
         public void handleMessage(Message msg)
         {
-            final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/image/";
+            final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/tainan_pic/";
             super.handleMessage(msg);
                  switch(msg.what)
                 {   case DOWNLOAD_COMPLETE:

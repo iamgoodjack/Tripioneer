@@ -44,6 +44,7 @@ public class Trip extends Activity
         ID = tripdata.getString("tripid");
         request_value[0] = ID;
         request_name[0]="ID";
+        Log.d(TAG,"ID in Trip="+ID);
 
 
         new Thread(run_Trip).start();
@@ -82,7 +83,7 @@ public class Trip extends Activity
     {
         public void handleMessage(Message msg)
         {
-            final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/image/";
+            final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/tainan_pic/";
             switch(msg.what)
             {
                 case  DOWNLOAD_COMPLETE :

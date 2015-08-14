@@ -174,7 +174,7 @@ public class Channel_content_mod extends Fragment implements AdapterView.OnItemC
     static Handler handler = new Handler()
     {
         private int TYPE;
-        private final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/image/";
+        private final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/tainan_pic/";
         public void handleMessage(Message msg)
         {
             switch (msg.what)

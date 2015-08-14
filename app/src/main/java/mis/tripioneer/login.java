@@ -108,7 +108,7 @@ public class Login extends AppCompatActivity
                     if(pwd.equals(ret_pwd))
                     {
                         Toast.makeText(getApplicationContext(), "Hi", Toast.LENGTH_LONG).show();
-                        gotoRecommendation();
+                        gotoMain();
                      }
                     else
                     {
@@ -194,10 +194,10 @@ public class Login extends AppCompatActivity
         }
     };
 
-    public void gotoRecommendation()
+    public void gotoMain()
     {
-        Intent GO_TO_RECOMM = new Intent(Login.this, Recommendation.class);
-        startActivity(GO_TO_RECOMM);
+        Intent GO_TO_Main = new Intent(Login.this, MainActivity_mdsign.class);
+        startActivity(GO_TO_Main);
     }
 
 }
