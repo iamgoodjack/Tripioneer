@@ -23,7 +23,7 @@
 
     <string-array name="drawer_menu">
     <item>推薦</item>
-    <item>頻道</item>
+    <item>訂閱</item>
     <item>收藏庫</item>
     <item>最近瀏覽</item>
     </string-array>

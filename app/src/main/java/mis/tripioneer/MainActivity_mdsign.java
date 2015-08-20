@@ -22,13 +22,13 @@ public class MainActivity_mdsign extends AppCompatActivity
 {
 
 
-    String TITLES[] = {"推薦","頻道","收藏庫","最近瀏覽"};
-    int ICONS[] = {R.drawable.ic_thumb_up_black_24dp,R.drawable.ic_radio_black_24dp,R.drawable.ic_favorite_black_24dp,R.drawable.ic_history_black_24dp};
+    String TITLES[] = {"推薦","訂閱","收藏庫","最近瀏覽"};
+    int ICONS[] = {R.drawable.ic_ic_thumb_up_black_24dp,R.drawable.ic_ic_radio_black_24dp,R.drawable.ic_ic_favorite_black_24dp,R.drawable.ic_ic_history_black_24dp};
 
 
     String NAME = "Gina";//TODO:GET USER NAME
     String EMAIL = "teemo@gmail.com";//TODO:GET USER EMAIL
-    int PROFILE = R.drawable.ic_account_box_black_24dp;
+    int PROFILE = R.drawable.ic_ic_account_box_black_24dp;
 
     private Toolbar toolbar;
     RecyclerView mRecyclerView;
@@ -39,7 +39,7 @@ public class MainActivity_mdsign extends AppCompatActivity
     ActionBarDrawerToggle mDrawerToggle;
 
     private static final String TAG ="MainActivity_mdsign";
-    String ttag;
+    String label;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -61,7 +61,7 @@ public class MainActivity_mdsign extends AppCompatActivity
                     public void onTitle(View caller, String tag)
                     {
                         Log.d(TAG, "onClick, getTag=" + caller.getTag());
-                        ttag =(String)caller.getTag();
+                        label =(String)caller.getTag();
                         selectItem();
                     }
 
@@ -69,7 +69,7 @@ public class MainActivity_mdsign extends AppCompatActivity
                     public void onIcon(ImageView callerImage, String tag)
                     {
                         Log.d(TAG, "onClick, getTag=" + callerImage.getTag());
-                        ttag =(String)callerImage.getTag();
+                        label =(String)callerImage.getTag();
                         selectItem();
                     }
                 });
@@ -88,14 +88,12 @@ public class MainActivity_mdsign extends AppCompatActivity
             public void onDrawerOpened(View drawerView)
             {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("TestOpen");
             }
 
             @Override
             public void onDrawerClosed(View drawerView)
             {
                 super.onDrawerClosed(drawerView);
-                getSupportActionBar().setTitle("TestClose");
             }
 
 
@@ -105,7 +103,7 @@ public class MainActivity_mdsign extends AppCompatActivity
         mDrawerToggle.syncState();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, new Recommendation_mod());
+        ft.replace(R.id.content_frame, new Recommendation_frag());
         ft.commit();
     }
 
@@ -154,28 +152,36 @@ public class MainActivity_mdsign extends AppCompatActivity
     public void selectItem()
     {
         Fragment fragment = null;
-        switch ( ttag )
+        switch ( label )
         {
             case "推薦":
-                fragment = new Recommendation_mod();
+                fragment = new Recommendation_frag();
                 break;
-            case "頻道":
-                fragment = new ChannelMain_mod();
+            case "訂閱":
+                fragment = new ChannelMain_frag();
                 Bundle bundle = new Bundle();
-                bundle.putString("channelid", "1");//To do : set to advisor's channel
+                bundle.putString("channelid", "1");//TODO:SET TO SUBSCRIPTED CHANNEL
                 fragment.setArguments(bundle);
                 break;
-            /*case "收藏庫":
+            case "收藏庫":
+                fragment = new Collect_frag();
+                /*Bundle bundle = new Bundle();
+                bundle.putString("channelid", "1");//TODO:SET TO SUBSCRIPTED COLLECT
+                fragment.setArguments(bundle);*/
                 break;
-            case "最近瀏覽":
+            /*case "最近瀏覽":
                 break;*/
             default:
                 Drawer.closeDrawer(mRecyclerView);
                 return;
                 //break;
         }
+        getSupportActionBar().setTitle(label);
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
         Drawer.closeDrawer(mRecyclerView);
     }
 }

@@ -49,7 +49,6 @@ public class Recommendation extends ActionBarActivity implements OnItemClickList
         TYPE = PLACE;
         new Thread(run_Place).start();
         viewModels = new ArrayList<ViewModel>();
-        adapter = new ViewAdapter(this, viewModels);
         listView =(ListView)findViewById(R.id.list);
         listView.setOnItemClickListener(this);
     }

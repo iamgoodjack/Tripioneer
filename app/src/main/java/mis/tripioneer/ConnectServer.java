@@ -89,7 +89,7 @@ public class ConnectServer
             reader.close();
 
             ret = response.toString();
-            Log.d("ret in cs",ret);
+            //Log.d("ret in cs",ret);
         }
         catch (Exception e)
         {
