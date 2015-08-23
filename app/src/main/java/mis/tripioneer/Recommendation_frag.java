@@ -196,6 +196,8 @@ public class Recommendation_frag extends Fragment implements OnItemClickListener
                                 new Thread(run_Channel).start();
                                 break;
                             default:
+                                Log.d(TAG,"models size="+viewModels.size());
+                                Log.d(TAG,"models size in getcnt="+adapter.getCount());
                                 break;
                         }
                     }
@@ -313,13 +315,13 @@ public class Recommendation_frag extends Fragment implements OnItemClickListener
 
             RET_PARAM_NUM = ret_place_Name.size();
 
-            /*for(int i=0; i<RET_PARAM_NUM;i++)
+            for(int i=0; i<RET_PARAM_NUM;i++)
             {
                 Log.d(TAG,ret_place_Name.get(i)+"\n");
                 Log.d(TAG, ret_place_Pic.get(i) + "\n");
                 Log.d(TAG, ret_place_ShortIntro.get(i) + "\n");
                 Log.d(TAG, ret_place_ID.get(i) + "\n");
-            }*/
+            }
 
             handler.sendEmptyMessage(DOWNLOAD_COMPLETE);
 

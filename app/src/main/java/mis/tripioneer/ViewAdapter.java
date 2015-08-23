@@ -33,6 +33,7 @@ public class ViewAdapter extends BaseAdapter
         this.inflater = LayoutInflater.from(context);
         this.viewModels = viewModels;
         this.headers = headers;
+
     }
 
     public List<ViewModel> viewmodels() {
@@ -40,9 +41,10 @@ public class ViewAdapter extends BaseAdapter
     }
 
     @Override
-    public int getCount() {
-        return this.viewModels.size();
-    }
+    public int getCount()
+    {
+        return this.viewModels.size()+this.headers.size();
+    }//Must use arraylist.size!dont use hardcode! Coz array list size would dynamically change!
 
     public ViewModel getHeader(int position)
     {
@@ -75,6 +77,7 @@ public class ViewAdapter extends BaseAdapter
     public ViewModel getItem(int position)
     {
         ViewModel model=null;
+        Log.d(TAG,"View models size="+this.viewModels.size());
         if(position  < 6)
         {
             model = this.viewModels.get(position-1);
@@ -98,32 +101,67 @@ public class ViewAdapter extends BaseAdapter
     }
 
     @Override
+    public int getItemViewType(int position)
+    {
+        if(position == 0 | position == 6 | position ==10)
+        {
+            return 0;
+        }
+        return 1;
+    }
+
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
         final ViewModel viewModel;
         ViewRow row=null;
-
         if(position ==0 | position ==6 | position == 10)
         {
             viewModel = getHeader(position);
             convertView = this.inflater.inflate(R.layout.list_header, parent, false);
+            Log.d(TAG,"pos="+position);
             Log.d(TAG,"converview null and is header");
-            row = new ViewRow(this.context, convertView, true);
+            row = new ViewRow(this.context, convertView, true,position);
             row.bind_header(viewModel);
         }
-        else if(convertView != null )
+        else if(convertView == null )
         {
+            Log.d(TAG,"pos="+position);
+            Log.d(TAG,"converView == null");
             viewModel = getItem(position);
             Log.d(TAG, "title=" + viewModel.getTitle());
             convertView = this.inflater.inflate(ViewRow.LAYOUT, parent, false);
             // In that case we also need to create a new row and attach it to the newly created View
-            row = new ViewRow(this.context, convertView);
+            row = new ViewRow(this.context, convertView,position);
             convertView.setTag(row);
             row.bind(viewModel);
         }
+        else if(convertView != null)
+        {
+            viewModel = getItem(position);
+            Log.d(TAG,"pos="+position);
+            Log.d(TAG,"converView != null");
+            Log.d(TAG, "title=" + viewModel.getTitle());
 
-        // After that we get the row associated with this View and bind the view model to it
-        row = (ViewRow) convertView.getTag();
+            row= (ViewRow)convertView.getTag();
+            if(row != null)
+            {
+                Log.d(TAG, "row != null");
+                row.bind(viewModel);
+            }
+            else
+            {
+                Log.d(TAG, "row = null");
+                convertView = this.inflater.inflate(ViewRow.LAYOUT, parent, false);
+                row = new ViewRow(this.context, convertView,position);
+                convertView.setTag(row);
+                row.bind(viewModel);
+            }
+
+            return convertView;
+        }
+
         return convertView;
     }
 }

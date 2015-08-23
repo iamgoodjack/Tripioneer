@@ -21,7 +21,7 @@ public class Collect_frag extends Fragment
     private static final String TAG ="Collect";
     int IMGS[] ={R.drawable.collectimg1,R.drawable.collectimg2,R.drawable.collectimg3,R.drawable.collectimg4,R.drawable.collectimg5};
     private Context context;
-    private List<CollectInfo> persons;
+    private List<CollectInfo> collectList;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -59,7 +59,7 @@ public class Collect_frag extends Fragment
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         initializeData();
-        CollectAdapter adapter = new CollectAdapter(persons);
+        CollectAdapter adapter = new CollectAdapter(collectList,getActivity());
         recList.setAdapter(adapter);
     }
 
@@ -123,12 +123,12 @@ public class Collect_frag extends Fragment
 
     private void initializeData()
     {
-        //TODO:IMG 圓角、Out of memory error
-        persons = new ArrayList<>();
-        persons.add(new CollectInfo("億載金城",IMGS[0]));
-        persons.add(new CollectInfo("安平古堡", IMGS[1]));
-        persons.add(new CollectInfo("安平豆花", IMGS[2]));
-        /*persons.add(new ContactInfo("台南孔廟",IMGS[3]));
-        persons.add(new ContactInfo("馬沙溝濱海遊憩區",IMGS[4]));*/
+        collectList = new ArrayList<>();
+        collectList.add(new CollectInfo("億載金城",IMGS[0]));
+        collectList.add(new CollectInfo("安平古堡", IMGS[1]));
+        collectList.add(new CollectInfo("安平豆花", IMGS[2]));
+        collectList.add(new CollectInfo("台南孔廟",IMGS[3]));
+        collectList.add(new CollectInfo("馬沙溝濱海遊憩區",IMGS[4]));
+
     }
 }

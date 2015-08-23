@@ -38,7 +38,7 @@ public class Channel_content_frag extends Fragment implements AdapterView.OnItem
     private static ArrayList<String> ret_place_ShortIntro = new ArrayList<String>();
     private static ListView listView;
     private static List<ViewModel> viewModels;
-    private static ViewAdapter adapter;
+    private static ChannelAdapter_tmp adapter;//TODO:CHANGE TO NEW LAYOUT
     private String id;
     public Context context;
 
@@ -66,7 +66,7 @@ public class Channel_content_frag extends Fragment implements AdapterView.OnItem
         View  v = inflater.inflate(R.layout.fragment_channel_content, container, false);
         listView =(ListView)v.findViewById(R.id.list);
         viewModels = new ArrayList<ViewModel>();
-        adapter = new ViewAdapter(getActivity(), viewModels);
+        adapter = new ChannelAdapter_tmp(getActivity(), viewModels);
 
         listView.setOnItemClickListener(this);
         return v;

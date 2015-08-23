@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder>
 {
     private static final String TAG = "DrawAdapter";
@@ -71,7 +73,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
                 Name = (TextView) itemView.findViewById(R.id.name);// Creating Text View object from header.xml for name
                 email = (TextView) itemView.findViewById(R.id.email);// Creating Text View object from header.xml for email
-                profile = (ImageView) itemView.findViewById(R.id.circleView);// Creating Image view object from header.xml for profile pic
+                profile = (CircleImageView) itemView.findViewById(R.id.circleView);// Creating Image view object from header.xml for profile pic
                 Holderid = 0;// Setting holder id = 0 as the object being populated are of type header view
             }
         }

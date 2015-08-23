@@ -46,7 +46,7 @@ public class ChannelMain_frag extends Fragment
         TabHost = (FragmentTabHost) v.findViewById(android.R.id.tabhost);
         TabHost.setup(this.getActivity(), getChildFragmentManager(), R.id.container);
         Bundle bundle = new Bundle();
-        bundle.putString("channelid", "1");//To do : get advisor's channel id
+        bundle.putString("channelid", "1");//TODO : get advisor's channel id
         TabHost.addTab(TabHost.newTabSpec("content").setIndicator("內容"),
                 Channel_content_frag.class, bundle);
         TabHost.addTab(TabHost.newTabSpec("info").setIndicator("簡介"),

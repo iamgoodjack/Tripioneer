@@ -15,25 +15,27 @@ public class ViewRow {
 
     // This is a reference to the layout we defined above
     public static final int LAYOUT = R.layout.list_single;
-
+    public int pos;
     private Context context;
     private TextView textView_header;
     private TextView textView_title;
     private TextView textView_info;
     private ImageView imageView;
 
-    public ViewRow(Context context, View convertView)
+    public ViewRow(Context context, View convertView, int pos)
     {
         this.context = context;
         this.imageView = (ImageView) convertView.findViewById(R.id.img);
         this.textView_title = (TextView) convertView.findViewById(R.id.txt);
         this.textView_info = (TextView) convertView.findViewById(R.id.info);
+        this.pos=pos;
     }
 
-    public ViewRow(Context contxt, View converView, boolean isHeader)
+    public ViewRow(Context contxt, View converView, boolean isHeader,int pos)
     {
         this.context = contxt ;
         this.textView_header = (TextView) converView.findViewById(R.id.textSeparator);
+        this.pos=pos;
     }
 
     public void bind(ViewModel Model)
