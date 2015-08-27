@@ -33,4 +33,8 @@
     <string name="action_edit">編輯</string>
     <string name="action_search">搜尋</string>
     <string name="action_info">軟體資訊</string>
+    <string name="title_activity_map">Map</string>
+    <string name="title_activity_nearsearch">Nearsearch_Map</string>
+    <string name="title_activity_place_api">place_api</string>
+    <string name="google_api_key">AIzaSyD4xbzcG5Jq43J7Ufm2jn9JBYWfWevuft0</string>
 </resources>

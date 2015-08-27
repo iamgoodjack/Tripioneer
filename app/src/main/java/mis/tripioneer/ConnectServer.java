@@ -75,6 +75,7 @@ public class ConnectServer
                 }
 
             }
+            Log.d(request.toString(),"ELSA");
             out.write(request.toString().getBytes());
             out.flush();
             out.close();

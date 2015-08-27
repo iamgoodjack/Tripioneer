@@ -7,6 +7,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -24,6 +25,7 @@ public class Trip extends Activity
     private static int RET_PARAM_NUM;
     private static ArrayList<String> ret_place_Pic = new ArrayList<String>();
     private static ArrayList<String> ret_place_Name = new ArrayList<String>();
+    private static ArrayList<String> ret_place_ID = new ArrayList<String>();
     private String[] request_name = new String[TRIP_NUM_PARAM];
     private String[] request_value = new String[TRIP_NUM_PARAM];
     private static ListView listView;
@@ -131,13 +133,20 @@ public class Trip extends Activity
             JsonParser parser = new JsonParser(CASE);
             ret_place_Pic = parser.Parse(ret, "place_Pic");
             ret_place_Name = parser.Parse(ret, "place_Name");
+            ret_place_ID = parser.Parse(ret, "place_ID");
             RET_PARAM_NUM = ret_place_Name.size();
 
 
             for(int i=0; i<RET_PARAM_NUM;i++)
             {
+
                 Log.d(TAG,ret_place_Name.get(i)+"\n");
                 Log.d(TAG, ret_place_Pic.get(i) + "\n");
+
+                Log.d("Jenny",ret_place_Name.get(i)+"\n");
+                Log.d("Gina", ret_place_Pic.get(i) + "\n");
+                Log.d("Ted",ret_place_ID.get(i)+"\n");
+
             }
             handler.sendEmptyMessage(DOWNLOAD_COMPLETE);
 
