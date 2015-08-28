@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
     <resources>
+        <color name="White">#FFFFFF</color>
         <color name="ColorPrimary">#FF5722</color>
         <color name="ColorPrimaryDark">#E64A19</color>
+        <color name="Profile">#cc9966</color>
+        <color name="ProfileDark">#b67f47</color>
+        <color name="Subscript">#ff9966</color>
+        <color name="SubscriptDark">#e77a44</color>
+        <color name="Recommend">#cc99cc</color>
+        <color name="RecommendDark">#af6eaf</color>
+        <color name="History">#ff6666</color>
+        <color name="HistoryDark">#ee4d4d</color>
+        <color name="Star">#e60012</color>
+        <color name="Navigation">#0000ff</color>
+        <color name="PlaceBar">#00CED1</color>
     </resources>
 

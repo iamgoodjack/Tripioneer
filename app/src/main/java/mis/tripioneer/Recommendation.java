@@ -1,11 +1,11 @@
 package mis.tripioneer;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +23,7 @@ import java.util.List;
 
 
 
-public class Recommendation extends ActionBarActivity implements OnItemClickListener
+public class Recommendation extends AppCompatActivity implements OnItemClickListener
 {
     private final static int DOWNLOAD_COMPLETE = 1;
     private static final String TAG = "RECOMMENDATION";
@@ -74,7 +74,7 @@ public class Recommendation extends ActionBarActivity implements OnItemClickList
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
+        if (id == R.id.action_search)
         {
             return true;
         }

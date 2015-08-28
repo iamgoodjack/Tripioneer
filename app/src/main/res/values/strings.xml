@@ -37,4 +37,7 @@
     <string name="title_activity_nearsearch">Nearsearch_Map</string>
     <string name="title_activity_place_api">place_api</string>
     <string name="google_api_key">AIzaSyD4xbzcG5Jq43J7Ufm2jn9JBYWfWevuft0</string>
+    <string name="title_activity_test">test</string>
+    <string name="title_activity_place_mimic_googlemap">place_mimic_googlemap</string>
+
 </resources>

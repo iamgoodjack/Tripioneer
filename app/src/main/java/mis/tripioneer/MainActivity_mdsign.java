@@ -1,5 +1,6 @@
 package mis.tripioneer;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -23,12 +24,12 @@ public class MainActivity_mdsign extends AppCompatActivity
 
 
     String TITLES[] = {"推薦","訂閱","收藏庫","最近瀏覽"};
-    int ICONS[] = {R.drawable.ic_ic_thumb_up_black_24dp,R.drawable.ic_ic_radio_black_24dp,R.drawable.ic_ic_favorite_black_24dp,R.drawable.ic_ic_history_black_24dp};
+    int ICONS[] = {R.drawable.ic_ic_thumb_up_black_24dp,R.drawable.ic_ic_radio_black_24dp,R.drawable.ic_ic_favorite_black_24dp,R.drawable.ic_menu_channel_modify};
 
 
     String NAME = "Gina";//TODO:GET USER NAME
     String EMAIL = "teemo@gmail.com";//TODO:GET USER EMAIL
-    int PROFILE = R.drawable.ic_ic_account_box_black_24dp;
+    int PROFILE = R.drawable.ic_person_icons;
 
     private Toolbar toolbar;
     RecyclerView mRecyclerView;
@@ -38,13 +39,13 @@ public class MainActivity_mdsign extends AppCompatActivity
 
     ActionBarDrawerToggle mDrawerToggle;
 
-    private static final String TAG ="MainActivity_mdsign";
+    private static final String TAG ="mainactivity_mdsign";
     String label;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.drawer);
+        setContentView(R.layout.mainactivity_mdsign);
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -152,22 +153,35 @@ public class MainActivity_mdsign extends AppCompatActivity
     public void selectItem()
     {
         Fragment fragment = null;
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
         switch ( label )
         {
             case "推薦":
-                fragment = new Recommendation_frag();
+                /*fragment = new Recommendation_frag();
+                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();*/
                 break;
             case "訂閱":
-                fragment = new ChannelMain_frag();
+                /*fragment = new ChannelMain_frag();
                 Bundle bundle = new Bundle();
                 bundle.putString("channelid", "1");//TODO:SET TO SUBSCRIPTED CHANNEL
-                fragment.setArguments(bundle);
+                fragment.setArguments(bundle);*/
+                intent.setClass(MainActivity_mdsign.this, ChannelMain.class);
+                bundle.putString("channelid", "1");//item.getID()
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
             case "收藏庫":
-                fragment = new Collect_frag();
-                /*Bundle bundle = new Bundle();
-                bundle.putString("channelid", "1");//TODO:SET TO SUBSCRIPTED COLLECT
-                fragment.setArguments(bundle);*/
+                //fragment = new Collect_frag();
+                intent.setClass(MainActivity_mdsign.this, Collect.class);
+                bundle.putString("channelid", "1");//TODO:SET TO COLLECT
+                intent.putExtras(bundle);
+                startActivity(intent);
+                //fragment.setArguments(bundle);
                 break;
             /*case "最近瀏覽":
                 break;*/
@@ -177,11 +191,11 @@ public class MainActivity_mdsign extends AppCompatActivity
                 //break;
         }
         getSupportActionBar().setTitle(label);
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        /*android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        fragmentTransaction.commit();*/
         Drawer.closeDrawer(mRecyclerView);
     }
 }

@@ -343,7 +343,7 @@ public class Recommendation_frag extends Fragment implements OnItemClickListener
         switch (TYPE)
         {
             case PLACE:
-                intent.setClass(context, place.class);
+                intent.setClass(context, place_mimic_googlemap.class);
                 bundle.putString("specifyid", item.getID());
                 break;
             case TRIP:

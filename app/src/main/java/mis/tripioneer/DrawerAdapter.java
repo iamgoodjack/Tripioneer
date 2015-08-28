@@ -20,7 +20,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private static final int TYPE_ITEM = 1;
 
     private String mNavTitles[]; // String Array to store the passed titles Value from MainActivity_mdsing.java
-    private int mIcons[];// Int Array to store the passed icons resource value from MainActivity_mdsign.java
+    private int mIcons[];// Int Array to store the passed icons resource value from mainactivity_mdsign.java
 
     private String name;//String Resource for header View Name
     private int profile;//int Resource for header view profile picture

@@ -2,8 +2,8 @@ package mis.tripioneer;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +15,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 
-public class place extends ActionBarActivity {
+public class place extends AppCompatActivity
+{
 
     private final static int DOWNLOAD_COMPLETE = 1;
     private static final int PLACE_PARAM_NUM = 1;
@@ -50,9 +51,9 @@ public class place extends ActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_place, menu);
         return true;
     }
 
@@ -64,7 +65,7 @@ public class place extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             return true;
         }
 
@@ -111,7 +112,8 @@ public class place extends ActionBarActivity {
         private final String URL_PLACEGRAB = "http://140.115.80.224:8080/Place_Grab.php";
         private int RET_PARAM_NUM;
         @Override
-        public void run() {
+        public void run()
+        {
             ConnectServer conncetion = new ConnectServer(URL_PLACEGRAB);
             ret = conncetion.connect(request_name, request_values, PLACE_PARAM_NUM);
             JsonParser parser = new JsonParser(CASE);
