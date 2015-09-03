@@ -1,15 +1,7 @@
 package mis.tripioneer;
 
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.*;
-import com.google.android.gms.maps.model.*;
-import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
@@ -25,7 +17,6 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,9 +60,12 @@ public class Place_navigation extends FragmentActivity
         content = (TextView)findViewById(R.id.content);
         locationMgr = (LocationManager) getSystemService(LOCATION_SERVICE);
         Log.d("uuu","uuu");
+
         //接收來自景點的ID
+        Bundle data = this.getIntent().getExtras();
+        request_value[0] = data.getString("place_id");
         request_name[0]="place_id";
-        request_value[0]="1";
+
         initProvider();
         new Thread(connect_Server).start();
     }

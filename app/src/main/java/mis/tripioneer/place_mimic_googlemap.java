@@ -1,5 +1,6 @@
 package mis.tripioneer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -42,13 +43,26 @@ public class place_mimic_googlemap extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_mimic_googlemap);
 
-        String placeid ;
+        final String placeid ;
         Bundle placedata = this.getIntent().getExtras();
         placeid = placedata.getString("specifyid");
         request_name[0] = "place_ID";
         request_values[0] = placeid;
 
         button = (FloatingActionButton)findViewById(R.id.fab);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Bundle bundle = new Bundle();
+                Intent intent = new Intent();
+                intent.setClass(place_mimic_googlemap.this,Place_navigation.class);
+                bundle.putString("place_id", placeid);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         img = (ImageView)findViewById(R.id.imageView);
         place = (TextView)findViewById(R.id.place);
         address = (TextView)findViewById(R.id.addr);
