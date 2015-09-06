@@ -11,7 +11,8 @@ import com.squareup.picasso.Picasso;
 /**
  * Created by user on 2015/7/16.
  */
-public class ViewRow {
+public class ViewRow
+{
 
     // This is a reference to the layout we defined above
     public static final int LAYOUT = R.layout.list_single;

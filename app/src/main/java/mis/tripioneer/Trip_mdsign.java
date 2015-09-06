@@ -1,55 +1,93 @@
 package mis.tripioneer;
 
-import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
-public class Trip extends Activity
+/**
+ * Created by user on 2015/9/4.
+ */
+public class Trip_mdsign extends AppCompatActivity
 {
     private final static int DOWNLOAD_COMPLETE = 1;
-    private static final String TAG ="Trip";
+    private static final String TAG = "Trip_mdsign";
     private static final int TRIP_NUM_PARAM = 1;
+    private String[] request_name = new String[TRIP_NUM_PARAM];
+    private String[] request_value = new String[TRIP_NUM_PARAM];
     private static int RET_PARAM_NUM;
     private static ArrayList<String> ret_place_Pic = new ArrayList<String>();
     private static ArrayList<String> ret_place_Name = new ArrayList<String>();
     private static ArrayList<String> ret_place_ID = new ArrayList<String>();
-    private String[] request_name = new String[TRIP_NUM_PARAM];
-    private String[] request_value = new String[TRIP_NUM_PARAM];
     private static ListView listView;
     private static List<ViewModel> viewModels;
-    private static ViewAdapter adapter;
-
+    private static GeneralViewAdapter_tmp adapter;
+    private static ImageView imageView;
+    private static Context context;
+    private FloatingActionButton Navigation;
+    private FloatingActionButton Like;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tripioneer_tour_listview);
+        setContentView(R.layout.activity_trip_mdsign);
+
+        context = this;
+        imageView = (ImageView) findViewById(R.id.tripPic);
+        listView =(ListView)findViewById(R.id.listView);
+        Navigation = (FloatingActionButton) findViewById(R.id.fab_navigation);
+        Like = (FloatingActionButton) findViewById(R.id.fab_like);
+        viewModels = new ArrayList<ViewModel>();
+        adapter = new GeneralViewAdapter_tmp(this, viewModels);
+
+        Navigation.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent();
+                intent.setClass(Trip_mdsign.this, main_road.class);
+                intent.putStringArrayListExtra("place_id_list", ret_place_ID);
+                startActivity(intent);
+            }
+        });
+
+        Like.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Log.d(TAG,"Like button clicked!");
+            }
+        });
+
 
         String ID ;
         Bundle tripdata = this.getIntent().getExtras();
         ID = tripdata.getString("tripid");
         request_value[0] = ID;
         request_name[0]="ID";
-        Log.d(TAG,"ID in Trip="+ID);
-
 
         new Thread(run_Trip).start();
-        viewModels = new ArrayList<ViewModel>();
-        adapter = new ViewAdapter(this, viewModels);
-        listView =(ListView)findViewById(R.id.listView);
+
+
     }
 
 
@@ -89,7 +127,8 @@ public class Trip extends Activity
                     try
                     {
 
-                        for(int i=0;i<RET_PARAM_NUM;i++) {
+                        for(int i=0;i<RET_PARAM_NUM;i++)
+                        {
                             if (!"".equals( ret_place_Pic.get(i) ) )
                             {
                                 ViewModel row = new ViewModel
@@ -101,19 +140,20 @@ public class Trip extends Activity
                                 viewModels.add(row);
                             }
                         }
+                        Picasso.with(context).load(viewModels.get(0).getImageUrl()).into(imageView);//Bind header trip_picture
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    listView.setAdapter(adapter);
 
+                    listView.setAdapter(adapter);
                     break;
+
                 default:
                     Log.d(TAG,"Download Failure");
                     break;
             }
         }
     };
-
 
     Runnable run_Trip = new Runnable()
     {
@@ -133,7 +173,6 @@ public class Trip extends Activity
             ret_place_ID = parser.Parse(ret, "place_ID");
             RET_PARAM_NUM = ret_place_Name.size();
 
-
             for(int i=0; i<RET_PARAM_NUM;i++)
             {
 
@@ -146,5 +185,4 @@ public class Trip extends Activity
 
         }
     };
-
 }

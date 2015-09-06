@@ -347,7 +347,8 @@ public class Recommendation_frag extends Fragment implements OnItemClickListener
                 bundle.putString("specifyid", item.getID());
                 break;
             case TRIP:
-                intent.setClass(context, Trip.class);
+                Log.d("Gina","onitemclick in recomm_frag");
+                intent.setClass(context, Trip_mdsign.class);
                 bundle.putString("tripid", item.getID());
                 Log.d(TAG,"tripid="+item.getID());
                 break;

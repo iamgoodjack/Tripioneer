@@ -24,12 +24,12 @@ public class MainActivity_mdsign extends AppCompatActivity
 
 
     String TITLES[] = {"推薦","訂閱","收藏庫","最近瀏覽"};
-    int ICONS[] = {R.drawable.ic_ic_thumb_up_black_24dp,R.drawable.ic_ic_radio_black_24dp,R.drawable.ic_ic_favorite_black_24dp,R.drawable.ic_menu_channel_modify};
+    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
 
 
     String NAME = "Gina";//TODO:GET USER NAME
     String EMAIL = "teemo@gmail.com";//TODO:GET USER EMAIL
-    int PROFILE = R.drawable.ic_person_icons;
+    int PROFILE = R.drawable.ic_menu_account;
 
     private Toolbar toolbar;
     RecyclerView mRecyclerView;
@@ -153,35 +153,33 @@ public class MainActivity_mdsign extends AppCompatActivity
     public void selectItem()
     {
         Fragment fragment = null;
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
+        //FOR Diff color action bar
+        /*Intent intent = new Intent();
+        Bundle bundle = new Bundle();*/
         switch ( label )
         {
             case "推薦":
-                /*fragment = new Recommendation_frag();
-                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();*/
+                fragment = new Recommendation_frag();
                 break;
             case "訂閱":
-                /*fragment = new ChannelMain_frag();
+                //FOR FRAGMENT STRUCTURE(Same color action bar)
+                fragment = new ChannelMain_frag();
                 Bundle bundle = new Bundle();
                 bundle.putString("channelid", "1");//TODO:SET TO SUBSCRIPTED CHANNEL
-                fragment.setArguments(bundle);*/
-                intent.setClass(MainActivity_mdsign.this, ChannelMain.class);
+                fragment.setArguments(bundle);
+                //FOR Diff color action bar
+                /*intent.setClass(MainActivity_mdsign.this, ChannelMain.class);
                 bundle.putString("channelid", "1");//item.getID()
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivity(intent);*/
                 break;
             case "收藏庫":
-                //fragment = new Collect_frag();
-                intent.setClass(MainActivity_mdsign.this, Collect.class);
+                fragment = new Collect_frag();
+                //FOR Diff color action bar
+                /*intent.setClass(MainActivity_mdsign.this, Collect.class);
                 bundle.putString("channelid", "1");//TODO:SET TO COLLECT
                 intent.putExtras(bundle);
-                startActivity(intent);
-                //fragment.setArguments(bundle);
+                startActivity(intent);*/
                 break;
             /*case "最近瀏覽":
                 break;*/
@@ -191,11 +189,11 @@ public class MainActivity_mdsign extends AppCompatActivity
                 //break;
         }
         getSupportActionBar().setTitle(label);
-        /*android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();*/
+        fragmentTransaction.commit();
         Drawer.closeDrawer(mRecyclerView);
     }
 }

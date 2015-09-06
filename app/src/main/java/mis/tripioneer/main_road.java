@@ -56,12 +56,12 @@ public class main_road extends FragmentActivity implements AdapterView.OnItemCli
     private static ArrayList<String> travel_mode = new ArrayList<String>();
     private String url;
     private int dis=0,dur=0;
-    final int par_num = 3;
+    private int par_num;
     private static int x;  //ret_place_Name的大小 我一共要規劃的點個數
     private final static int DOWNLOAD_COMPLETE = 1;
     private static LatLng position[];
-    String request_place_id_name[] = new String[par_num];
-    String request_place_id_value[] = new String[par_num];
+    String request_place_id_name[];
+    String request_place_id_value[];
     private static ArrayList<String> ret_place_X = new ArrayList<String>();
     private static ArrayList<String> ret_place_Y = new ArrayList<String>();
     private static ArrayList<String> ret_place_Name = new ArrayList<String>();
@@ -73,7 +73,7 @@ public class main_road extends FragmentActivity implements AdapterView.OnItemCli
     private static TextView distance;
     private static TextView time;
     final String GET_PLACE_LATLON = "http://140.115.80.224:8080/group4/get_place_latlon.php";
-
+    ArrayList<String> placelist_from_trip;
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -89,10 +89,18 @@ public class main_road extends FragmentActivity implements AdapterView.OnItemCli
         content = (TextView) findViewById(R.id.content);
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
+
+        placelist_from_trip = this.getIntent().getExtras().getStringArrayList("place_id_list");
+        par_num = placelist_from_trip.size();
+        request_place_id_name = new String[par_num];
+        request_place_id_value = new String[par_num];
+
+        Log.d("Gina","size="+par_num);
+
         for (int u=0;u<par_num;u++)
         {
             request_place_id_name[u] = "place_id"+u;
-            request_place_id_value[u] = String.valueOf(u);  //arraylist傳入之值
+            request_place_id_value[u] = placelist_from_trip.get(u);
         }
         new Thread(connect_Server).start();
     }

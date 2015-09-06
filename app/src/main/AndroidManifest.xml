@@ -72,6 +72,11 @@
             android:name=".Place_mdsign"
             android:label="景點" >
         </activity>
+        <activity
+            android:name=".Trip_mdsign"
+            android:label="行程" >
+
+        </activity>
         <activity android:name=".MainActivity_mdsign"
             android:label="@string/app_name">
             <intent-filter>

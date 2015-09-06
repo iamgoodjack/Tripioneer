@@ -105,7 +105,7 @@
                     android:orientation="vertical"
                     android:layout_marginLeft="25dp">
                     <ImageButton
-                        android:src="@drawable/ic_star"
+                        android:src="@drawable/ic_spot_star_afterpush"
                         android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -179,8 +179,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:clickable="true"
-        app:backgroundTint="@color/Navigation"
-        android:src="@drawable/ic_spot_navigation_icon_version2"
+        app:backgroundTint="@color/ColorPrimary"
+        android:src="@drawable/ic_spot_navigation"
         app:layout_anchor="@id/PlaceBar"
         app:layout_anchorGravity="top|right|end"/>
 

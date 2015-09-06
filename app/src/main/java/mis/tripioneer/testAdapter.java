@@ -60,7 +60,6 @@ public class testAdapter extends RecyclerView.Adapter<testAdapter.ViewHolder>
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mTextView.setText(TITLES[position]);
-        //Picasso.with(context).load(ci.img).into(contactViewHolder.img);
         holder.mImageView.setBackgroundResource(ICONS[position]);
     }
 
