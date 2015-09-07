@@ -38,6 +38,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -72,8 +73,11 @@ public class main_road extends FragmentActivity implements AdapterView.OnItemCli
     private static TextView to_text;
     private static TextView distance;
     private static TextView time;
+
     final String GET_PLACE_LATLON = "http://140.115.80.224:8080/group4/get_place_latlon.php";
     ArrayList<String> placelist_from_trip;
+
+
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -97,6 +101,11 @@ public class main_road extends FragmentActivity implements AdapterView.OnItemCli
 
         Log.d("Gina","size="+par_num);
 
+        //將行程中景點id傳入
+       // par_num=3; //景點數量
+        //request_place_id_name=new String[par_num];
+        //request_place_id_value=new String[par_num];
+
         for (int u=0;u<par_num;u++)
         {
             request_place_id_name[u] = "place_id"+u;
@@ -115,7 +124,7 @@ public class main_road extends FragmentActivity implements AdapterView.OnItemCli
         {
             Log.d("Robin,","connect_server");
             ConnectServer connection = new ConnectServer( GET_PLACE_LATLON);
-            ret = connection.connect(request_place_id_name, request_place_id_value, par_num);
+            ret = connection.connect(request_place_id_name, request_place_id_value, request_place_id_value.length);
             JsonParser parser = new JsonParser(CASE);
             ret_place_Name = parser.Parse(ret,"place_Name");
             ret_place_X = parser.Parse(ret, "place_X");

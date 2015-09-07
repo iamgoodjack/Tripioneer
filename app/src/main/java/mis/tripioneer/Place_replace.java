@@ -170,7 +170,7 @@ public class Place_replace extends FragmentActivity
                 position= new LatLng(Double.parseDouble(ret_place_Y.get(0)),Double.parseDouble(ret_place_X.get(0)));
                 map.addMarker(new MarkerOptions().position(position).title(ret_place_Name.get(0)));
                 //icon(BitmapDescriptorFactory.fromResource(android.R.drawable.)
-               // map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 16));
+                // map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 16));
                 Log.d("TAG", "get_choose_place_down");
             }
             if (choose_flag && replaced_flag)

@@ -65,6 +65,7 @@ public class Place_navigation extends FragmentActivity
         Bundle data = this.getIntent().getExtras();
         request_value[0] = data.getString("place_id");
         request_name[0]="place_id";
+        Toast.makeText(Place_navigation.this, "request_value[0]"+request_value[0], Toast.LENGTH_LONG).show();
 
         initProvider();
         new Thread(connect_Server).start();
@@ -202,6 +203,7 @@ public class Place_navigation extends FragmentActivity
                 {
                     int d = Integer.parseInt(dist.get(a));
                     int t = Integer.parseInt(duration.get(a));
+                    Log.d("TAG",String.valueOf(d));
                     dis+=d;
                     dur+=t;
                 }
