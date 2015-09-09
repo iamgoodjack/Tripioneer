@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class Login extends AppCompatActivity
+public class login extends AppCompatActivity
 {
     private String pwd="";
     private String ret_pwd="";
@@ -196,7 +196,7 @@ public class Login extends AppCompatActivity
 
     public void gotoMain()
     {
-        Intent GO_TO_Main = new Intent(Login.this, MainActivity_mdsign.class);
+        Intent GO_TO_Main = new Intent(login.this, MainActivity_mdsign.class);
         startActivity(GO_TO_Main);
     }
 
