@@ -40,28 +40,35 @@
                     android:text="安平古堡"
                     android:id="@+id/place"
                     android:textColor="@color/White"
-                    android:textSize="50sp"
+                    android:textSize="30sp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginLeft="10dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="7dp">
                     <TextView
                         android:text="****4.4顆星"
+                        android:textSize="13dp"
                         android:textColor="@color/White"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginRight="80dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:text="186則評論"
+                        android:textSize="13dp"
                         android:textColor="@color/White"
-                        android:layout_marginRight="120dp"
+                        android:layout_marginRight="80dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:text="2小時"
+                        android:textSize="13dp"
                         android:layout_gravity="right"
                         android:textColor="@color/White"
                         android:layout_width="wrap_content"
@@ -69,17 +76,21 @@
                 </LinearLayout>
 
                 <TextView
-                    android:text="堡壘"
+                    android:text="廟宇"
+                    android:textSize="13dp"
                     android:textColor="@color/White"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,13 +102,25 @@
                         android:src="@drawable/ic_spot_phone"
                         android:background="@null"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:maxWidth="40dp"
+                        android:maxHeight="40dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="35dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"></ImageButton>
+
+
+                    <!--android:scaleType="fitCenter/-->
                     <TextView
                         android:text="打電話"
+                        android:textSize="13dp"
                         android:layout_gravity="center_horizontal"
                         android:textColor="@color/PlaceBar"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="11dp"
+                        />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -105,16 +128,22 @@
                     android:orientation="vertical"
                     android:layout_marginLeft="25dp">
                     <ImageButton
-                        android:src="@drawable/ic_spot_star_afterpush"
+                        android:src="@drawable/ic_spot_star_beforepush"
                         android:background="@null"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:maxWidth="40dp"
+                        android:maxHeight="40dp"/>
                     <TextView
                         android:text="收藏"
+                        android:textSize="13dp"
                         android:textColor="@color/PlaceBar"
-                        android:paddingLeft="25dp"
+                        android:paddingLeft="7dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -122,24 +151,37 @@
             <TextView
                 android:id="@+id/intro"
                 android:text="安平古堡，古稱奧倫治城、熱蘭遮城、安平城、臺灣城，位於今臺灣臺南市。最早建於1624年，是臺灣最早的要塞建築。自建城以來，曾經是荷蘭人統治臺灣的中樞、也曾經是鄭氏王朝3代的居城。 安平古堡有兩處遺跡被列為古蹟，為國定古蹟臺灣城殘蹟，及國定古蹟熱蘭遮城城垣暨城內建築遺構。"
+                android:textSize="13dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="25dp">
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginRight="10dp">
                 <ImageButton
                     android:src="@drawable/ic_spot_address"
                     android:background="@null"
                     android:layout_width="wrap_content"
-                    android:layout_height="57dp" />
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="30dp"
+                    android:maxHeight="30dp"
+                    android:scaleType="fitXY"
+                    android:layout_marginRight="15dp"/>
                 <TextView
                     android:id="@+id/addr"
                     android:text="台南市安平區安平路165號"
-                    android:layout_gravity="bottom"
+                    android:textSize="13dp"
+                    android:layout_gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -147,15 +189,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="25dp">
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginRight="10dp">
                 <ImageButton
                     android:src="@drawable/ic_spot_time"
                     android:background="@null"
                     android:layout_width="wrap_content"
-                    android:layout_height="57dp" />
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="30dp"
+                    android:maxHeight="30dp"
+                    android:scaleType="fitXY"
+                    android:layout_marginRight="15dp"/>
                 <TextView
                     android:id="@+id/hours"
-                    android:layout_gravity="bottom"
+                    android:layout_gravity="top"
                     android:text="
                     星期一 07:00~19:00
                     星期二 07:00~19:00
@@ -164,6 +213,7 @@
                     星期五 07:00~19:00
                     星期六 07:00~19:00
                     星期日 07:00~19:00"
+                    android:textSize="13dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -179,8 +229,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:clickable="true"
-        app:backgroundTint="@color/ColorPrimary"
-        android:src="@drawable/ic_spot_navigation"
+        app:backgroundTint="@color/Navigation"
+        android:src="@drawable/ic_spot_navigation_icon_version2"
         app:layout_anchor="@id/PlaceBar"
         app:layout_anchorGravity="top|right|end"/>
 

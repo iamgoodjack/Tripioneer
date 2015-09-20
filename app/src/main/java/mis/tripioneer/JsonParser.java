@@ -51,6 +51,7 @@ public class JsonParser
                         for(int i=0;i<object.length();i++)
                         {
                             json.add(object.getJSONObject(i).getString(key));
+
                         }
                     }
                     catch(ClassCastException e)

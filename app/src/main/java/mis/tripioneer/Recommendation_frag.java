@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,7 @@ public class Recommendation_frag extends Fragment implements OnItemClickListener
     private static List<ViewModel> headers;
     private static ViewAdapter adapter;
     public Context context;
-
+    private String title ="行程";
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -55,8 +56,9 @@ public class Recommendation_frag extends Fragment implements OnItemClickListener
     {
         super.onAttach(activity);
         Log.d(TAG, "onAttach");
-        context = getActivity();
+        context = activity;
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -337,6 +339,7 @@ public class Recommendation_frag extends Fragment implements OnItemClickListener
         Toast.makeText(context, "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
 
         TYPE = item.getType();
+        title = item.getTitle();
 
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -350,6 +353,7 @@ public class Recommendation_frag extends Fragment implements OnItemClickListener
                 Log.d("Gina","onitemclick in recomm_frag");
                 intent.setClass(context, Trip_mdsign.class);
                 bundle.putString("tripid", item.getID());
+                bundle.putString("title",item.getTitle());
                 Log.d(TAG,"tripid="+item.getID());
                 break;
             case CHANNEL:

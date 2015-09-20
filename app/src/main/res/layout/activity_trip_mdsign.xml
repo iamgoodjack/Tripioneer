@@ -5,24 +5,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/tripPic"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
-
-        <ListView
-            android:id="@+id/listView"
+        android:layout_height="match_parent">
+        <!-- The main content view -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical">
-        </ListView>
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <include
+                android:id="@+id/tool_bar"
+                layout="@layout/tool_bar">
+            </include>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/tripPic"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+                <ListView
+                    android:id="@+id/listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical">
+                </ListView>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- The navigation mainactivity_mdsign -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/RecyclerView"
+            android:layout_width="320dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:background="#ffffff"
+            android:scrollbars="vertical">
+
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.DrawerLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_like"
@@ -45,6 +73,17 @@
         app:backgroundTint="@color/Navigation"
         android:src="@drawable/ic_spot_navigation_icon_version2"
         app:layout_anchor="@id/tripPic"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_replace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:clickable="true"
+        app:backgroundTint="@color/ColorPrimary"
+        android:src="@drawable/ic_spot_plus"
+        app:layout_anchor="@id/listView"
         app:layout_anchorGravity="bottom|right|end"/>
 
 </android.support.design.widget.CoordinatorLayout>

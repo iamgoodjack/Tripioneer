@@ -29,12 +29,12 @@ public class Collect extends AppCompatActivity
     int IMGS[] ={R.drawable.collectimg1,R.drawable.collectimg2,R.drawable.collectimg3,R.drawable.collectimg4,R.drawable.collectimg5};
     private List<CollectInfo> collectInfoList;
     String TITLES[] = {"推薦","訂閱","收藏庫","最近瀏覽"};
-    int ICONS[] = {R.drawable.ic_recommand_icons,R.drawable.ic_channel_icons,R.drawable.ic_treasurebox_icons,R.drawable.ic_historyrecord_icons};
+    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
 
 
     String NAME = "Gina";//TODO:GET USER NAME
     String EMAIL = "teemo@gmail.com";//TODO:GET USER EMAIL
-    int PROFILE = R.drawable.ic_person_icons;
+    int PROFILE = R.drawable.ic_menu_account;
 
     private Toolbar toolbar;
     RecyclerView mRecyclerView;
@@ -49,7 +49,7 @@ public class Collect extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.collect_difacbar);
-        toolbar = (Toolbar) findViewById(R.id.tool_bar_collect);
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
@@ -172,10 +172,10 @@ public class Collect extends AppCompatActivity
                 Bundle bundle = new Bundle();
                 bundle.putString("channelid", "1");//TODO:SET TO SUBSCRIPTED CHANNEL
                 fragment.setArguments(bundle);*/
-                intent.setClass(Collect.this, ChannelMain.class);
+                /*intent.setClass(Collect.this, ChannelMain.class);
                 bundle.putString("channelid", "1");//item.getID()
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivity(intent);*/
                 break;
             case "收藏庫":
                 //fragment = new Collect_frag();

@@ -238,7 +238,7 @@ public class Channel_content extends Fragment implements AdapterView.OnItemClick
         switch (TYPE)
         {
             case PLACE:
-                intent.setClass(context, place.class);
+                intent.setClass(context, place_mimic_googlemap.class);
                 bundle.putString("specifyid", item.getID());
                 break;
             case TRIP:

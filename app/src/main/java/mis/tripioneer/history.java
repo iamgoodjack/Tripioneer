@@ -3,15 +3,16 @@ package mis.tripioneer;
 /**
  * Created by iamgo on 2015/9/9.
  */
-import android.support.v7.app.ActionBarActivity;
+
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-public class history extends ActionBarActivity {
+public class history extends AppCompatActivity {
     private String[] sources = {
             "http://lorempixel.com/600/200/food"
     };

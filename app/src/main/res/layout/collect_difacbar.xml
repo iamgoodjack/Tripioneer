@@ -10,8 +10,8 @@
         android:orientation="vertical">
 
         <include
-            android:id="@+id/tool_bar_collect"
-            layout="@layout/tool_bar_collect">
+            android:id="@+id/tool_bar"
+            layout="@layout/tool_bar">
         </include>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/cardList"
@@ -27,7 +27,6 @@
         android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-
         android:background="#ffffff"
         android:scrollbars="vertical">
 

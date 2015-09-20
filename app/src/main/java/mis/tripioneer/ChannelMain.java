@@ -32,12 +32,12 @@ public class ChannelMain extends AppCompatActivity
     private final String TAG ="ChannelMain";
 
     String TITLES[] = {"推薦","訂閱","收藏庫","最近瀏覽"};
-    int ICONS[] = {R.drawable.ic_recommand_icons,R.drawable.ic_channel_icons,R.drawable.ic_treasurebox_icons,R.drawable.ic_historyrecord_icons};
+    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
 
 
     String NAME = "Gina";//TODO:GET USER NAME
     String EMAIL = "teemo@gmail.com";//TODO:GET USER EMAIL
-    int PROFILE = R.drawable.ic_person_icons;
+    int PROFILE = R.drawable.ic_menu_account;
 
     private Toolbar toolbar;
     RecyclerView mRecyclerView;
