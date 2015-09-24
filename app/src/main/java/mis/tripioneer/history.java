@@ -14,7 +14,7 @@ import android.support.v7.widget.RecyclerView;
 
 public class history extends AppCompatActivity {
     private String[] sources = {
-            "http://lorempixel.com/600/200/food"
+            "http://www.tnwcdo.gov.tw/warehouse/E00/1-8.jpg", "http://photo.network.com.tw/scenery/98E3B96F-21E9-41AD-8193-31840E021733_c.jpg"
     };
 
     @Override
@@ -24,13 +24,8 @@ public class history extends AppCompatActivity {
 
     RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
     mis.tripioneer.ItemData itemsData[] = {
-            new mis.tripioneer.ItemData("餐廳",sources[0]),
-            new mis.tripioneer.ItemData("餐廳",sources[0]),
-            new mis.tripioneer.ItemData("餐廳",sources[0]),
-            new mis.tripioneer.ItemData("餐廳",sources[0]),
-            new mis.tripioneer.ItemData("餐廳",sources[0]),
-            new mis.tripioneer.ItemData("餐廳",sources[0]),
-            new mis.tripioneer.ItemData("餐廳",sources[0]),
+            new mis.tripioneer.ItemData("赤崁樓",sources[0]),
+            new mis.tripioneer.ItemData("台南孔廟",sources[1]),
     };
 
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
