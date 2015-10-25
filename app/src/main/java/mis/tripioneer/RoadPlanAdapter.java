@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -59,7 +61,14 @@ public class RoadPlanAdapter extends BaseAdapter
         // After that we get the row associated with this View and bind the view model to it
         row = (RoadPlanRow) convertView.getTag();
         row.bind(model);
+        ImageView add_btn = (ImageView)convertView.findViewById(R.id.addButton);
+        add_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Toast.makeText(context, "Successfully added to your trip!", Toast.LENGTH_SHORT).show();
+            }
+        });
         return convertView;
     }
 }

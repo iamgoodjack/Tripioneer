@@ -1,10 +1,16 @@
 package mis.tripioneer;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
+import com.nhaarman.listviewanimations.util.Insertable;
+import com.nhaarman.listviewanimations.util.Swappable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +18,7 @@ import java.util.List;
 /**
  * Created by user on 2015/7/16.
  */
-public class GeneralViewAdapter_tmp extends BaseAdapter
+public class GeneralViewAdapter_tmp extends BaseAdapter implements Swappable, UndoAdapter
 {
 
     private final List<ViewModel> viewModels;
@@ -48,7 +54,8 @@ public class GeneralViewAdapter_tmp extends BaseAdapter
     @Override
     public long getItemId(int position) {
         // We only need to implement this if we have multiple rows with a different layout. All your rows use the same layout so we can just return 0.
-        return position;
+        //return position;
+        return getItem(position).hashCode();
     }
 
     @Override
@@ -61,7 +68,6 @@ public class GeneralViewAdapter_tmp extends BaseAdapter
         // If the convertView is null we need to create it
         if(convertView == null) {
             convertView = this.inflater.inflate(ViewRow.LAYOUT, parent, false);
-
             // In that case we also need to create a new row and attach it to the newly created View
             row = new ViewRow(this.context, convertView,position);
             convertView.setTag(row);
@@ -73,4 +79,47 @@ public class GeneralViewAdapter_tmp extends BaseAdapter
 
         return convertView;
     }
+
+    @Override
+    public boolean hasStableIds()
+    {
+        return true;
+    }
+
+    @Override
+    public void swapItems(final int positionOne, final int positionTwo) {
+        ViewModel model;
+        if ( this instanceof Swappable) {
+            model = this.getItem(positionOne);
+            viewModels.set(positionOne,viewModels.get(positionTwo));
+            viewModels.set(positionTwo,model);
+            this.notifyDataSetChanged();
+        } else {
+            Log.w("ListViewAnimations", "Warning: swapItems called on an adapter that does not implement Swappable!");
+        }
+    }
+
+    public void remove(int position)
+    {
+        viewModels.remove(position);
+        this.notifyDataSetChanged();
+    }
+
+    public View getUndoView(int i, View convertView, @NonNull ViewGroup parent) {
+        if (convertView == null) {
+            convertView = getUndoView(parent);
+        }
+        return convertView;
+    }
+
+    private View getUndoView(ViewGroup parent) {
+        return LayoutInflater.from(context).inflate(R.layout.undo_layout, parent, false);
+    }
+
+    @NonNull
+    @Override
+    public View getUndoClickView(@NonNull View view) {
+        return view.findViewById(R.id.undoButton);
+    }
+
 }

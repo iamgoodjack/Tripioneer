@@ -12,22 +12,22 @@ import com.squareup.picasso.Picasso;
  */
 public class RoadPlanRow
 {
-    public static final int LAYOUT = R.layout.list_single;
+    public static final int LAYOUT = R.layout.list_single_place_replace;
     private final Context context;
     private final TextView title;
     private final ImageView img;
-    private final TextView info;
+    //private final TextView info;
 
     public RoadPlanRow(Context context, View convertView)
     {
         this.context = context;
         this.img = (ImageView) convertView.findViewById(R.id.img);
         this.title = (TextView) convertView.findViewById(R.id.txt);
-        this.info = (TextView) convertView.findViewById(R.id.info);
+        //this.info = (TextView) convertView.findViewById(R.id.info);
     }
     public void bind(RoadPlanModel Model) {
         this.title.setText(Model.getTitle());
-        this.info.setText(Model.getInfo());
+        //this.info.setText(Model.getInfo());
         Picasso.with(this.context).load(Model.getImageUrl()).into(this.img);
     }
 }

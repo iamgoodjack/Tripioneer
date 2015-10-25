@@ -1,12 +1,19 @@
 package mis.tripioneer;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,7 +35,7 @@ import javax.sql.StatementEvent;
 /**
  * Created by Jenny on 2015/8/7. 行程中景點置換的附近搜尋(配合activity_map 的layout)
  */
-public class Place_replace extends FragmentActivity
+public class Place_replace extends Activity
 {
     private  LatLng position,cho;
     private static GoogleMap map;
@@ -53,6 +60,7 @@ public class Place_replace extends FragmentActivity
     private static RoadPlanAdapter adapter;
 
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         Log.d("Jenny", "uuu");
         setContentView(R.layout.activity_map);
@@ -60,6 +68,7 @@ public class Place_replace extends FragmentActivity
         viewModels = new ArrayList<RoadPlanModel>();
         adapter = new RoadPlanAdapter(this, viewModels);
         listView = (ListView) findViewById(R.id.listView_map);
+
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
         Log.d("vvv", "uuu");
@@ -67,6 +76,7 @@ public class Place_replace extends FragmentActivity
         request_place_id_value[0] = "2";
         request_place_id_name[1] = "trip_id";
         request_place_id_value[1] = "1";
+
         new Thread(get_choose).start();
         //new Thread(get_trip_place).start();
         new Thread(get_Replaced).start();

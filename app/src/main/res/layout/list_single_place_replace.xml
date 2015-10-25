@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <TableRow
+        android:background="@drawable/list_item_selector">
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="100dp"
+            android:layout_height="60dp"/>
+
+        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:rowCount="1"
+            android:columnCount="2" >
+
+            <!-- 這邊是景點標題 -->　
+            <TextView
+                android:id="@+id/txt"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:paddingRight="1dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp" android:textAppearance="?android:attr/textAppearanceMedium"
+                />
+
+            <ImageView
+                android:id="@+id/addButton"
+                android:src="@drawable/ic_add_black_36dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:clickable="true"
+                />
+        </GridLayout>
+
+    </TableRow>
+</TableLayout>

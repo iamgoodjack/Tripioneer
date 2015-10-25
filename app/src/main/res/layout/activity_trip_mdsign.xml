@@ -30,12 +30,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp" />
 
-                <ListView
+                <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
                     android:id="@+id/listView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scrollbars="vertical">
-                </ListView>
+                    android:scrollbars="vertical"/>
+
 
             </LinearLayout>
         </LinearLayout>

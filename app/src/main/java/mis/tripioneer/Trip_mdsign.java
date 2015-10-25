@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,11 +19,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.TouchViewDraggableManager;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
 import com.squareup.picasso.Picasso;
+import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -32,7 +39,7 @@ import java.util.List;
 /**
  * Created by user on 2015/9/4.
  */
-public class Trip_mdsign extends AppCompatActivity
+public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItemClickListener
 {
     private final static int DOWNLOAD_COMPLETE = 1;
     private static final String TAG = "Trip_mdsign";
@@ -44,7 +51,7 @@ public class Trip_mdsign extends AppCompatActivity
     private static ArrayList<String> ret_place_Name = new ArrayList<String>();
     private static ArrayList<String> ret_place_ID = new ArrayList<String>();
     private static ArrayList<String> ret_place_SuggestTime = new ArrayList<String>();
-    private static ListView listView;
+    private static DynamicListView  listView;
     private static List<ViewModel> viewModels;
     private static GeneralViewAdapter_tmp adapter;
     private static ImageView imageView;
@@ -130,7 +137,7 @@ public class Trip_mdsign extends AppCompatActivity
 
         context = this;
         imageView = (ImageView) findViewById(R.id.tripPic);
-        listView =(ListView)findViewById(R.id.listView);
+        listView =(DynamicListView )findViewById(R.id.listView);
         Navigation = (FloatingActionButton) findViewById(R.id.fab_navigation);
         Like = (FloatingActionButton) findViewById(R.id.fab_like);
         Replace = (FloatingActionButton) findViewById(R.id.fab_replace);
@@ -177,7 +184,45 @@ public class Trip_mdsign extends AppCompatActivity
         getSupportActionBar().setTitle(TITLE);
         request_value[0] = ID;
         request_name[0]="ID";
+        listView.setOnItemClickListener(this);
 
+        listView.enableDragAndDrop();
+        listView.setDraggableManager(new TouchViewDraggableManager(R.id.img));
+        listView.setOnItemLongClickListener(
+                new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(final AdapterView<?> parent, final View view,
+                                                   final int position, final long id) {
+                        listView.startDragging(position);
+                        return true;
+                    }
+                }
+        );
+
+        listView.enableSwipeToDismiss(
+                new OnDismissCallback() {
+                    @Override
+                    public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
+                        for (int position : reverseSortedPositions) {
+                            adapter.remove(position);
+                        }
+                    }
+                }
+        );
+
+        /*SimpleSwipeUndoAdapter swipeUndoAdapter = new SimpleSwipeUndoAdapter(adapter, Trip_mdsign.this,
+                new OnDismissCallback() {
+                    @Override
+                    public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
+                        for (int position : reverseSortedPositions) {
+                            adapter.remove(position);
+                        }
+                    }
+                }
+        );
+        swipeUndoAdapter.setAbsListView(listView);
+        listView.setAdapter(swipeUndoAdapter);
+        listView.enableSimpleSwipeUndo();*/
         new Thread(run_Trip).start();
 
 
@@ -308,6 +353,7 @@ public class Trip_mdsign extends AppCompatActivity
                                                 "建議停留時間:"+ret_place_SuggestTime.get(i)+"小時"
                                         );
                                 viewModels.add(row);
+                                row.setID(ret_place_ID.get(i));
                             }
                         }
                         Picasso.with(context).load(viewModels.get(0).getImageUrl()).into(imageView);//Bind header trip_picture
@@ -357,4 +403,22 @@ public class Trip_mdsign extends AppCompatActivity
 
         }
     };
+
+    @Override
+    public void onItemClick(AdapterView<?> arg0, View arg1, int row, long id)
+    {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        ViewModel item = (ViewModel) listView.getItemAtPosition(row);
+        Log.d(TAG, "item = " + item.getTitle() + "type=" + item.getType() + "id=" + item.getID());
+        Toast.makeText(context, "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
+
+        intent.setClass(this, place_mimic_googlemap.class);
+        bundle.putString("specifyid", item.getID());
+
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 }

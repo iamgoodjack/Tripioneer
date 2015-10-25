@@ -13,7 +13,13 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("new-releasekey.keystore")
+            storeFile file("C:\\Program Files\\Java\\jdk1.7.0_71\\bin\\new-releasekey.keystore")
+            storePassword "gp4gp4123456"
+            keyAlias "releasekeynew"
+            keyPassword "gp4gp4123"
+        }
+        debug{
+            storeFile file("C:\\Program Files\\Java\\jdk1.7.0_71\\bin\\new-releasekey.keystore")
             storePassword "gp4gp4123456"
             keyAlias "releasekeynew"
             keyPassword "gp4gp4123"
@@ -24,9 +30,6 @@ android {
                 proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
                 signingConfig signingConfigs.release
             }
-        }
-        compileOptions {
-            encoding "UTF-8"
         }
 
     }
@@ -42,6 +45,11 @@ android {
 
         compile 'com.android.support:design:22.2.0'
         compile 'com.sothree.slidinguppanel:library:3.1.1'
+
+        compile 'com.android.support:appcompat-v7:22.2.0'
+        compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
+        compile 'com.nhaarman.listviewanimations:lib-manipulation:3.1.0@aar'
+        compile 'com.nhaarman.listviewanimations:lib-core-slh:3.1.0@aar'
     }
 
 }

@@ -1,12 +1,12 @@
 package mis.tripioneer;
 
-import android.content.Context;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import java.util.List;
+        import android.content.Context;
+        import android.util.Log;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.BaseAdapter;
+        import java.util.List;
 
 
 /**
@@ -131,7 +131,9 @@ public class ViewAdapter extends BaseAdapter
             Log.d(TAG,"converView == null");
             viewModel = getItem(position);
             Log.d(TAG, "title=" + viewModel.getTitle());
+
             convertView = this.inflater.inflate(ViewRow.LAYOUT, parent, false);
+
             // In that case we also need to create a new row and attach it to the newly created View
             row = new ViewRow(this.context, convertView,position);
             convertView.setTag(row);

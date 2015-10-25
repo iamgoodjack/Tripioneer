@@ -25,13 +25,14 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/ic_star_grey600_48dp" />
+                    android:background="@drawable/profilepic" />
 
                 <TextView
                     android:id="@+id/text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Advisor Name"/>
+                    android:textSize="40dp"
+                    android:text="Thomas Lin"/>
 
             </LinearLayout>
             <LinearLayout

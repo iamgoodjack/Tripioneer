@@ -14,7 +14,7 @@ public class RoadPlanModel
     {
         this.title = text;
         this.img=imgurl;
-        this.info=info;
+        //this.info=info;
     }
 
     public String getTitle() { return title;}
