@@ -61,6 +61,7 @@
             android:name=".Place_replace"
             android:label="@string/title_activity_map" >
 
+
         </activity>
         <activity
             android:name=".main_road"
@@ -79,15 +80,15 @@
         <activity
             android:name=".MainActivity_mdsign"
             android:label="@string/app_name">
-
-        </activity>
-        <activity
-            android:name=".roadplan_choose_mode"
-            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".roadplan_choose_mode"
+            android:label="@string/app_name" >
+
         </activity>
 
         <activity
@@ -98,6 +99,11 @@
         <activity
             android:name=".roadplan_choose_map"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".place_navi"
+            android:label="@string/app_name" >
+
         </activity>
 
         <activity

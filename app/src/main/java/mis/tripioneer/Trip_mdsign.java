@@ -143,7 +143,7 @@ public class Trip_mdsign extends AppCompatActivity
             public void onClick(View v)
             {
                 Intent intent = new Intent();
-                intent.setClass(Trip_mdsign.this, main_road.class);
+                intent.setClass(Trip_mdsign.this, roadplan_choose_mode.class);
                 intent.putStringArrayListExtra("place_id_list", ret_place_ID);
                 startActivity(intent);
             }

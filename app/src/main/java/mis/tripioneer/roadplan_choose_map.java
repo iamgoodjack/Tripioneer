@@ -245,7 +245,6 @@ public class roadplan_choose_map  extends FragmentActivity implements AdapterVie
             //parse出畫在地圖上的經緯度組
             result = parser.parse(jObject);
 
-            //bounds=par.parse(jObject);
             Log.d("TAG","routes="+String.valueOf(result.size()));
         } catch (JSONException e) {
             e.printStackTrace();

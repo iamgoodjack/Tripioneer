@@ -36,6 +36,7 @@ public class roadplan_choose_mode extends FragmentActivity implements AdapterVie
     private static  String mode="";
     private static String json_String;
     private String url;
+    private int par_num;
     private String request_place_id_name[];
     private String request_place_id_value[];
     private static ArrayList<String> summary = new ArrayList<String>();
@@ -44,6 +45,7 @@ public class roadplan_choose_mode extends FragmentActivity implements AdapterVie
     private static ArrayList<String> ret_place_X = new ArrayList<String>();
     private static ArrayList<String> ret_place_Y = new ArrayList<String>();
     private static ArrayList<String> ret_place_Name = new ArrayList<String>();
+    private static ArrayList<String> placelist_from_trip = new ArrayList<String>();
     private static TextView orgin;
     private static TextView waypoints;
     private static TextView destination;
@@ -62,14 +64,16 @@ public class roadplan_choose_mode extends FragmentActivity implements AdapterVie
         destination =(TextView) findViewById(R.id.destination);
         routes_listview = (ListView) findViewById(R.id.routes_listview);
         routes_listview.setOnItemClickListener(this);
-        int num = 4;
-        request_place_id_name=new String [num];
-        request_place_id_value=new String[num];
-        for (int a = 0; a < num; a++)
+
+        placelist_from_trip = this.getIntent().getExtras().getStringArrayList("place_id_list");
+        par_num = placelist_from_trip.size();
+        request_place_id_name = new String[par_num];
+        request_place_id_value = new String[par_num];
+
+        for (int a = 0; a < par_num; a++)
         {
              request_place_id_name[a]="place_id"+String.valueOf(a);
-             request_place_id_value[a]=String.valueOf(a+1);
-
+             request_place_id_value[a]=placelist_from_trip.get(a);
         }
         getCheck();
         GetLatLng getlatlng = new GetLatLng();

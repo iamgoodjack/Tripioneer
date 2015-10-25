@@ -30,7 +30,7 @@ import javax.sql.StatementEvent;
  */
 public class Place_replace extends FragmentActivity
 {
-    private  LatLng position;
+    private  LatLng position,cho;
     private static GoogleMap map;
     final int par_num = 2;
     private  int x=0;
@@ -64,7 +64,7 @@ public class Place_replace extends FragmentActivity
         map.getUiSettings().setZoomControlsEnabled(true);
         Log.d("vvv", "uuu");
         request_place_id_name[0] = "place_id";
-        request_place_id_value[0] = "1";
+        request_place_id_value[0] = "2";
         request_place_id_name[1] = "trip_id";
         request_place_id_value[1] = "1";
         new Thread(get_choose).start();
@@ -79,17 +79,16 @@ public class Place_replace extends FragmentActivity
         @Override
         public void run()
         {
-            Log.d("Robin,","Robinn");
+            Log.d("TAG,","Robinn");
             ConnectServer connection = new ConnectServer(GET_CHOOSE_PLACE);
             ret = connection.connect(request_place_id_name, request_place_id_value, par_num);
             JsonParser parser = new JsonParser(CASE);
             ret_place_Name = parser.Parse(ret,"place_Name");
             ret_place_X = parser.Parse(ret, "place_X");
             ret_place_Y = parser.Parse(ret, "place_Y");
-            Log.d("Jenny",ret_place_Name.get(0)+"\n");
-            Log.d("Jenny",ret_place_X.get(0)+"\n");
-            Log.d("Jenny",ret_place_Y.get(0)+"\n");
-
+            Log.d("TAG",ret_place_Name.get(0)+"\n");
+            Log.d("TAG",ret_place_X.get(0)+"\n");
+            Log.d("TAG",ret_place_Y.get(0)+"\n");
             handler.sendEmptyMessage(0);
         }
     };
@@ -101,7 +100,7 @@ public class Place_replace extends FragmentActivity
         @Override
         public void run()
         {
-            Log.d("marsh", "marsh");
+            Log.d("TAG", "marsh");
             ConnectServer con = new ConnectServer(GET_REPLACED_PLACE);
             rest = con.connect(request_place_id_name, request_place_id_value, 2);
             JsonParser parser1 = new JsonParser(CASE);
@@ -111,14 +110,15 @@ public class Place_replace extends FragmentActivity
             rest_place_pic = parser1.Parse(rest,"place_pic");
             rest_place_ShortIntro = parser1.Parse(rest, "place_ShortIntro");
             x = rest_place_Name.size();
+            Log.d("TAG","x="+String.valueOf(x));
             for(int a=0;a<x;a++)
             {
-                Log.d("x is ",String.valueOf(x));
-                Log.d("Gina",rest_place_Name.get(a)+"\n");
-                Log.d("Gina",rest_place_X.get(a)+"\n");
-                Log.d("Gina",rest_place_Y.get(a)+"\n");
-                Log.d("Gina",rest_place_ShortIntro.get(a)+"\n");
-                Log.d("Gina",rest_place_pic.get(a)+"\n");
+                Log.d("TAG ","x is"+String.valueOf(x));
+                Log.d("TAG",rest_place_Name.get(a)+"\n");
+                Log.d("TAG",rest_place_X.get(a)+"\n");
+                Log.d("TAG",rest_place_Y.get(a)+"\n");
+                Log.d("TAG",rest_place_ShortIntro.get(a)+"\n");
+                Log.d("TAG",rest_place_pic.get(a)+"\n");
             }
             handler.sendEmptyMessage(1);
         }
@@ -134,11 +134,12 @@ public class Place_replace extends FragmentActivity
             {
                 replaced_flag=true;
                 Log.d("TAG", "get_Replaced_place");
-                Log.d("xNumber:", String.valueOf(x));
+                Log.d("TAG", "xNumber"+String.valueOf(x));
                 MarkerOptions orgin_options = new MarkerOptions();
                 orgin_options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 for(int b=0;b<x;b++)
                 {
+                    position=null;
                     position= new LatLng(Double.parseDouble(rest_place_Y.get(b)),Double.parseDouble(rest_place_X.get(b)));
                     orgin_options.position(position);
                     orgin_options.title(rest_place_Name.get(b));
@@ -154,6 +155,7 @@ public class Place_replace extends FragmentActivity
                                             URL_PREFIX_IMAGE + URLEncoder.encode(rest_place_pic.get(b), "UTF-8") + ".jpg",
                                             rest_place_ShortIntro.get(b)
                                     );
+                            Log.d("TAG",rest_place_Name.get(b));
                             viewModels.add(row);
                         }
                     }catch (UnsupportedEncodingException e) {
@@ -167,17 +169,18 @@ public class Place_replace extends FragmentActivity
             {
                 choose_flag=true;
                 Log.d("TAG","get_choose_place");
-                position= new LatLng(Double.parseDouble(ret_place_Y.get(0)),Double.parseDouble(ret_place_X.get(0)));
-                map.addMarker(new MarkerOptions().position(position).title(ret_place_Name.get(0)));
+                cho= new LatLng(Double.parseDouble(ret_place_Y.get(0)),Double.parseDouble(ret_place_X.get(0)));
+                map.addMarker(new MarkerOptions().position(cho).title(ret_place_Name.get(0)));
                 //icon(BitmapDescriptorFactory.fromResource(android.R.drawable.)
                 // map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 16));
                 Log.d("TAG", "get_choose_place_down");
             }
             if (choose_flag && replaced_flag)
             {
-                bunds=getBound(rest_place_X, rest_place_Y, ret_place_X, ret_place_Y);
-                Log.d("bunds","123456");
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(bunds.getCenter(), 18));
+                //bunds=getBound(rest_place_X, rest_place_Y, ret_place_X, ret_place_Y);
+                Log.d("TAG", "123456");
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(cho,14));
+                //map.animateCamera(CameraUpdateFactory.newLatLngZoom(bunds.getCenter(), 18));
                 /*map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                     public void onCameraChange(CameraPosition cameraPosition) {
                         Log.d("onCameraChange","onCameraChange");

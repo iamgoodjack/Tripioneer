@@ -22,6 +22,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.UnsupportedEncodingException;
@@ -32,7 +33,7 @@ import java.util.List;
 /**
  * Created by Jenny on 2015/8/14. 放大鏡功能
  */
-public class Search extends FragmentActivity {
+public class Search extends FragmentActivity  {
     private GoogleMap map;
     private LocationManager locationMgr;
     private  LatLng position;
@@ -46,27 +47,60 @@ public class Search extends FragmentActivity {
     private static ArrayList<String> ret_place_X = new ArrayList<String>();
     private static ArrayList<String> ret_place_Y = new ArrayList<String>();
     private static ArrayList<String> ret_place_Name = new ArrayList<String>();
-    private static ArrayList<String> ret_place_ShortIntro = new ArrayList<String>();
-    private static ArrayList<String> ret_place_pic = new ArrayList<String>();
-    private static ListView listView;
-    private static List<RoadPlanModel> viewModels;
-    private static RoadPlanAdapter adapter;
+    private static ArrayList<String> ret_place_id = new ArrayList<String>();
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("TAG", "oncreate");
-        setContentView(R.layout.activity_nearsearch);
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.search_map)).getMap();
+        setContentView(R.layout.activity_search);
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.s_map)).getMap();
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
-        viewModels = new ArrayList<RoadPlanModel>();
-        adapter = new RoadPlanAdapter(this, viewModels);
-        listView = (ListView) findViewById(R.id.listView_map);
+        map.getUiSettings().setMapToolbarEnabled(false);
+
         locationMgr=(LocationManager) getSystemService(LOCATION_SERVICE);
         initProvider();
         Log.d("TAG", "uuu");
+
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
+        {
+            Marker currentShown;
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.equals(currentShown))
+                {
+                    marker.hideInfoWindow();
+                    currentShown = null;
+                } else
+                {
+                    marker.showInfoWindow();
+                    currentShown = marker;
+                }
+                for(int u=0;u<ret_place_Name.size();u++)
+                {
+                    if(marker.getTitle().equals(ret_place_Name.get(u))) // if marker source is clicked
+                    {
+                        Toast.makeText(Search.this, marker.getTitle(), Toast.LENGTH_SHORT).show();// display toast
+                        changeActivity(ret_place_id.get(u));
+                    }
+
+                }
+                return true;
+            }
+        });
+    }
+
+    private void changeActivity(String s)
+    {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        intent.setClass(Search.this, place.class);
+        //bundle.putString("specifyid", item.getID());
+        intent.putExtras(bundle);
+        startActivity(intent);
+
     }
 
     public void initProvider()
@@ -100,53 +134,17 @@ public class Search extends FragmentActivity {
         }
     }
 
-    private LatLngBounds getBound(ArrayList<String> ret_place_X, ArrayList<String> ret_place_Y, Double lng,Double lat)
-    {
-        Log.d("TAG","latlngbounds");
-        ret_place_X.add(String.valueOf(lng));
-        ret_place_Y.add(String.valueOf(lat));
-        double max_X=Double.parseDouble(ret_place_X.get(0));
-        double min_X=Double.parseDouble(ret_place_X.get(0));
-        double max_Y=Double.parseDouble(ret_place_Y.get(0));
-        double min_Y=Double.parseDouble(ret_place_Y.get(0));
-        for (int t=1; t<ret_place_X.size();t++)
-        {
-            if (Double.parseDouble(ret_place_X.get(t))>max_X)
-            {
-                max_X=Double.parseDouble(ret_place_X.get(t));
-            }
-            if (Double.parseDouble(ret_place_X.get(t))<min_X)
-            {
-                min_X=Double.parseDouble(ret_place_X.get(t));
-            }
-            if (Double.parseDouble(ret_place_Y.get(t))>max_Y)
-            {
-                max_Y=Double.parseDouble(ret_place_Y.get(t));
-            }
-            if (Double.parseDouble(ret_place_Y.get(t))<min_Y)
-            {
-                min_Y=Double.parseDouble(ret_place_Y.get(t));
-            }
-        }
-        Log.d("TAG","minX"+String.valueOf(min_X));
-        Log.d("TAG","maxX"+String.valueOf(max_X));
-        Log.d("TAG","minY"+String.valueOf(min_Y));
-        Log.d("TAG","maxY"+String.valueOf(min_Y));
-        center = new LatLngBounds(new LatLng(min_Y, min_X), new LatLng(max_Y, max_X));
-        return center;
-        }
-
     protected void onPause() {
         Log.d("TAG","onpause");
-        locationMgr.removeUpdates(locationListener);
-        locationMgr.removeGpsStatusListener(gpsListener);
+        //locationMgr.removeUpdates(locationListener);
+        //locationMgr.removeGpsStatusListener(gpsListener);
         super.onPause();
     }
 
     protected void onResume()
     {
         super.onResume();
-        initProvider();
+        //initProvider();
         Log.d("TAG", "onResume");
     }
 
@@ -177,6 +175,27 @@ public class Search extends FragmentActivity {
         connect_Server.execute(location);
     }
 
+    /*@Override
+    public boolean onMarkerClick(Marker marker)
+    {
+        Marker lastOpened = null;
+        if (lastOpened != null) {
+            // Close the info window
+            lastOpened.hideInfoWindow();
+
+            // Is the marker the same marker that was already open
+            if (lastOpened.equals(marker)) {
+                // Nullify the lastOpened object
+                lastOpened = null;
+                // Return so that the info window isn't opened again
+                return true;
+            }
+            marker.showInfoWindow();
+            lastOpened = marker;
+        }
+        return true;
+    }*/
+
     private class Connect_Server extends AsyncTask<Location,Void,String>
     {
         final String CONNECT_SERVER = "http://140.115.80.224:8080/group4/near_search.php";
@@ -204,8 +223,7 @@ public class Search extends FragmentActivity {
             ret_place_Name = parser.Parse(ret,"place_Name");
             ret_place_X = parser.Parse(ret, "place_X");
             ret_place_Y = parser.Parse(ret, "place_Y");
-            ret_place_pic = parser.Parse(ret, "place_pic");
-            ret_place_ShortIntro = parser.Parse(ret, "place_ShortIntro");
+            ret_place_id = parser.Parse(ret, "place_pic");
             x = ret_place_Name.size();
 
 
@@ -215,11 +233,10 @@ public class Search extends FragmentActivity {
                 Log.d("Gina",ret_place_Name.get(a)+"\n");
                 Log.d("TAG",ret_place_X.get(a)+"\n");
                 Log.d("TAG",ret_place_Y.get(a)+"\n");
-                Log.d("TAG",ret_place_ShortIntro.get(a)+"\n");
-                Log.d("TAG",ret_place_pic.get(a)+"\n");
+                Log.d("TAG",ret_place_id.get(a)+"\n");
             }
             Log.d("TAG", "x is "+String.valueOf(x));
-            //bunds=getBound(ret_place_X, ret_place_Y,lng,lat);
+
             MarkerOptions orgin_options = new MarkerOptions();
             orgin_options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
             for(int b=0;b<x;b++)
@@ -228,26 +245,10 @@ public class Search extends FragmentActivity {
                 orgin_options.position(position);
                 orgin_options.title(ret_place_Name.get(b));
                 map.addMarker(orgin_options);
-                try
-                {
-                    if(!"".equals( ret_place_pic.get(b)))
-                    {
-                        Log.d("Hello","Hello");
-                        RoadPlanModel row = new RoadPlanModel
-                                (
-                                        ret_place_Name.get(b),
-                                        URL_PREFIX_IMAGE + URLEncoder.encode(ret_place_pic.get(b), "UTF-8") + ".jpg",
-                                        ret_place_ShortIntro.get(b)
-                                );
-                        viewModels.add(row);
-                    }
-                }catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+
             }
-            listView.setAdapter(adapter);
             LatLng t=new LatLng(lat,lng);
-            map.animateCamera(CameraUpdateFactory.newLatLng(t));
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom((t), 14));
             //map.animateCamera(CameraUpdateFactory.newLatLngZoom(bunds.getCenter(),14));
         }
     }

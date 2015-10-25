@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class RoutesTextJSONParser
 {
 
+    //回傳單層ArrayList
     public ArrayList<String> parse(JSONObject jObject, String match)
     {
         ArrayList<String> json = new ArrayList<String>();
@@ -23,7 +24,7 @@ public class RoutesTextJSONParser
         int temp;
         Log.d("TAG", "RoutesTextJSONParser");
         switch (match) {
-            case "TEXT":
+            case "TEXT"://只有main_road有用
                 try {
                     jRoutes = jObject.getJSONArray("routes");
 
@@ -43,7 +44,6 @@ public class RoutesTextJSONParser
                                 json.add(noHTMLString);
                                 Log.d("k is", String.valueOf(k));
                                 Log.d("TEXT", noHTMLString);
-
                             }
                         }
                     }
@@ -51,6 +51,7 @@ public class RoutesTextJSONParser
                     e.printStackTrace();
                 }
                 break;
+
             case "SUMMARY": //routes個數決定summary
                 try {
                     jRoutes = jObject.getJSONArray("routes");
@@ -129,11 +130,52 @@ public class RoutesTextJSONParser
                     e.printStackTrace();
                 }
                 break;
+            case "PLACE_NAVI_DISTANCE":
+                Log.d("TAG", "place_navi_Distance");
+                try {
+                    jRoutes = jObject.getJSONArray("routes");
+                    for (int i = 0; i < jRoutes.length(); i++)
+                    {
+                        jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
+                        for (int j = 0; j < jLegs.length(); j++)
+                        {
+                            String t = "";
+                            t = ((JSONObject) jLegs.get(j)).getJSONObject("distance").getString("text");
+                            Log.d("TAG", "j is" + String.valueOf(j));
+                            Log.d("TAG", "distance" + t);
+                            json.add(t);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "PLACE_NAVI_DURATION": //不同routes存在不同arraylist
+                Log.d("TAG", "place_navi_Duration");
+                try {
+                    jRoutes = jObject.getJSONArray("routes");
+                    for (int i = 0; i < jRoutes.length(); i++)
+                    {
+                        jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
+                        for (int j = 0; j < jLegs.length(); j++)
+                        {
+                            String t = "";
+                            t = ((JSONObject) jLegs.get(j)).getJSONObject("duration").getString("text");
+                            json.add(t);
+                            Log.d("TAG", "j is" + String.valueOf(j));
+                            Log.d("TAG", "duration" + t);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
         Log.d("TEXT", "TEXT");
         return json;
     }
 
+    //回傳雙層ArrayList
     public ArrayList<ArrayList<String>> parseroad(JSONObject jObject, int position, String match)
     {
         JSONArray jRoutes;
@@ -142,6 +184,59 @@ public class RoutesTextJSONParser
         ArrayList<ArrayList<String>> road = new ArrayList<>();
         switch (match)
         {
+            case "PLACE_NAVI_TEXT":
+                try {
+                    jRoutes = jObject.getJSONArray("routes");
+
+                    for (int i = 0; i < jRoutes.length(); i++)
+                    {
+                        jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
+                        ArrayList<String> json = new ArrayList<String>();
+                        //for (int j = 0; j < jLegs.length(); j++)
+                        //{
+                            jSteps = ((JSONObject) jLegs.get(0)).getJSONArray("steps");
+
+                            for (int k = 0; k < jSteps.length(); k++)
+                            {
+                                String t;
+                                t = jSteps.getJSONObject(k).getString("html_instructions");
+                                String noHTMLString = t.replaceAll("\\<.*?>", "");
+                                json.add(noHTMLString);
+                                Log.d("TAG","k is"+ String.valueOf(k));
+                                Log.d("TAG", "TEXT"+noHTMLString);
+                            }
+                        //}
+                        road.add(json);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "PLACE_NAVI_STEPS_DIS":
+                try {
+                    jRoutes = jObject.getJSONArray("routes");
+                    for (int i = 0; i < jRoutes.length(); i++)
+                    {
+                        jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
+                        ArrayList<String> json = new ArrayList<String>();
+                        //for (int j = 0; j < jLegs.length(); j++)
+                        //{
+                            jSteps = ((JSONObject) jLegs.get(0)).getJSONArray("steps");
+
+                            for (int k = 0; k < jSteps.length(); k++) {
+                                String t;
+                                t = ((JSONObject)jSteps.get(k)).getJSONObject("distance").getString("text");
+                                json.add(t);
+                                Log.d("TAG", "k is"+String.valueOf(k));
+                                Log.d("TAG", "TEXT"+t);
+                            }
+                        //}
+                        road.add(json);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
             case "HTML_INSTRUCTION":
                 try {
                     jRoutes = jObject.getJSONArray("routes");

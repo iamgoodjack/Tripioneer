@@ -138,8 +138,8 @@ public class Place_navigation extends FragmentActivity
                 if (String.valueOf(lat)!=null && String.valueOf(lng)!=null)
                 {
                     Log.d("got where you are","uuu");
-                    from_text.setText("現在位置");
-                    to_text.setText(ret_place_Name.get(0));
+                    from_text.setText("起點:現在位置");
+                    to_text.setText("終點:"+ret_place_Name.get(0));
                     url = getDirectionsUrl();
                     DownloadTask downloadTask = new DownloadTask();
                     downloadTask.execute(url);
@@ -186,29 +186,31 @@ public class Place_navigation extends FragmentActivity
         protected void onPostExecute(String result)
         {
             JSONObject jObject;
-             ArrayList<String> text = new ArrayList<String>();
-             ArrayList<String> dist;
-             ArrayList<String> duration;
-             ArrayList<String> travel_mode;
+            ArrayList<String> text = new ArrayList<String>();
+            ArrayList<String> dist;
+            ArrayList<String> duration;
+            ArrayList<String> travel_mode;
             super.onPostExecute(result);
             Log.d("after DownloadTask", "lili");
             try {
                 jObject = new JSONObject(result);
                 RoutesTextJSONParser par = new RoutesTextJSONParser();
                 text = par.parse(jObject,"TEXT");
-                dist = par.parse(jObject,"DISTANCE");
-                duration = par.parse(jObject,"DURATION");
+                dist = par.parse(jObject,"PLACE_NAVI_DISTANCE");
+                duration = par.parse(jObject,"PLACE_NAVI_DURATION");
                 travel_mode = par.parse(jObject,"TRAVEL_MODE");
-                for(int a=0;a<dist.size();a++)
+                Log.d("TAG","dur size"+String.valueOf(duration.size()));
+                Log.d("TAG","dist size"+String.valueOf(dist.size()));
+                /*for(int a=0;a<dist.size();a++)
                 {
                     int d = Integer.parseInt(dist.get(a));
                     int t = Integer.parseInt(duration.get(a));
                     Log.d("TAG",String.valueOf(d));
                     dis+=d;
                     dur+=t;
-                }
-                time.setText(convert(dur, "dur"));
-                distance.setText(convert(dis,"dis"));
+                }*/
+                time.setText(duration.get(0));
+                distance.setText(dist.get(0));
                 String h="";
                 for (int i=0;i<text.size();i++)
                 {
@@ -402,27 +404,27 @@ public class Place_navigation extends FragmentActivity
             }
         }
     };
-        GpsStatus.Listener gpsListener = new GpsStatus.Listener() {
-            @Override
-            public void onGpsStatusChanged(int event) {
-                switch (event) {
-                    case GpsStatus.GPS_EVENT_STARTED:
-                        Log.d("penny", "GPS_EVENT_STARTED");
-                        Toast.makeText(Place_navigation.this, "GPS_EVENT_STARTED", Toast.LENGTH_SHORT).show();
-                        break;
-                    case GpsStatus.GPS_EVENT_STOPPED:
-                        Log.d("penny", "GPS_EVENT_STOPPED");
-                        Toast.makeText(Place_navigation.this, "GPS_EVENT_STOPPED", Toast.LENGTH_SHORT).show();
-                        break;
-                    case GpsStatus.GPS_EVENT_FIRST_FIX:
-                        Log.d("penny", "GPS_EVENT_FIRST_FIX");
-                        Toast.makeText(Place_navigation.this, "GPS_EVENT_FIRST_FIX", Toast.LENGTH_SHORT).show();
-                        break;
-                    case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                        Log.d("penny", "GPS_EVENT_SATELLITE_STATUS");
-                        break;
-                }
+    GpsStatus.Listener gpsListener = new GpsStatus.Listener() {
+        @Override
+        public void onGpsStatusChanged(int event) {
+            switch (event) {
+                case GpsStatus.GPS_EVENT_STARTED:
+                    Log.d("penny", "GPS_EVENT_STARTED");
+                    Toast.makeText(Place_navigation.this, "GPS_EVENT_STARTED", Toast.LENGTH_SHORT).show();
+                    break;
+                case GpsStatus.GPS_EVENT_STOPPED:
+                    Log.d("penny", "GPS_EVENT_STOPPED");
+                    Toast.makeText(Place_navigation.this, "GPS_EVENT_STOPPED", Toast.LENGTH_SHORT).show();
+                    break;
+                case GpsStatus.GPS_EVENT_FIRST_FIX:
+                    Log.d("penny", "GPS_EVENT_FIRST_FIX");
+                    Toast.makeText(Place_navigation.this, "GPS_EVENT_FIRST_FIX", Toast.LENGTH_SHORT).show();
+                    break;
+                case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+                    Log.d("penny", "GPS_EVENT_SATELLITE_STATUS");
+                    break;
             }
-        };
+        }
+    };
 
-    }
+}

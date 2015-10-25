@@ -57,7 +57,7 @@ public class place_mimic_googlemap extends AppCompatActivity
             {
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent();
-                intent.setClass(place_mimic_googlemap.this,Place_navigation.class);
+                intent.setClass(place_mimic_googlemap.this,place_navi.class);
                 bundle.putString("place_id", placeid);
                 intent.putExtras(bundle);
                 startActivity(intent);
