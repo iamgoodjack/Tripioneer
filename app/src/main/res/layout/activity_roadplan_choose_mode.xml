@@ -15,16 +15,17 @@
             android:layout_height="wrap_content">
 
             <ImageButton
+                    android:background="@drawable/ic_drive_eta_black_36dp"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:id="@+id/driving_mode" />
 
 
             <ImageButton
-                    android:layout_width="wrap_content"
+                    android:background="@drawable/ic_directions_walk_black_36dp"
+                    android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:id="@+id/walking_mode"
-                    android:layout_weight="0.1"/>
+                    android:id="@+id/walking_mode" />
 
         </LinearLayout>
 

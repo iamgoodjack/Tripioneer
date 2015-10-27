@@ -1,6 +1,7 @@
 package mis.tripioneer;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
@@ -8,12 +9,14 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,9 +28,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,26 +43,75 @@ public class Search extends FragmentActivity  {
     final String CASE = "MAP";
     private final int par_num = 2;
     private static int x;
-    private LatLngBounds center,bunds;
+    private SimpleAdapter adapter;
+    private static ListView listView;
     String request_place_id_name[] = new String[par_num];
     String request_place_id_value[] = new String[par_num];
     private static ArrayList<String> ret_place_X = new ArrayList<String>();
     private static ArrayList<String> ret_place_Y = new ArrayList<String>();
     private static ArrayList<String> ret_place_Name = new ArrayList<String>();
     private static ArrayList<String> ret_place_id = new ArrayList<String>();
-
+    private static ArrayList<String> ret_pttrip_id = new ArrayList<String>();
+    private static ArrayList<String> ret_pttrip_name = new ArrayList<String>();
+    private static ArrayList<String> ret_total_time = new ArrayList<String>();
+    private static ArrayList<String> ret_like_num = new ArrayList<String>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("TAG", "oncreate");
-        setContentView(R.layout.activity_search);
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.s_map)).getMap();
+        setContentView(R.layout.activity_map);
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setMapToolbarEnabled(false);
+        map.clear();
+        listView = (ListView) findViewById(R.id.listView_map);
+        listView.setOnItemClickListener
+                (new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                    {
+                        Intent intent = new Intent();
+                        Bundle bundle = new Bundle();
+                        if (id==0)
+                        {
+                            /*Toast.makeText(Search.this, "ID：" + position +
+                                    " 選單文字："+ parent.getItemAtPosition(position).toString()
+                                    , Toast.LENGTH_SHORT).show();*/
+                            intent.setClass(Search.this, Trip_mdsign.class);
+                            bundle.putString("tripid", ret_pttrip_id.get(0));
+                            bundle.putString("title", ret_pttrip_name.get(0));
+                             intent.putExtras(bundle);
+                             startActivity(intent);
+                        }else if (id==1)
+                        {
+                            /*Toast.makeText(Search.this, "ID：" + position +
+                                    " 選單文字："+ parent.getItemAtPosition(position).toString()
+                                    , Toast.LENGTH_SHORT).show();*/
+                            intent.setClass(Search.this, Trip_mdsign.class);
+                            bundle.putString("tripid", ret_pttrip_id.get(1));
+                            bundle.putString("title", ret_pttrip_name.get(1));
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }else if (id==2)
+                        {
+                            /*Toast.makeText(Search.this, "ID：" + position +
+                                    " 選單文字："+ parent.getItemAtPosition(position).toString()
+                                    , Toast.LENGTH_SHORT).show();*/
+                            intent.setClass(Search.this, Trip_mdsign.class);
+                            bundle.putString("tripid", ret_pttrip_id.get(2));
+                            bundle.putString("title", ret_pttrip_name.get(2));
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }else
+                        {
+                            ;
+                        }
 
+                    }
+                });
         locationMgr=(LocationManager) getSystemService(LOCATION_SERVICE);
         initProvider();
         Log.d("TAG", "uuu");
@@ -83,7 +134,10 @@ public class Search extends FragmentActivity  {
                     if(marker.getTitle().equals(ret_place_Name.get(u))) // if marker source is clicked
                     {
                         Toast.makeText(Search.this, marker.getTitle(), Toast.LENGTH_SHORT).show();// display toast
-                        changeActivity(ret_place_id.get(u));
+                       // changeActivity(ret_place_id.get(u));
+                        Get_Releated_Trip get_releated_trip = new Get_Releated_Trip();
+                        get_releated_trip.execute(ret_place_id.get(u));
+                        Log.d("TAGTAGTAGGG",ret_place_id.get(u));
                     }
 
                 }
@@ -92,50 +146,58 @@ public class Search extends FragmentActivity  {
         });
     }
 
-    private void changeActivity(String s)
+    private  class Get_Releated_Trip extends AsyncTask<String, Void, ArrayList<String>>
     {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        intent.setClass(Search.this, place.class);
-        //bundle.putString("specifyid", item.getID());
-        intent.putExtras(bundle);
-        startActivity(intent);
+        final String CONNECT_SERVER = "http://140.115.80.224:8080/group4/releated_trip_search.php";
+        String r_place_id_name[] = new String[1];
+        String r_place_id_value[] = new String[1];
+        ArrayList<HashMap<String,String>> list = new ArrayList<HashMap<String,String>>();
+        String ret;
+        @Override
+        protected ArrayList<String> doInBackground(String... params)
+        {
+            r_place_id_name[0]="place_id";
+            r_place_id_value[0]=params[0];
+            ConnectServer connection = new ConnectServer(CONNECT_SERVER);
+            ret = connection.connect(r_place_id_name, r_place_id_value, 1);
+            Log.d("TAG","TAGTAGTAGTAG"+ret);
 
-    }
+            JsonParser parser = new JsonParser(CASE);
+            ret_pttrip_id = parser.Parse(ret, "trip_ID");
+            ret_pttrip_name=parser.Parse(ret, "trip_Name");
+            ret_total_time=parser.Parse(ret, "trip_TotalTime");
+            ret_like_num=parser.Parse(ret, "trip_LikeNum");
 
-    public void initProvider()
-    {
-        int minTime = 1000;//ms
-        int minDist = 500;//meter
-        Log.d("TAG", "iniProvider");
-        if(!locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER))
-        {
-            Log.d("TAG","!locmgr GPS");
-            Toast.makeText(Search.this, "請開啟GPS定位功能並重啟此APP", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            for(int i=0;i<ret_pttrip_id.size();i++)
+            {
+                Log.d("TAGGGGG",ret_pttrip_id.get(i));
+                Log.d("TAGGGGG",ret_pttrip_name.get(i));
+                Log.d("TAGGGGG",ret_total_time.get(i));
+                Log.d("TAGGGGG",ret_like_num.get(i));
+            }
+            return ret_pttrip_name;
         }
-        if(locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+
+        protected void onPostExecute(ArrayList rett)
         {
-            Log.d("TAG","locmgr GPS");
-            locationMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,minTime,minDist,locationListener);
-            locationMgr.addGpsStatusListener(gpsListener);
-            locationMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, locationListener);
-            Toast.makeText(Search.this, "provider:gps", Toast.LENGTH_SHORT).show();
-        }
-        else if (locationMgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-        {
-            Log.d("TAG","locmgr network");
-            Toast.makeText(Search.this, "provider:network", Toast.LENGTH_SHORT).show();
-            locationMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, locationListener);
-        }else
-        {
-            Toast.makeText(Search.this, "請開啟定位功能:", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            for(int i=0;i<rett.size();i++)
+            {
+                Log.d("TAG","haha");
+                HashMap<String,String> item = new HashMap<String,String>();
+                item.put("name", ret_pttrip_name.get(i));
+                item.put( "des", "行程總時間:"+ret_total_time.get(i)+"小時\n行程喜愛度:"+ret_like_num.get(i)+"個推薦");
+                list.add(item);
+            }
+            adapter = new SimpleAdapter(Search.this, list, android.R.layout.simple_list_item_2,
+                    new String[] { "name","des" },
+                    new int[] { android.R.id.text1, android.R.id.text2 } );
+            listView.setAdapter(adapter);
+
         }
     }
 
     protected void onPause() {
-        Log.d("TAG","onpause");
+        Log.d("TAG", "onpause");
         //locationMgr.removeUpdates(locationListener);
         //locationMgr.removeGpsStatusListener(gpsListener);
         super.onPause();
@@ -150,6 +212,7 @@ public class Search extends FragmentActivity  {
 
     private void updateWithNewLocation(Location location)
     {
+        map.clear();
         Log.d("TAG", "updateNewLocation");
         String where = "";
         if (location != null)
@@ -165,36 +228,19 @@ public class Search extends FragmentActivity  {
             where = "No location found.";
         }
         Log.d("TAG", where);
-        MarkerOptions orgin_option = new MarkerOptions();
-        orgin_option.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        position= new LatLng(lat,lng);
-        orgin_option.position(position);
-        orgin_option.title("目前位置");
-        map.addMarker(orgin_option);
+        MarkerOptions o_option = new MarkerOptions();
+        Resources resources = this.getResources();
+        final int resourceId = resources.getIdentifier("ic_v3", "drawable",
+                this.getPackageName());
+        o_option.icon(BitmapDescriptorFactory.fromResource(resourceId));
+        o_option.position(new LatLng(lat,lng));
+        Log.d("TAG","now place");
+        o_option.title("目前位置");
+        map.addMarker(o_option);
         Connect_Server connect_Server = new Connect_Server();
         connect_Server.execute(location);
     }
 
-    /*@Override
-    public boolean onMarkerClick(Marker marker)
-    {
-        Marker lastOpened = null;
-        if (lastOpened != null) {
-            // Close the info window
-            lastOpened.hideInfoWindow();
-
-            // Is the marker the same marker that was already open
-            if (lastOpened.equals(marker)) {
-                // Nullify the lastOpened object
-                lastOpened = null;
-                // Return so that the info window isn't opened again
-                return true;
-            }
-            marker.showInfoWindow();
-            lastOpened = marker;
-        }
-        return true;
-    }*/
 
     private class Connect_Server extends AsyncTask<Location,Void,String>
     {
@@ -212,7 +258,7 @@ public class Search extends FragmentActivity  {
             request_place_id_value[1]=String.valueOf(params[0].getLongitude());
             ConnectServer connection = new ConnectServer(CONNECT_SERVER);
             ret = connection.connect(request_place_id_name, request_place_id_value, par_num);
-            Log.d("TAG",ret);
+            Log.d("TAGVVVVV",ret);
             return ret;
         }
 
@@ -223,7 +269,7 @@ public class Search extends FragmentActivity  {
             ret_place_Name = parser.Parse(ret,"place_Name");
             ret_place_X = parser.Parse(ret, "place_X");
             ret_place_Y = parser.Parse(ret, "place_Y");
-            ret_place_id = parser.Parse(ret, "place_pic");
+            ret_place_id = parser.Parse(ret, "place_ID");
             x = ret_place_Name.size();
 
 
@@ -248,8 +294,39 @@ public class Search extends FragmentActivity  {
 
             }
             LatLng t=new LatLng(lat,lng);
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom((t), 14));
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom((t), 8));
             //map.animateCamera(CameraUpdateFactory.newLatLngZoom(bunds.getCenter(),14));
+        }
+    }
+
+    public void initProvider()
+    {
+        int minTime = 5000;//ms
+        int minDist = 1000;//meter
+        Log.d("TAG", "iniProvider");
+        if(!locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            Log.d("TAG","!locmgr GPS");
+            Toast.makeText(Search.this, "請開啟GPS定位功能並重啟此APP", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        }
+        if(locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            Log.d("TAG","locmgr GPS");
+            locationMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,minTime,minDist,locationListener);
+            locationMgr.addGpsStatusListener(gpsListener);
+            locationMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, locationListener);
+            Toast.makeText(Search.this, "provider:gps", Toast.LENGTH_SHORT).show();
+        }
+        else if (locationMgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+        {
+            Log.d("TAG","locmgr network");
+            Toast.makeText(Search.this, "provider:network", Toast.LENGTH_SHORT).show();
+            locationMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, locationListener);
+        }else
+        {
+            Toast.makeText(Search.this, "請開啟定位功能:", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
         }
     }
 

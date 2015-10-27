@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.UnsupportedEncodingException;
@@ -80,6 +81,30 @@ public class Place_replace extends Activity
         new Thread(get_choose).start();
         //new Thread(get_trip_place).start();
         new Thread(get_Replaced).start();
+
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            Marker currentShown;
+
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.equals(currentShown)) {
+                    marker.hideInfoWindow();
+                    currentShown = null;
+                } else {
+                    marker.showInfoWindow();
+                    currentShown = marker;
+                }
+                for (int u = 0; u < ret_place_Name.size(); u++) {
+                    if (marker.getTitle().equals(ret_place_Name.get(u))) // if marker source is clicked
+                    {
+                        Toast.makeText(Place_replace.this, marker.getTitle(), Toast.LENGTH_SHORT).show();// display toast
+                        //changeActivity(ret_place_id.get(u));
+                    }
+
+                }
+                return true;
+            }
+        });
+
     }
 
     Runnable get_choose = new Runnable()

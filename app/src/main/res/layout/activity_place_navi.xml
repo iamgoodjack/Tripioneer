@@ -8,10 +8,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <ImageButton
+            android:background="@drawable/ic_drive_eta_black_36dp"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/driving"/>
         <ImageButton
+            android:background="@drawable/ic_directions_walk_black_36dp"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/walking"/>

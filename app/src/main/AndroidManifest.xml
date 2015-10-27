@@ -45,7 +45,10 @@
         <activity
             android:name=".Search"
             android:label="@string/title_activity_nearsearch" >
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Map"
@@ -80,10 +83,7 @@
         <activity
             android:name=".MainActivity_mdsign"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity
             android:name=".roadplan_choose_mode"
