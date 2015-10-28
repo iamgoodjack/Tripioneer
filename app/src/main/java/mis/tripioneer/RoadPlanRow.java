@@ -16,6 +16,7 @@ public class RoadPlanRow
     private final Context context;
     private final TextView title;
     private final ImageView img;
+
     //private final TextView info;
 
     public RoadPlanRow(Context context, View convertView)
@@ -24,6 +25,7 @@ public class RoadPlanRow
         this.img = (ImageView) convertView.findViewById(R.id.img);
         this.title = (TextView) convertView.findViewById(R.id.txt);
         //this.info = (TextView) convertView.findViewById(R.id.info);
+
     }
     public void bind(RoadPlanModel Model) {
         this.title.setText(Model.getTitle());

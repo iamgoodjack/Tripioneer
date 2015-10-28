@@ -65,7 +65,9 @@ public class RoadPlanAdapter extends BaseAdapter
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ((Place_replace) context).add_to_replace(model.getID());
+                ((Place_replace) context).add_Name_to_replace(model.getTitle());
+                ((Place_replace) context).add_Pic_to_replace(model.getImageUrl());
                 Toast.makeText(context, "Successfully added to your trip!", Toast.LENGTH_SHORT).show();
             }
         });

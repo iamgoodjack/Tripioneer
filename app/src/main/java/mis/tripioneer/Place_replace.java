@@ -1,13 +1,22 @@
 package mis.tripioneer;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -36,8 +45,11 @@ import javax.sql.StatementEvent;
 /**
  * Created by Jenny on 2015/8/7. 行程中景點置換的附近搜尋(配合activity_map 的layout)
  */
-public class Place_replace extends Activity
+public class Place_replace extends AppCompatActivity
 {
+    private ArrayList<String> replace_place_ID = new ArrayList<String>();
+    private ArrayList<String> replace_place_Name = new ArrayList<String>();
+    private ArrayList<String> replace_place_Pic = new ArrayList<String>();
     private  LatLng position,cho;
     private static GoogleMap map;
     final int par_num = 2;
@@ -51,6 +63,7 @@ public class Place_replace extends Activity
     private static ArrayList<String> ret_place_X = new ArrayList<String>();
     private static ArrayList<String> ret_place_Y = new ArrayList<String>();
     private static ArrayList<String> ret_place_Name = new ArrayList<String>();
+    private static ArrayList<String> rest_place_id = new ArrayList<String>();
     private static ArrayList<String> rest_place_X = new ArrayList<String>();
     private static ArrayList<String> rest_place_Y = new ArrayList<String>();
     private static ArrayList<String> rest_place_pic = new ArrayList<String>();
@@ -59,17 +72,85 @@ public class Place_replace extends Activity
     private static ListView listView;
     private static List<RoadPlanModel> viewModels;
     private static RoadPlanAdapter adapter;
+    private Toolbar toolbar;
+    RecyclerView mRecyclerView;
+    RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
+    DrawerLayout Drawer;
+    String label;
+    ActionBarDrawerToggle mDrawerToggle;
+    String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
+    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
+    String NAME = "Gina";//TODO:GET USER NAME
+    String EMAIL = "teemo@gmail.com";//TODO:GET USER EMAIL
+    int PROFILE = R.drawable.ic_menu_account;
+    private static final String TAG = "Place_replace";
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         Log.d("Jenny", "uuu");
         setContentView(R.layout.activity_map);
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
+
+        mRecyclerView.setHasFixedSize(true);// Letting the system know that the list objects are of fixed size
+
+        mAdapter = new DrawerAdapter(TITLES,ICONS,NAME,EMAIL,PROFILE,
+                new DrawerAdapter.IMyViewHolderClicks()
+                {
+
+                    @Override
+                    public void onTitle(View caller, String tag)
+                    {
+                        Log.d(TAG, "onClick, getTag=" + caller.getTag());
+                        label =(String)caller.getTag();
+                        selectItem();
+                    }
+
+                    @Override
+                    public void onIcon(ImageView callerImage, String tag)
+                    {
+                        Log.d(TAG, "onClick, getTag=" + callerImage.getTag());
+                        label =(String)callerImage.getTag();
+                        selectItem();
+                    }
+                });
+
+        mRecyclerView.setAdapter(mAdapter);
+
+        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
+
+        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+
+
+        Drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar,R.string.drawer_open,R.string.drawer_close){
+
+            @Override
+            public void onDrawerOpened(View drawerView)
+            {
+                super.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView)
+            {
+                super.onDrawerClosed(drawerView);
+            }
+
+
+
+        };
+        Drawer.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         viewModels = new ArrayList<RoadPlanModel>();
         adapter = new RoadPlanAdapter(this, viewModels);
         listView = (ListView) findViewById(R.id.listView_map);
-
+        //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
         Log.d("vvv", "uuu");
@@ -107,6 +188,12 @@ public class Place_replace extends Activity
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_place_replace, menu);
+        return true;
+    }
     Runnable get_choose = new Runnable()
     {
         final String GET_CHOOSE_PLACE = "http://140.115.80.224:8080/group4/get_choose_place.php";
@@ -139,6 +226,7 @@ public class Place_replace extends Activity
             ConnectServer con = new ConnectServer(GET_REPLACED_PLACE);
             rest = con.connect(request_place_id_name, request_place_id_value, 2);
             JsonParser parser1 = new JsonParser(CASE);
+            rest_place_id = parser1.Parse(rest,"place_ID");
             rest_place_Name = parser1.Parse(rest,"place_Name");
             rest_place_X = parser1.Parse(rest, "place_X");
             rest_place_Y = parser1.Parse(rest, "place_Y");
@@ -191,6 +279,7 @@ public class Place_replace extends Activity
                                             rest_place_ShortIntro.get(b)
                                     );
                             Log.d("TAG",rest_place_Name.get(b));
+                            row.setID(rest_place_id.get(b));
                             viewModels.add(row);
                         }
                     }catch (UnsupportedEncodingException e) {
@@ -311,5 +400,98 @@ public class Place_replace extends Activity
             }
             handler.sendEmptyMessage(1);
         }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+
+        int id = item.getItemId();
+        //home
+        if (mDrawerToggle.onOptionsItemSelected(item))
+        {
+            return true;
+        }
+
+        //action buttons
+        switch (item.getItemId())
+        {
+            case R.id.action_done:
+                //TODO
+                Toast.makeText(getBaseContext(), "置換景點完成!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra("replace_id_list", replace_place_ID);
+                intent.putStringArrayListExtra("replace_name_list", replace_place_Name);
+                intent.putStringArrayListExtra("replace_pic_list", replace_place_Pic);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+                break;
+
+            default:
+                //TODO
+                Toast.makeText(getBaseContext(),"default", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void selectItem()
+    {
+        //Fragment fragment = null;
+        //FOR Diff color action bar
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        switch ( label )
+        {
+            case "推薦":
+                intent.setClass(Place_replace.this, MainActivity_mdsign.class);
+                startActivity(intent);
+                break;
+            case "訂閱":
+                /*fragment = new ChannelMain_frag();
+                Bundle bundle = new Bundle();
+                bundle.putString("channelid", "1");//TODO:SET TO SUBSCRIPTED CHANNEL
+                fragment.setArguments(bundle);*/
+                intent.setClass(Place_replace.this, ChannelMain.class);
+                bundle.putString("channelid", "1");//item.getID()
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            case "收藏庫":
+                //fragment = new Collect_frag();
+                //fragment.setArguments(bundle);
+                intent.setClass(Place_replace.this, Collect.class);
+                //TODO:SET TO COLLECT
+                startActivity(intent);
+                break;
+            default:
+                Drawer.closeDrawer(mRecyclerView);
+                return;
+            //break;
+        }
+        getSupportActionBar().setTitle(label);
+        /*android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();*/
+        Drawer.closeDrawer(mRecyclerView);
+    }
+
+    public void add_to_replace(String id)
+    {
+        replace_place_ID.add(id);
+    }
+
+    public void add_Name_to_replace(String name)
+    {
+        replace_place_Name.add(name);
+        Log.d("Gina", "name in replace =" + replace_place_Name.get(replace_place_Name.size() - 1));
+    }
+
+    public void add_Pic_to_replace(String pic)
+    {
+        replace_place_Pic.add(pic);
+        Log.d("Gina", "pic in replace =" + replace_place_Pic.get(replace_place_Pic.size() - 1));
     }
 }

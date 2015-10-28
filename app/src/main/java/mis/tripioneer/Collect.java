@@ -28,7 +28,7 @@ public class Collect extends AppCompatActivity
     private static final String TAG ="Collect";
     int IMGS[] ={R.drawable.collectimg1,R.drawable.collectimg2,R.drawable.collectimg3,R.drawable.collectimg4,R.drawable.collectimg5};
     private List<CollectInfo> collectInfoList;
-    String TITLES[] = {"推薦","訂閱","收藏庫","最近瀏覽"};
+    String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
     int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
 
 
@@ -181,8 +181,10 @@ public class Collect extends AppCompatActivity
                 //fragment = new Collect_frag();
                 //fragment.setArguments(bundle);
                 break;
-            /*case "最近瀏覽":
-                break;*/
+            case "快選行程":
+                intent.setClass(Collect.this, Search.class);
+                startActivity(intent);
+                break;
             default:
                 Drawer.closeDrawer(mRecyclerView);
                 return;

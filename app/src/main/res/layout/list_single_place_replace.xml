@@ -38,6 +38,5 @@
                 android:clickable="true"
                 />
         </GridLayout>
-
     </TableRow>
 </TableLayout>

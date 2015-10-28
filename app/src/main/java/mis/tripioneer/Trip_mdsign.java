@@ -1,5 +1,6 @@
 package mis.tripioneer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.Simple
 import com.squareup.picasso.Picasso;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -59,20 +61,24 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
     private FloatingActionButton Navigation;
     private FloatingActionButton Like;
     private FloatingActionButton Replace;
+    private final int REQUEST_CODE=1;
+    private ArrayList<String> replace_id_list;
+    private ArrayList<String> replace_name_list;
+    private ArrayList<String> replace_pic_list;
 
-    String TITLES[] = {"推薦","訂閱","收藏庫","最近瀏覽"};
+    String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
     int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
     String NAME = "Gina";//TODO:GET USER NAME
     String EMAIL = "teemo@gmail.com";//TODO:GET USER EMAIL
     int PROFILE = R.drawable.ic_menu_account;
     private Toolbar toolbar;
+
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
     DrawerLayout Drawer;
     String label;
     ActionBarDrawerToggle mDrawerToggle;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -120,12 +126,18 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
             @Override
             public void onDrawerOpened(View drawerView)
             {
+                Replace.setVisibility(View.INVISIBLE);
+                Like.setVisibility(View.INVISIBLE);
+                Navigation.setVisibility(View.INVISIBLE);
                 super.onDrawerOpened(drawerView);
             }
 
             @Override
             public void onDrawerClosed(View drawerView)
             {
+                Replace.setVisibility(View.VISIBLE);
+                Like.setVisibility(View.VISIBLE);
+                Navigation.setVisibility(View.VISIBLE);
                 super.onDrawerClosed(drawerView);
             }
 
@@ -170,9 +182,11 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
             @Override
             public void onClick(View v)
             {
+
                 Intent intent = new Intent();
                 intent.setClass(Trip_mdsign.this, Place_replace.class);
-                startActivity(intent);
+                //startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE);
             }
         });
 
@@ -315,8 +329,10 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
                 //TODO:SET TO COLLECT
                 startActivity(intent);
                 break;
-            /*case "最近瀏覽":
-                break;*/
+            case "快選行程":
+                intent.setClass(Trip_mdsign.this, Search.class);
+                startActivity(intent);
+                break;
             default:
                 Drawer.closeDrawer(mRecyclerView);
                 return;
@@ -360,7 +376,6 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-
                     listView.setAdapter(adapter);
                     break;
 
@@ -420,5 +435,54 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
 
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/tainan_pic/";
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch(requestCode)
+        {
+            case REQUEST_CODE:
+
+                if (resultCode != Activity.RESULT_CANCELED)
+                {
+                    if (resultCode == RESULT_OK)
+                    {
+                        if( data.getStringArrayListExtra("replace_id_list") != null)
+                        {
+                            replace_id_list = data.getStringArrayListExtra("replace_id_list");
+                            replace_name_list = data.getStringArrayListExtra("replace_name_list");
+                            replace_pic_list = data.getStringArrayListExtra("replace_pic_list");;
+                            for(int i=0;i<replace_id_list.size();i++)
+                            {
+                                try
+                                {
+                                    ViewModel row = new ViewModel
+                                            (
+                                                    replace_name_list.get(i),
+                                                    URL_PREFIX_IMAGE + URLEncoder.encode(replace_pic_list.get(i), "UTF-8") + ".jpg",
+                                                    "建議停留時間:1小時"
+                                            );
+                                    row.setID(replace_id_list.get(i));
+                                    viewModels.add(row);
+
+                                }
+                                catch (IOException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
+                            ((GeneralViewAdapter_tmp) listView.getAdapter()).notifyDataSetChanged();
+                        }
+                    }
+                }
+
+                break;
+            default:
+                break;
+        }
     }
 }

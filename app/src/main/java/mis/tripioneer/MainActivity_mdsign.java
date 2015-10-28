@@ -23,7 +23,7 @@ public class MainActivity_mdsign extends AppCompatActivity
 {
 
 
-    String TITLES[] = {"推薦","訂閱","收藏庫","最近瀏覽"};
+    String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
     int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
 
 
@@ -181,8 +181,15 @@ public class MainActivity_mdsign extends AppCompatActivity
                 intent.putExtras(bundle);
                 startActivity(intent);*/
                 break;
-            /*case "最近瀏覽":
-                break;*/
+            //TODO:FRAGMENT PLACE_REPLACE
+            case "快選行程":
+                Intent intent = new Intent();
+                intent.setClass(MainActivity_mdsign.this, Search.class);
+                Drawer.closeDrawer(mRecyclerView);
+                startActivity(intent);
+                getSupportActionBar().setTitle(label);
+                return;
+                //break;
             default:
                 Drawer.closeDrawer(mRecyclerView);
                 return;

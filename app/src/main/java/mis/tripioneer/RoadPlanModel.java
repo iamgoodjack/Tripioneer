@@ -5,6 +5,7 @@ package mis.tripioneer;
  */
 public class RoadPlanModel
 {
+    private String id;
     private String title;
     private String img;
     private String info;
@@ -22,5 +23,12 @@ public class RoadPlanModel
     public String getImageUrl() { return img;}
 
     public String getInfo(){ return info;}
+
+    public String getID(){return id;}
+
+    public void setID(String id)
+    {
+        this.id=id;
+    }
 
 }

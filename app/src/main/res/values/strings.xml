@@ -25,7 +25,7 @@
     <item>推薦</item>
     <item>訂閱</item>
     <item>收藏庫</item>
-    <item>最近瀏覽</item>
+    <item>快選行程</item>
     </string-array>
     <string name="title_activity_place">place</string>
     <string name="title_tripioneer_tour_listview">tripioneer_tour_listview</string>
