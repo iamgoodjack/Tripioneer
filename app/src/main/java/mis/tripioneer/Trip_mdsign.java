@@ -463,12 +463,12 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
                                     ViewModel row = new ViewModel
                                             (
                                                     replace_name_list.get(i),
-                                                    URL_PREFIX_IMAGE + URLEncoder.encode(replace_pic_list.get(i), "UTF-8") + ".jpg",
+                                                    replace_pic_list.get(i),
                                                     "建議停留時間:1小時"
                                             );
                                     row.setID(replace_id_list.get(i));
                                     viewModels.add(row);
-
+Log.d(TAG,URL_PREFIX_IMAGE + URLEncoder.encode(replace_pic_list.get(i), "UTF-8") + ".jpg");
                                 }
                                 catch (IOException e)
                                 {

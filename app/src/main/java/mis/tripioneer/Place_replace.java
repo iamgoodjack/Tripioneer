@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -186,6 +187,8 @@ public class Place_replace extends AppCompatActivity
             }
         });
 
+        Picasso.with(this).setIndicatorsEnabled(true);
+        Picasso.with(this).setLoggingEnabled(true);
     }
 
     @Override
