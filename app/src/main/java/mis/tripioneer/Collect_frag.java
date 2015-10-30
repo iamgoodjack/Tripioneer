@@ -69,7 +69,7 @@ public class Collect_frag extends Fragment
         // 建立資料庫物件
         itemDAO = new ItemDAO(getActivity());
         // 取得所有記事資料
-        items = itemDAO.getAll();
+        items = itemDAO.getCollect();
         initializeData();
 
         CollectAdapter adapter = new CollectAdapter(collectList,getActivity());
@@ -154,19 +154,25 @@ public class Collect_frag extends Fragment
         int label = R.drawable.ic_tripioneer_treasurebox_atob_2;
         collectList = new ArrayList<>();
 
-        try
+        for(int i=0;i<items.size();i++)
         {
-            collectList.add(
-                    new CollectInfo
-                            (items.get(0).getTitle(),
-                            URL_PREFIX_IMAGE + URLEncoder.encode(items.get(0).getSpotpic(), "UTF-8") + ".jpg",
-                            items.get(0).getDate(),
-                                    label
-                            )
-            );
-        } catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
+            try
+            {
+                collectList.add(
+                        new CollectInfo
+                                (       items.get(i).getID(),
+                                        items.get(i).getTitle(),
+                                        URL_PREFIX_IMAGE + URLEncoder.encode(items.get(i).getSpotpic(), "UTF-8") + ".jpg",
+                                        "加入收藏時間:"+items.get(i).getDate(),
+                                        label
+                                )
+                );
+            } catch (UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+
         }
+
     }
 }

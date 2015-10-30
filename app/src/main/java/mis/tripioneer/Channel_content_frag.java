@@ -220,7 +220,7 @@ public class Channel_content_frag extends Fragment implements AdapterView.OnItem
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         ViewModel item = (ViewModel) listView.getItemAtPosition(row);
         Log.d(TAG, "item = " + item.getTitle() + "type=" + item.getType() + "id=" + item.getID());
-        Toast.makeText(getActivity(), "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
 
         TYPE = item.getType();
 

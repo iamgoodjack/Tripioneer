@@ -253,7 +253,7 @@ public class Recommendation extends AppCompatActivity implements OnItemClickList
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         ViewModel item = (ViewModel) listView.getItemAtPosition(row);
         Log.d(TAG, "item = " + item.getTitle() + "type=" + item.getType() + "id=" + item.getID());
-        Toast.makeText(getBaseContext(), "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getBaseContext(), "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
 
         TYPE = item.getType();
 

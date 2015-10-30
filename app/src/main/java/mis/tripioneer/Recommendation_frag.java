@@ -336,7 +336,7 @@ public class Recommendation_frag extends Fragment implements OnItemClickListener
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         ViewModel item = (ViewModel) listView.getItemAtPosition(row);
         Log.d(TAG, "item = " + item.getTitle() + "type=" + item.getType() + "id=" + item.getID());
-        Toast.makeText(context, "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
 
         TYPE = item.getType();
         title = item.getTitle();
@@ -354,6 +354,7 @@ public class Recommendation_frag extends Fragment implements OnItemClickListener
                 intent.setClass(context, Trip_mdsign.class);
                 bundle.putString("tripid", item.getID());
                 bundle.putString("title",item.getTitle());
+                bundle.putString("label","Recommendation_frag");
                 Log.d(TAG,"tripid="+item.getID());
                 break;
             case CHANNEL:
