@@ -32,7 +32,7 @@ public class ChannelMain extends AppCompatActivity
     private final String TAG ="ChannelMain";
 
     String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
-    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
+    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_ic_flag_black_32dp};
 
 
     String NAME = "Gina";//TODO:GET USER NAME
@@ -233,7 +233,8 @@ public class ChannelMain extends AppCompatActivity
                 //fragment.setArguments(bundle);
                 break;
             case "快選行程":
-                intent.setClass(ChannelMain.this, Search.class);
+                intent = new Intent(ChannelMain.this,Search.class);
+                Drawer.closeDrawer(mRecyclerView);
                 startActivity(intent);
                 break;
             default:

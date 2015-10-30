@@ -35,7 +35,9 @@ import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -65,10 +67,17 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
     private ArrayList<String> replace_id_list;
     private ArrayList<String> replace_name_list;
     private ArrayList<String> replace_pic_list;
+    private ArrayList<String> ret_trip_time;
+
+    private String ID ;
+    private String TITLE;
+    private String TITLE_prefix;
+    private String TITLE_postfix;
+
 
 
     String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
-    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
+    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_ic_flag_black_32dp};
     String NAME = "Gina";//TODO:GET USER NAME
     String EMAIL = "teemo@gmail.com";//TODO:GET USER EMAIL
     int PROFILE = R.drawable.ic_menu_account;
@@ -80,6 +89,9 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
     DrawerLayout Drawer;
     String label;
     ActionBarDrawerToggle mDrawerToggle;
+
+    ItemDAO itemDAO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -142,8 +154,6 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
                 super.onDrawerClosed(drawerView);
             }
 
-
-
         };
         Drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
@@ -177,10 +187,44 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
 
         Like.setOnClickListener(new View.OnClickListener()
         {
+            //Item(String tripid, String spotid, String spotname, String title, int spotorder, String spottime, String spotpic, int ttltime, long date)
+            Item item;
+            Date date = new Date();
+
+            //TODO:TTLTIME & DATE
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "Like button clicked!");
+                SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+                String now = formatter.format(new Date());
+                itemDAO = new ItemDAO(context);
+
+                for(int i=82;i<92;i++)
+                {
+                    itemDAO.delete(i);
+                }
+
+                for(int i=0; i<viewModels.size();i++)
+                {
+                    Log.d(TAG,"id"+ID);
+                    Log.d(TAG,"placeid"+ret_place_ID.get(i));
+                    Log.d(TAG,"placename"+ret_place_Name.get(i));
+                    Log.d(TAG,"title"+TITLE);
+                    Log.d(TAG,"placeorder"+i);
+                    Log.d(TAG,"placetime"+ret_place_SuggestTime.get(i));
+                    Log.d(TAG,"placepicname"+ret_place_Pic.get(i));
+                    Log.d(TAG,"spotsize"+viewModels.size());
+                    Log.d(TAG,"date"+now);
+                    item = new Item(ID, ret_place_ID.get(i), ret_place_Name.get(i), TITLE, i, ret_place_SuggestTime.get(i)
+                    , ret_place_Pic.get(i), viewModels.size() ,now);
+
+                    itemDAO.insert(item);
+                }
+
+                //測試用
+                //Intent intent = new Intent(Trip_mdsign.this,ShowDb.class);
+                //startActivity(intent);
+                itemDAO.close();
             }
         });
 
@@ -192,17 +236,21 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
 
                 Intent intent = new Intent();
                 intent.setClass(Trip_mdsign.this, Place_replace.class);
-                //startActivity(intent);
                 startActivityForResult(intent,REQUEST_CODE);
             }
         });
 
 
-        String ID ;
+
         Bundle tripdata = this.getIntent().getExtras();
         ID = tripdata.getString("tripid");
-        String TITLE = tripdata.getString("title");
+        TITLE_prefix = tripdata.getString("title");
+        if(ID.equals("2"))
+        {TITLE_postfix ="(二日遊)";}
+        else{TITLE_postfix ="(一日遊)";}
+        TITLE = TITLE_prefix+TITLE_postfix;
         getSupportActionBar().setTitle(TITLE);
+
         request_value[0] = ID;
         request_name[0]="ID";
         listView.setOnItemClickListener(this);
@@ -226,7 +274,14 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
                     public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
                         for (int position : reverseSortedPositions) {
                             adapter.remove(position);
+                            //TITLE_postfix = "("+viewModels.size()+"小時)";
                         }
+
+                        TITLE_postfix = "(" + (viewModels.size() + 1) + "小時)";
+
+
+                        TITLE = TITLE_prefix + TITLE_postfix;
+                        getSupportActionBar().setTitle(TITLE);
                     }
                 }
         );
@@ -337,7 +392,8 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
                 startActivity(intent);
                 break;
             case "快選行程":
-                intent.setClass(Trip_mdsign.this, Search.class);
+                intent = new Intent(Trip_mdsign.this,Search.class);
+                Drawer.closeDrawer(mRecyclerView);
                 startActivity(intent);
                 break;
             default:
@@ -364,7 +420,6 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
                 case  DOWNLOAD_COMPLETE :
                     try
                     {
-
                         for(int i=0;i<RET_PARAM_NUM;i++)
                         {
                             if (!"".equals( ret_place_Pic.get(i) ) )
@@ -396,8 +451,7 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
     Runnable run_Trip = new Runnable()
     {
         @Override
-        public void run()
-        {
+        public void run() {
             final String URL_TRIP = "http://140.115.80.224:8080/group4/Android_trip.php";
             final String CASE = "TRIP";
             String ret;
@@ -406,6 +460,7 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
             ret = connection.connect(request_name, request_value, 1);
 
             JsonParser parser = new JsonParser(CASE);
+            ret_trip_time = parser.Parse(ret,"trip_TotalTime");
             ret_place_Pic = parser.Parse(ret, "place_Pic");
             ret_place_Name = parser.Parse(ret, "place_Name");
             ret_place_ID = parser.Parse(ret, "place_ID");

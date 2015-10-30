@@ -22,9 +22,8 @@ import mis.tripioneer.DrawerAdapter.IMyViewHolderClicks;
 public class MainActivity_mdsign extends AppCompatActivity
 {
 
-
     String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
-    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
+    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_ic_flag_black_32dp};
 
 
     String NAME = "Gina";//TODO:GET USER NAME
@@ -38,7 +37,6 @@ public class MainActivity_mdsign extends AppCompatActivity
     DrawerLayout Drawer;
 
     ActionBarDrawerToggle mDrawerToggle;
-
     private static final String TAG ="mainactivity_mdsign";
     String label;
     @Override
@@ -183,11 +181,10 @@ public class MainActivity_mdsign extends AppCompatActivity
                 break;
             //TODO:FRAGMENT PLACE_REPLACE
             case "快選行程":
-                Intent intent = new Intent();
-                intent.setClass(MainActivity_mdsign.this, Search.class);
+                Intent intent = new Intent(MainActivity_mdsign.this,Search.class);
                 Drawer.closeDrawer(mRecyclerView);
-                startActivity(intent);
                 getSupportActionBar().setTitle(label);
+                startActivity(intent);
                 return;
                 //break;
             default:

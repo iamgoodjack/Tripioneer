@@ -42,7 +42,6 @@
                     android:id="@+id/addTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="2015/08/18  單一景點"
                     android:textColor="#fff" />
 
             </LinearLayout>

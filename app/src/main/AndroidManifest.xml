@@ -44,7 +44,7 @@
         </activity>
         <activity
             android:name=".Search"
-            android:label="@string/title_activity_nearsearch" >
+            android:label="快選行程" >
 
         </activity>
         <activity
@@ -111,6 +111,11 @@
             android:label="@string/app_name" >
         </activity>
 
+        <activity
+            android:name=".ShowDb"
+            android:label="測試資料庫" >
+
+        </activity>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_api_key" />

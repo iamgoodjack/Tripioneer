@@ -10,7 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,14 +28,15 @@ public class Collect_frag extends Fragment
     private Context context;
     private List<CollectInfo> collectList;
 
+    private ItemDAO itemDAO;
+    private List<Item> items = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         //ID = this.getArguments().getString("channelid");
-        super.onCreate(savedInstanceState);
-
     }
     @Override
     public void onAttach(Activity activity)
@@ -58,9 +64,19 @@ public class Collect_frag extends Fragment
         LinearLayoutManager llm = new LinearLayoutManager(context);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
+        //sample();
+
+        // 建立資料庫物件
+        itemDAO = new ItemDAO(getActivity());
+        // 取得所有記事資料
+        items = itemDAO.getAll();
         initializeData();
+
         CollectAdapter adapter = new CollectAdapter(collectList,getActivity());
         recList.setAdapter(adapter);
+        super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -119,16 +135,38 @@ public class Collect_frag extends Fragment
 
     }
 
-
+    private void sample()
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+        String now = formatter.format(new Date());
+        int label = R.drawable.ic_tripioneer_treasurebox_location_2;
+        collectList = new ArrayList<>();
+        collectList.add(new CollectInfo("億載金城",IMGS[0],now,label));
+        collectList.add(new CollectInfo("安平古堡", IMGS[1],now,label));
+        collectList.add(new CollectInfo("安平豆花", IMGS[2],now,label));
+        collectList.add(new CollectInfo("台南孔廟",IMGS[3],now,label));
+        collectList.add(new CollectInfo("馬沙溝濱海遊憩區",IMGS[4],now,label));
+    }
 
     private void initializeData()
     {
+        final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/tainan_pic/";
+        int label = R.drawable.ic_tripioneer_treasurebox_atob_2;
         collectList = new ArrayList<>();
-        collectList.add(new CollectInfo("億載金城",IMGS[0]));
-        collectList.add(new CollectInfo("安平古堡", IMGS[1]));
-        collectList.add(new CollectInfo("安平豆花", IMGS[2]));
-        collectList.add(new CollectInfo("台南孔廟",IMGS[3]));
-        collectList.add(new CollectInfo("馬沙溝濱海遊憩區",IMGS[4]));
 
+        try
+        {
+            collectList.add(
+                    new CollectInfo
+                            (items.get(0).getTitle(),
+                            URL_PREFIX_IMAGE + URLEncoder.encode(items.get(0).getSpotpic(), "UTF-8") + ".jpg",
+                            items.get(0).getDate(),
+                                    label
+                            )
+            );
+        } catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

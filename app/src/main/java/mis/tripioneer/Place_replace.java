@@ -46,7 +46,7 @@ import javax.sql.StatementEvent;
 /**
  * Created by Jenny on 2015/8/7. 行程中景點置換的附近搜尋(配合activity_map 的layout)
  */
-public class Place_replace extends AppCompatActivity
+public class Place_replace extends AppCompatActivity implements AdapterView.OnItemClickListener
 {
     private ArrayList<String> replace_place_ID = new ArrayList<String>();
     private ArrayList<String> replace_place_Name = new ArrayList<String>();
@@ -81,7 +81,7 @@ public class Place_replace extends AppCompatActivity
     String label;
     ActionBarDrawerToggle mDrawerToggle;
     String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
-    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
+    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_ic_flag_black_32dp};
     String NAME = "Gina";//TODO:GET USER NAME
     String EMAIL = "teemo@gmail.com";//TODO:GET USER EMAIL
     int PROFILE = R.drawable.ic_menu_account;
@@ -151,6 +151,7 @@ public class Place_replace extends AppCompatActivity
         viewModels = new ArrayList<RoadPlanModel>();
         adapter = new RoadPlanAdapter(this, viewModels);
         listView = (ListView) findViewById(R.id.listView_map);
+        listView.setOnItemClickListener(this);
         //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
@@ -189,6 +190,22 @@ public class Place_replace extends AppCompatActivity
 
         Picasso.with(this).setIndicatorsEnabled(true);
         Picasso.with(this).setLoggingEnabled(true);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> arg0, View arg1, int row, long id)
+    {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        RoadPlanModel item = (RoadPlanModel) listView.getItemAtPosition(row);
+
+        intent.setClass(this, place_mimic_googlemap.class);
+        bundle.putString("specifyid", item.getID());
+
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override
@@ -467,6 +484,10 @@ public class Place_replace extends AppCompatActivity
                 //TODO:SET TO COLLECT
                 startActivity(intent);
                 break;
+            case "快選行程":
+                intent = new Intent(Place_replace.this,Search.class);
+                Drawer.closeDrawer(mRecyclerView);
+                startActivity(intent);
             default:
                 Drawer.closeDrawer(mRecyclerView);
                 return;

@@ -17,7 +17,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -29,7 +31,7 @@ public class Collect extends AppCompatActivity
     int IMGS[] ={R.drawable.collectimg1,R.drawable.collectimg2,R.drawable.collectimg3,R.drawable.collectimg4,R.drawable.collectimg5};
     private List<CollectInfo> collectInfoList;
     String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
-    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
+    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_ic_flag_black_32dp};
 
 
     String NAME = "Gina";//TODO:GET USER NAME
@@ -43,6 +45,9 @@ public class Collect extends AppCompatActivity
     DrawerLayout Drawer;
     String label;
     ActionBarDrawerToggle mDrawerToggle;
+
+    private ItemDAO itemDAO;
+    private List<Item> items = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -110,7 +115,16 @@ public class Collect extends AppCompatActivity
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
+        //sample();
+
+        // 建立資料庫物件
+        itemDAO = new ItemDAO(getApplicationContext());
+
+        // 取得所有記事資料
+        items = itemDAO.getAll();
+
         initializeData();
+
         CollectAdapter adapter = new CollectAdapter(collectInfoList);
         recList.setAdapter(adapter);
     }
@@ -143,12 +157,12 @@ public class Collect extends AppCompatActivity
 
             case R.id.action_search:
                 //TODO
-                Toast.makeText(getBaseContext(),"search", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "search", Toast.LENGTH_SHORT).show();
                 break;
 
             default:
                 //TODO
-                Toast.makeText(getBaseContext(),"default", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "default", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -182,7 +196,8 @@ public class Collect extends AppCompatActivity
                 //fragment.setArguments(bundle);
                 break;
             case "快選行程":
-                intent.setClass(Collect.this, Search.class);
+                intent = new Intent(Collect.this,Search.class);
+                Drawer.closeDrawer(mRecyclerView);
                 startActivity(intent);
                 break;
             default:
@@ -200,13 +215,23 @@ public class Collect extends AppCompatActivity
     }
 
 
-    private void initializeData()
+    private void sample()
     {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+        String now = formatter.format(new Date());
+        int label = R.drawable.ic_tripioneer_treasurebox_location_2;
         collectInfoList = new ArrayList<>();
-        collectInfoList.add(new CollectInfo("億載金城",IMGS[0]));
-        collectInfoList.add(new CollectInfo("安平古堡",IMGS[1]));
-        collectInfoList.add(new CollectInfo("安平豆花",IMGS[2]));
-        collectInfoList.add(new CollectInfo("台南孔廟",IMGS[3]));
-        collectInfoList.add(new CollectInfo("馬沙溝濱海遊憩區",IMGS[4]));
+        collectInfoList.add(new CollectInfo("億載金城",IMGS[0],now,label));
+        collectInfoList.add(new CollectInfo("安平古堡", IMGS[1],now,label));
+        collectInfoList.add(new CollectInfo("安平豆花", IMGS[2],now,label));
+        collectInfoList.add(new CollectInfo("台南孔廟",IMGS[3],now,label));
+        collectInfoList.add(new CollectInfo("馬沙溝濱海遊憩區",IMGS[4],now,label));
+    }
+
+    public void initializeData()
+    {
+        int label = R.drawable.ic_tripioneer_treasurebox_atob_2;
+        collectInfoList = new ArrayList<>();
+        collectInfoList.add(new CollectInfo(items.get(0).getTitle(),IMGS[0],items.get(0).getDate(),label));
     }
 }

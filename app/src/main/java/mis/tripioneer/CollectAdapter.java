@@ -14,6 +14,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.CollectViewHolder> {
 
@@ -42,7 +44,8 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.CollectV
     {
         CollectInfo ci = contactList.get(i);
         contactViewHolder.txt.setText(ci.name);
-        //contactViewHolder.img.setBackgroundResource(ci.img);
+        contactViewHolder.time.setText(ci.date);
+        contactViewHolder.label.setBackgroundResource(ci.label);
         Picasso.with(context).load(ci.img).transform(new RoundedTransformation(4, 0)).fit().into(contactViewHolder.img);
     }
 
@@ -59,14 +62,19 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.CollectV
     public static class CollectViewHolder extends RecyclerView.ViewHolder
     {
         TextView txt;
+        TextView time;
         ImageView img;
         CardView card;
+        CircleImageView label;
+
         public CollectViewHolder(View v)
         {
             super(v);
             txt = (TextView) v.findViewById(R.id.placeName);
             img = (ImageView) v.findViewById(R.id.placePic);
             card = (CardView) v.findViewById(R.id.card_view);
+            time = (TextView) v.findViewById(R.id.addTime);
+            label = (CircleImageView) v.findViewById(R.id.circleView);
             card.setPreventCornerOverlap(false);
         }
     }

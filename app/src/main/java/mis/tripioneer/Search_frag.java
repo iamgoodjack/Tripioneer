@@ -1,5 +1,8 @@
 package mis.tripioneer;
 
+import android.app.Activity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.location.GpsStatus;
@@ -12,20 +15,12 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -46,7 +41,10 @@ import java.util.List;
 /**
  * Created by Jenny on 2015/8/14. 放大鏡功能
  */
-public class Search extends AppCompatActivity  {
+public class Search_frag extends Fragment {
+
+    private final String TAG ="Search_frag";
+    private Context context;
     private GoogleMap map;
     private LocationManager locationMgr;
     private  LatLng position;
@@ -67,36 +65,32 @@ public class Search extends AppCompatActivity  {
     private static ArrayList<String> ret_total_time = new ArrayList<String>();
     private static ArrayList<String> ret_like_num = new ArrayList<String>();
 
-    String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
-    int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_ic_flag_black_32dp};
-
-
-    String NAME = "Gina";//TODO:GET USER NAME
-    String EMAIL = "teemo@gmail.com";//TODO:GET USER EMAIL
-    int PROFILE = R.drawable.ic_menu_account;
-
-    private Toolbar toolbar;
-    RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
-    DrawerLayout Drawer;
-
-    ActionBarDrawerToggle mDrawerToggle;
-    private static final String TAG ="mainactivity_mdsign";
-    String label;
-
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("TAG", "oncreate");
-        setContentView(R.layout.activity_search);
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        Log.d(TAG, "onAttach");
+        context = activity;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View  v = inflater.inflate(R.layout.activity_map, container, false);
+        //TODO BUG
+        //map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setMapToolbarEnabled(false);
         map.clear();
-        listView = (ListView) findViewById(R.id.listView_map);
+        listView = (ListView) v.findViewById(R.id.listView_map);
         listView.setOnItemClickListener
                 (new AdapterView.OnItemClickListener() {
                     @Override
@@ -109,17 +103,17 @@ public class Search extends AppCompatActivity  {
                             /*Toast.makeText(Search.this, "ID：" + position +
                                     " 選單文字："+ parent.getItemAtPosition(position).toString()
                                     , Toast.LENGTH_SHORT).show();*/
-                            intent.setClass(Search.this, Trip_mdsign.class);
+                            intent.setClass(context, Trip_mdsign.class);
                             bundle.putString("tripid", ret_pttrip_id.get(0));
                             bundle.putString("title", ret_pttrip_name.get(0));
-                             intent.putExtras(bundle);
-                             startActivity(intent);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
                         }else if (id==1)
                         {
                             /*Toast.makeText(Search.this, "ID：" + position +
                                     " 選單文字："+ parent.getItemAtPosition(position).toString()
                                     , Toast.LENGTH_SHORT).show();*/
-                            intent.setClass(Search.this, Trip_mdsign.class);
+                            intent.setClass(context, Trip_mdsign.class);
                             bundle.putString("tripid", ret_pttrip_id.get(1));
                             bundle.putString("title", ret_pttrip_name.get(1));
                             intent.putExtras(bundle);
@@ -129,7 +123,7 @@ public class Search extends AppCompatActivity  {
                             /*Toast.makeText(Search.this, "ID：" + position +
                                     " 選單文字："+ parent.getItemAtPosition(position).toString()
                                     , Toast.LENGTH_SHORT).show();*/
-                            intent.setClass(Search.this, Trip_mdsign.class);
+                            intent.setClass(context, Trip_mdsign.class);
                             bundle.putString("tripid", ret_pttrip_id.get(2));
                             bundle.putString("title", ret_pttrip_name.get(2));
                             intent.putExtras(bundle);
@@ -141,7 +135,7 @@ public class Search extends AppCompatActivity  {
 
                     }
                 });
-        locationMgr=(LocationManager) getSystemService(LOCATION_SERVICE);
+        locationMgr=(LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         initProvider();
         Log.d("TAG", "uuu");
 
@@ -162,8 +156,8 @@ public class Search extends AppCompatActivity  {
                 {
                     if(marker.getTitle().equals(ret_place_Name.get(u))) // if marker source is clicked
                     {
-                        Toast.makeText(Search.this, marker.getTitle(), Toast.LENGTH_SHORT).show();// display toast
-                       // changeActivity(ret_place_id.get(u));
+                        Toast.makeText(context, marker.getTitle(), Toast.LENGTH_SHORT).show();// display toast
+                        // changeActivity(ret_place_id.get(u));
                         Get_Releated_Trip get_releated_trip = new Get_Releated_Trip();
                         get_releated_trip.execute(ret_place_id.get(u));
                         Log.d("TAGTAGTAGGG",ret_place_id.get(u));
@@ -174,151 +168,53 @@ public class Search extends AppCompatActivity  {
             }
         });
 
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
+        return inflater.inflate(R.layout.collect, container, false);
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated");
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
-
-        mRecyclerView.setHasFixedSize(true);// Letting the system know that the list objects are of fixed size
-
-        mAdapter = new DrawerAdapter(TITLES,ICONS,NAME,EMAIL,PROFILE,
-                new DrawerAdapter.IMyViewHolderClicks()
-                {
-
-                    @Override
-                    public void onTitle(View caller, String tag)
-                    {
-                        Log.d(TAG, "onClick, getTag=" + caller.getTag());
-                        label =(String)caller.getTag();
-                        selectItem();
-                    }
-
-                    @Override
-                    public void onIcon(ImageView callerImage, String tag)
-                    {
-                        Log.d(TAG, "onClick, getTag=" + callerImage.getTag());
-                        label =(String)callerImage.getTag();
-                        selectItem();
-                    }
-                });
-
-        mRecyclerView.setAdapter(mAdapter);
-
-        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-
-        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
-
-
-        Drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar,R.string.drawer_open,R.string.drawer_close){
-
-            @Override
-            public void onDrawerOpened(View drawerView)
-            {
-                super.onDrawerOpened(drawerView);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView)
-            {
-                super.onDrawerClosed(drawerView);
-            }
-
-
-
-        };
-        Drawer.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart");
+
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
+    public void onStop()
     {
+        super.onStop();
+        Log.d(TAG, "onStop");
 
-        int id = item.getItemId();
-        //home
-        if (mDrawerToggle.onOptionsItemSelected(item))
-        {
-            return true;
-        }
-
-        //action buttons
-        switch (item.getItemId())
-        {
-            case R.id.action_edit:
-                //TODO
-                Toast.makeText(getBaseContext(), "edit", Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.action_search:
-                //TODO
-                Toast.makeText(getBaseContext(),"search", Toast.LENGTH_SHORT).show();
-                break;
-
-            default:
-                //TODO
-                Toast.makeText(getBaseContext(),"default", Toast.LENGTH_SHORT).show();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
-    /**/
-    public void selectItem()
+    @Override
+    public void onDestroyView()
     {
-        Fragment fragment = null;
-        //FOR Diff color action bar
-        /*Intent intent = new Intent();
-        Bundle bundle = new Bundle();*/
-        switch ( label )
-        {
-            case "推薦":
-                fragment = new Recommendation_frag();
-                break;
-            case "訂閱":
-                //FOR FRAGMENT STRUCTURE(Same color action bar)
-                fragment = new ChannelMain_frag();
-                Bundle bundle = new Bundle();
-                bundle.putString("channelid", "1");//TODO:SET TO SUBSCRIPTED CHANNEL
-                fragment.setArguments(bundle);
-                //FOR Diff color action bar
-                /*intent.setClass(MainActivity_mdsign.this, ChannelMain.class);
-                bundle.putString("channelid", "1");//item.getID()
-                intent.putExtras(bundle);
-                startActivity(intent);*/
-                break;
-            case "收藏庫":
-                fragment = new Collect_frag();
-                //FOR Diff color action bar
-                /*intent.setClass(MainActivity_mdsign.this, Collect.class);
-                bundle.putString("channelid", "1");//TODO:SET TO COLLECT
-                intent.putExtras(bundle);
-                startActivity(intent);*/
-                break;
-            //TODO:FRAGMENT PLACE_REPLACE
-            case "快選行程":
-                return;
-            //break;
-            default:
-                Drawer.closeDrawer(mRecyclerView);
-                return;
-            //break;
-        }
-        getSupportActionBar().setTitle(label);
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content_frame, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-        Drawer.closeDrawer(mRecyclerView);
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView");
+
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy");
+
+    }
+
+    @Override
+    public void onDetach()
+    {
+        super.onDetach();
+        Log.d(TAG, "onDetach");
+
     }
 
     private  class Get_Releated_Trip extends AsyncTask<String, Void, ArrayList<String>>
@@ -359,11 +255,11 @@ public class Search extends AppCompatActivity  {
             {
                 Log.d("TAG","haha");
                 HashMap<String,String> item = new HashMap<String,String>();
-                item.put("name", ret_pttrip_name.get(i)+"("+ret_total_time.get(i)+"小時)");
+                item.put("name", ret_pttrip_name.get(i));
                 item.put( "des", "行程總時間:"+ret_total_time.get(i)+"小時\n行程喜愛度:"+ret_like_num.get(i)+"個推薦");
                 list.add(item);
             }
-            adapter = new SimpleAdapter(Search.this, list, android.R.layout.simple_list_item_2,
+            adapter = new SimpleAdapter(context, list, android.R.layout.simple_list_item_2,
                     new String[] { "name","des" },
                     new int[] { android.R.id.text1, android.R.id.text2 } );
             listView.setAdapter(adapter);
@@ -371,14 +267,14 @@ public class Search extends AppCompatActivity  {
         }
     }
 
-    protected void onPause() {
+    public void onPause() {
         Log.d("TAG", "onpause");
         //locationMgr.removeUpdates(locationListener);
         //locationMgr.removeGpsStatusListener(gpsListener);
         super.onPause();
     }
 
-    protected void onResume()
+    public void onResume()
     {
         super.onResume();
         //initProvider();
@@ -406,7 +302,7 @@ public class Search extends AppCompatActivity  {
         MarkerOptions o_option = new MarkerOptions();
         Resources resources = this.getResources();
         final int resourceId = resources.getIdentifier("ic_v3", "drawable",
-                this.getPackageName());
+                context.getPackageName());
         o_option.icon(BitmapDescriptorFactory.fromResource(resourceId));
         o_option.position(new LatLng(lat,lng));
         Log.d("TAG","now place");
@@ -469,7 +365,7 @@ public class Search extends AppCompatActivity  {
 
             }
             LatLng t=new LatLng(lat,lng);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom((t), 8));
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom((t), 8));
             //map.animateCamera(CameraUpdateFactory.newLatLngZoom(bunds.getCenter(),14));
         }
     }
@@ -482,7 +378,7 @@ public class Search extends AppCompatActivity  {
         if(!locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER))
         {
             Log.d("TAG","!locmgr GPS");
-            Toast.makeText(Search.this, "請開啟GPS定位功能並重啟此APP", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "請開啟GPS定位功能並重啟此APP", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
         }
         if(locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER))
@@ -491,16 +387,16 @@ public class Search extends AppCompatActivity  {
             locationMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,minTime,minDist,locationListener);
             locationMgr.addGpsStatusListener(gpsListener);
             locationMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, locationListener);
-            Toast.makeText(Search.this, "provider:gps", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "provider:gps", Toast.LENGTH_SHORT).show();
         }
         else if (locationMgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
         {
             Log.d("TAG","locmgr network");
-            Toast.makeText(Search.this, "provider:network", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "provider:network", Toast.LENGTH_SHORT).show();
             locationMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, locationListener);
         }else
         {
-            Toast.makeText(Search.this, "請開啟定位功能:", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "請開啟定位功能:", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
         }
     }
@@ -512,19 +408,19 @@ public class Search extends AppCompatActivity  {
         {
             updateWithNewLocation(location);
             Log.d("TAG", "onLocationChanged");
-            Toast.makeText(Search.this, "onLocationChanged", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "onLocationChanged", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onProviderDisabled(String provider) {
             Log.d("TAG", "onProviderDisabled");
-            Toast.makeText(Search.this, "定位提供者關閉，請重啟", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "定位提供者關閉，請重啟", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onProviderEnabled(String provider) {
             Log.d("TAG","onProviderEnabled");
-            Toast.makeText(Search.this, "onProviderEnabled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "onProviderEnabled", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -532,15 +428,15 @@ public class Search extends AppCompatActivity  {
             switch (status) {
                 case LocationProvider.OUT_OF_SERVICE:
                     Log.d("Jenny", "Status Changed: Out of Service");
-                    Toast.makeText(Search.this, "Status Changed: Out of Service", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Status Changed: Out of Service", Toast.LENGTH_SHORT).show();
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
                     Log.d("Jenny", "Status Changed: Temporarily Unavailable");
-                    Toast.makeText(Search.this, "Status Changed: Temporarily Unavailable", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Status Changed: Temporarily Unavailable", Toast.LENGTH_SHORT).show();
                     break;
                 case LocationProvider.AVAILABLE:
                     Log.d("Jenny", "Status Changed: Available");
-                    Toast.makeText(Search.this, "Status Changed: Available", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Status Changed: Available", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -551,15 +447,15 @@ public class Search extends AppCompatActivity  {
             switch (event) {
                 case GpsStatus.GPS_EVENT_STARTED:
                     Log.d("penny", "GPS_EVENT_STARTED");
-                    Toast.makeText(Search.this, "GPS_EVENT_STARTED", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "GPS_EVENT_STARTED", Toast.LENGTH_SHORT).show();
                     break;
                 case GpsStatus.GPS_EVENT_STOPPED:
                     Log.d("penny", "GPS_EVENT_STOPPED");
-                    Toast.makeText(Search.this, "GPS_EVENT_STOPPED", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "GPS_EVENT_STOPPED", Toast.LENGTH_SHORT).show();
                     break;
                 case GpsStatus.GPS_EVENT_FIRST_FIX:
                     Log.d("penny", "GPS_EVENT_FIRST_FIX");
-                    Toast.makeText(Search.this, "GPS_EVENT_FIRST_FIX", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "GPS_EVENT_FIRST_FIX", Toast.LENGTH_SHORT).show();
                     break;
                 case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
                     Log.d("penny", "GPS_EVENT_SATELLITE_STATUS");

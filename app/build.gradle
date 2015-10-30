@@ -13,13 +13,13 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("C:\\Program Files\\Java\\jdk1.8.0_40\\bin\\new-releasekey.keystore")
+            storeFile file("C:\\Program Files\\Java\\jdk1.7.0_71\\bin\\new-releasekey.keystore")
             storePassword "gp4gp4123456"
             keyAlias "releasekeynew"
             keyPassword "gp4gp4123"
         }
         debug{
-            storeFile file("C:\\Program Files\\Java\\jdk1.8.0_40\\bin\\new-releasekey.keystore")
+            storeFile file("C:\\Program Files\\Java\\jdk1.7.0_71\\bin\\new-releasekey.keystore")
             storePassword "gp4gp4123456"
             keyAlias "releasekeynew"
             keyPassword "gp4gp4123"
