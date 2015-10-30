@@ -135,12 +135,120 @@ public class ItemDAO {
         return result;
     }
 
+
+    // SELECT _id FROM  Collet_trip WHERE trip_spot_order = 0
+    public List<Item> getCollectSetKey(String trip_id) {
+
+        List<Item> result = new ArrayList<>();
+
+        String where = SPOT_ORDER_COLUMN + "=" + 0 + "AND"+
+                TRIP_ID_COLUMN + "=?";
+
+        String[] tableColumns = new String[] {
+                KEY_ID
+        };
+
+        Cursor cursor = db.query(
+                TABLE_NAME, tableColumns, "trip_spot_order = 0 AND trip_id =?", new String[]{trip_id}, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            result.add(getKey(cursor));
+        }
+
+        cursor.close();
+        return result;
+    }
+
+    // 把getCollectSetKey目前的資料包裝為物件
+    public Item getKey(Cursor cursor) {
+        // 準備回傳結果用的物件
+        Item result = new Item();
+
+        result.setID(cursor.getLong(0));
+        // 回傳結果
+        return result;
+    }
+
+    // SELECT trip_spot_id,trip_spot_order FROM Collect_trip WHERE trip_id = ?
+    public List<Item> Chk_dup(String trip_id) {
+
+        List<Item> result = new ArrayList<>();
+
+        String where = TRIP_ID_COLUMN + "=?";
+
+        String[] tableColumns = new String[] {
+                SPOT_ID_COLUMN,
+                SPOT_ORDER_COLUMN,
+        };
+
+        Cursor cursor = db.query(
+                TABLE_NAME, tableColumns, where, new String[]{trip_id}, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            result.add(getDup(cursor));
+        }
+
+        cursor.close();
+        return result;
+    }
+
+    // 把Chk_dup目前的資料包裝為物件
+    public Item getDup(Cursor cursor) {
+        // 準備回傳結果用的物件
+        Item result = new Item();
+
+        result.setSpotid(cursor.getString(0));
+        result.setSpotorder(cursor.getInt(1));
+
+        // 回傳結果
+        return result;
+    }
+
+    // SELECT TITLE_COLUMN,SPOT_PIC_COLUMN,DATETIME_COLUMN FROM  Collet_trip WHERE trip_spot_order = 0
+    public List<Item> getCollect() {
+        List<Item> result = new ArrayList<>();
+
+        String where = SPOT_ORDER_COLUMN + "=" + 0;
+
+        String[] tableColumns = new String[] {
+                KEY_ID,
+                TITLE_COLUMN,
+                SPOT_PIC_COLUMN,
+                DATETIME_COLUMN
+        };
+        //Cursor cursor = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
+
+        Cursor cursor = db.query(
+                TABLE_NAME, tableColumns, where, null, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            result.add(getColumn(cursor));
+        }
+
+        cursor.close();
+        return result;
+    }
+
+    // 把getCollect目前的資料包裝為物件
+    public Item getColumn(Cursor cursor) {
+        // 準備回傳結果用的物件
+        Item result = new Item();
+
+        result.setID(cursor.getLong(0));
+        result.setTitle(cursor.getString(1));
+        result.setSpotpic(cursor.getString(2));
+        result.setDate(cursor.getString(3));
+        // 回傳結果
+        return result;
+    }
+
     // 取得指定編號的資料物件
     public Item get(long id) {
         // 準備回傳結果用的物件
         Item item = null;
         // 使用編號為查詢條件
         String where = KEY_ID + "=" + id;
+        //Cursor cursor = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
         // 執行查詢
         Cursor result = db.query(
                 TABLE_NAME, null, where, null, null, null, null, null);
@@ -186,6 +294,16 @@ public class ItemDAO {
         }
 
         return result;
+    }
+
+    public void deleteTable()
+    {
+        db.execSQL("DROP TABLE IF EXISTS " + ItemDAO.TABLE_NAME);
+    }
+
+    public void createTable()
+    {
+        db.execSQL(ItemDAO.CREATE_TABLE);
     }
     //Item(String tripid, String spotid, String spotname, String title, int spotorder, String spottime, String spotpic, int ttltime, long date)
     // 建立範例資料

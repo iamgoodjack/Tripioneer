@@ -112,6 +112,7 @@ public class Search extends AppCompatActivity  {
                             intent.setClass(Search.this, Trip_mdsign.class);
                             bundle.putString("tripid", ret_pttrip_id.get(0));
                             bundle.putString("title", ret_pttrip_name.get(0));
+                            bundle.putString("label", "Search");
                              intent.putExtras(bundle);
                              startActivity(intent);
                         }else if (id==1)
@@ -122,6 +123,7 @@ public class Search extends AppCompatActivity  {
                             intent.setClass(Search.this, Trip_mdsign.class);
                             bundle.putString("tripid", ret_pttrip_id.get(1));
                             bundle.putString("title", ret_pttrip_name.get(1));
+                            bundle.putString("label", "Search");
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }else if (id==2)
@@ -132,6 +134,7 @@ public class Search extends AppCompatActivity  {
                             intent.setClass(Search.this, Trip_mdsign.class);
                             bundle.putString("tripid", ret_pttrip_id.get(2));
                             bundle.putString("title", ret_pttrip_name.get(2));
+                            bundle.putString("label", "Search");
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }else
@@ -254,17 +257,17 @@ public class Search extends AppCompatActivity  {
         {
             case R.id.action_edit:
                 //TODO
-                Toast.makeText(getBaseContext(), "edit", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "edit", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.action_search:
                 //TODO
-                Toast.makeText(getBaseContext(),"search", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(),"search", Toast.LENGTH_SHORT).show();
                 break;
 
             default:
                 //TODO
-                Toast.makeText(getBaseContext(),"default", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(),"default", Toast.LENGTH_SHORT).show();
                 break;
         }
 

@@ -130,17 +130,17 @@ public class MainActivity_mdsign extends AppCompatActivity
         {
             case R.id.action_edit:
                 //TODO
-                Toast.makeText(getBaseContext(), "edit", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "edit", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.action_search:
                 //TODO
-                Toast.makeText(getBaseContext(),"search", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(),"search", Toast.LENGTH_SHORT).show();
                 break;
 
             default:
                 //TODO
-                Toast.makeText(getBaseContext(),"default", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(),"default", Toast.LENGTH_SHORT).show();
                 break;
         }
 

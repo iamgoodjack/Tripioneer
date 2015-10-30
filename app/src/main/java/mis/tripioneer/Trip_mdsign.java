@@ -3,6 +3,7 @@ package mis.tripioneer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -46,6 +47,8 @@ import java.util.List;
 public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItemClickListener
 {
     private final static int DOWNLOAD_COMPLETE = 1;
+    private final static int DB_LOAD_COMPLETE = 2;
+    private static List<Item> items;
     private static final String TAG = "Trip_mdsign";
     private static final int TRIP_NUM_PARAM = 1;
     private String[] request_name = new String[TRIP_NUM_PARAM];
@@ -91,6 +94,9 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
     ActionBarDrawerToggle mDrawerToggle;
 
     ItemDAO itemDAO;
+
+    private long key;
+    private String label_collect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -185,46 +191,44 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
             }
         });
 
-        Like.setOnClickListener(new View.OnClickListener()
-        {
+        itemDAO = new ItemDAO(context);
+
+        Like.setOnClickListener(new View.OnClickListener() {
             //Item(String tripid, String spotid, String spotname, String title, int spotorder, String spottime, String spotpic, int ttltime, long date)
             Item item;
             Date date = new Date();
 
             //TODO:TTLTIME & DATE
             @Override
-            public void onClick(View v)
-            {
-                SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+            public void onClick(View v) {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy hh:mm");
                 String now = formatter.format(new Date());
-                itemDAO = new ItemDAO(context);
+                /*Like.setBackgroundResource(R.drawable.ic_star_aftertpushed_version2);
+                Like.setBackgroundTintList(ColorStateList.valueOf(R.color.White));
+                Like.setBackgroundResource(R.drawable.ic_star_version2);
+                Like.setBackgroundTintList(ColorStateList.valueOf(R.color.History));*/
+                if (isnotDup()) {
+                    for (int i = 0; i < viewModels.size(); i++) {
+                        /*Log.d(TAG,"id"+ID);
+                        Log.d(TAG,"placeid"+ret_place_ID.get(i));
+                        Log.d(TAG,"placename"+ret_place_Name.get(i));
+                        Log.d(TAG,"title"+TITLE);
+                        Log.d(TAG,"placeorder"+i);
+                        Log.d(TAG,"placetime"+ret_place_SuggestTime.get(i));
+                        Log.d(TAG,"placepicname"+ret_place_Pic.get(i));
+                        Log.d(TAG,"spotsize"+viewModels.size());
+                        Log.d(TAG,"date"+now);*/
+                        item = new Item(ID, ret_place_ID.get(i), ret_place_Name.get(i), TITLE, i, ret_place_SuggestTime.get(i)
+                                , ret_place_Pic.get(i), viewModels.size(), now);
 
-                for(int i=82;i<92;i++)
-                {
-                    itemDAO.delete(i);
+                        itemDAO.insert(item);
+                    }
+                    Toast.makeText(getBaseContext(), "成功加入收藏!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getBaseContext(), "已經加入過喽!", Toast.LENGTH_SHORT).show();
                 }
 
-                for(int i=0; i<viewModels.size();i++)
-                {
-                    Log.d(TAG,"id"+ID);
-                    Log.d(TAG,"placeid"+ret_place_ID.get(i));
-                    Log.d(TAG,"placename"+ret_place_Name.get(i));
-                    Log.d(TAG,"title"+TITLE);
-                    Log.d(TAG,"placeorder"+i);
-                    Log.d(TAG,"placetime"+ret_place_SuggestTime.get(i));
-                    Log.d(TAG,"placepicname"+ret_place_Pic.get(i));
-                    Log.d(TAG,"spotsize"+viewModels.size());
-                    Log.d(TAG,"date"+now);
-                    item = new Item(ID, ret_place_ID.get(i), ret_place_Name.get(i), TITLE, i, ret_place_SuggestTime.get(i)
-                    , ret_place_Pic.get(i), viewModels.size() ,now);
-
-                    itemDAO.insert(item);
-                }
-
-                //測試用
-                //Intent intent = new Intent(Trip_mdsign.this,ShowDb.class);
-                //startActivity(intent);
-                itemDAO.close();
+                //itemDAO.close();
             }
         });
 
@@ -243,16 +247,27 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
 
 
         Bundle tripdata = this.getIntent().getExtras();
-        ID = tripdata.getString("tripid");
-        TITLE_prefix = tripdata.getString("title");
-        if(ID.equals("2"))
-        {TITLE_postfix ="(二日遊)";}
-        else{TITLE_postfix ="(一日遊)";}
-        TITLE = TITLE_prefix+TITLE_postfix;
-        getSupportActionBar().setTitle(TITLE);
+        label_collect = tripdata.getString("label");
+        if(label_collect.equals("CollectAdapter"))
+        {
+            key = tripdata.getLong("key");
+            Log.d("Gina","key="+key);
+        }
+        else
+        {
+            ID = tripdata.getString("tripid");
+            TITLE_prefix = tripdata.getString("title");
+            if(ID.equals("2"))
+            {TITLE_postfix ="(二日遊)";}
+            else{TITLE_postfix ="(一日遊)";}
+            TITLE = TITLE_prefix+TITLE_postfix;
+            getSupportActionBar().setTitle(TITLE);
 
-        request_value[0] = ID;
-        request_name[0]="ID";
+            request_value[0] = ID;
+            request_name[0]="ID";
+        }
+
+
         listView.setOnItemClickListener(this);
 
         listView.enableDragAndDrop();
@@ -299,10 +314,36 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
         swipeUndoAdapter.setAbsListView(listView);
         listView.setAdapter(swipeUndoAdapter);
         listView.enableSimpleSwipeUndo();*/
-        new Thread(run_Trip).start();
 
+        if(label_collect.equals("CollectAdapter"))
+        {
+            new Thread(run_From_Collect).start();
+        }
+        else
+        {
+            new Thread(run_Trip).start();
+        }
 
     }
+
+    Runnable run_From_Collect = new Runnable()
+    {
+        @Override
+        public void run() {
+            ItemDAO itemDAO = new ItemDAO(context);
+
+            items = itemDAO.getAll();
+
+            handler.sendEmptyMessage(DB_LOAD_COMPLETE);
+
+        }
+    };
+
+    /*@Override
+    public void onDestroy()
+    {
+        itemDAO.close();
+    }*/
 
 
     @Override
@@ -345,17 +386,17 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
         {
             case R.id.action_edit:
                 //TODO
-                Toast.makeText(getBaseContext(), "edit", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "edit", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.action_search:
                 //TODO
-                Toast.makeText(getBaseContext(),"search", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(),"search", Toast.LENGTH_SHORT).show();
                 break;
 
             default:
                 //TODO
-                Toast.makeText(getBaseContext(),"default", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(),"default", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -440,7 +481,29 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
                     }
                     listView.setAdapter(adapter);
                     break;
-
+                case DB_LOAD_COMPLETE:
+                    try
+                    {
+                        for(int i=0;i<items.size();i++)
+                        {
+                            if (!"".equals( items.get(i).getSpotpic() ) )
+                            {
+                                ViewModel row = new ViewModel
+                                        (
+                                                items.get(i).getSpotname(),
+                                                URL_PREFIX_IMAGE + URLEncoder.encode(items.get(i).getSpotpic(), "UTF-8") + ".jpg",
+                                                "建議停留時間:"+items.get(i).getSpottime()+"小時"
+                                        );
+                                viewModels.add(row);
+                                row.setID(items.get(i).getSpotid());
+                            }
+                        }
+                        Picasso.with(context).load(viewModels.get(0).getImageUrl()).into(imageView);//Bind header trip_picture
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    listView.setAdapter(adapter);
+                    break;
                 default:
                     Log.d(TAG,"Download Failure");
                     break;
@@ -490,7 +553,7 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         ViewModel item = (ViewModel) listView.getItemAtPosition(row);
         Log.d(TAG, "item = " + item.getTitle() + "type=" + item.getType() + "id=" + item.getID());
-        Toast.makeText(context, "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "You clicked on position : " + row + " and id : " + id, Toast.LENGTH_SHORT).show();
 
         intent.setClass(this, place_mimic_googlemap.class);
         bundle.putString("specifyid", item.getID());
@@ -552,4 +615,52 @@ Log.d(TAG,URL_PREFIX_IMAGE + URLEncoder.encode(replace_pic_list.get(i), "UTF-8")
     {
         viewModels = models_in_adapter;
     }
+
+    public boolean isnotDup()
+    {
+        List<Item> items;
+        List<Item> items_key;
+
+        // 取得所有記事資料
+        items_key = itemDAO.getCollectSetKey(ID);
+        items = itemDAO.Chk_dup(ID);
+
+        if(items_key.isEmpty())
+        {
+            return true;
+        }
+
+        for(int i=0; i< items_key.size();i++)
+        {
+            long _id=items_key.get(i).getID();
+            final int _id_start = 91;
+            for(int j=0;j<viewModels.size();j++)
+            {
+                Log.d("ShowDb", "Spotid" + items.get(i).getSpotid());
+                Log.d("ShowDb", "Spotorder" + items.get(i).getSpotorder());
+                Log.d("ShowDb","j="+j);
+                Log.d("ShowDb","_id="+_id);
+                Log.d("ShowDb","_id-1+j="+((int)_id-1+j));
+                Log.d("ShowDb", "DB_SPOT_ID" + items.get((int)_id-1+j).getSpotid());
+                Log.d("ShowDb", "View models id" + viewModels.get(j).getID());
+                if(!items.get((int)_id-1+j).getSpotid().equals(viewModels.get(j).getID()))
+                {
+                    return true;
+                }
+            }
+
+            if(i+1 < items_key.size())
+            {
+                if( items_key.get(i+1).getID()-i-1 > viewModels.size() )
+                {
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    }
+
+
 }

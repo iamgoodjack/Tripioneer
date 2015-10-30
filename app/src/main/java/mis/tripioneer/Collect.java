@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -121,7 +123,7 @@ public class Collect extends AppCompatActivity
         itemDAO = new ItemDAO(getApplicationContext());
 
         // 取得所有記事資料
-        items = itemDAO.getAll();
+        items = itemDAO.getCollect();
 
         initializeData();
 
@@ -152,7 +154,7 @@ public class Collect extends AppCompatActivity
         {
             case R.id.action_edit:
                 //TODO
-                Toast.makeText(getBaseContext(), "edit", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "edit", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.action_search:
@@ -228,10 +230,31 @@ public class Collect extends AppCompatActivity
         collectInfoList.add(new CollectInfo("馬沙溝濱海遊憩區",IMGS[4],now,label));
     }
 
-    public void initializeData()
+    private void initializeData()
     {
+        final String URL_PREFIX_IMAGE = "http://140.115.80.224:8080/group4/tainan_pic/";
         int label = R.drawable.ic_tripioneer_treasurebox_atob_2;
         collectInfoList = new ArrayList<>();
-        collectInfoList.add(new CollectInfo(items.get(0).getTitle(),IMGS[0],items.get(0).getDate(),label));
+
+        for(int i=0;i<items.size();i++)
+        {
+            try
+            {
+                collectInfoList.add(
+                        new CollectInfo
+                                (       items.get(i).getID(),
+                                        items.get(i).getTitle(),
+                                        URL_PREFIX_IMAGE + URLEncoder.encode(items.get(i).getSpotpic(), "UTF-8") + ".jpg",
+                                        "加入收藏時間:"+items.get(i).getDate(),
+                                        label
+                                )
+                );
+            } catch (UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+
     }
 }

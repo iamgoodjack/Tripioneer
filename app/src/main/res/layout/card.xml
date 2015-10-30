@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true">
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_tripioneer_treasurebox_location_2"

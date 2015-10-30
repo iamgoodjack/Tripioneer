@@ -1,6 +1,7 @@
 package mis.tripioneer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -50,11 +51,20 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.CollectV
     }
 
     @Override
-    public CollectViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
+    public CollectViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i)
     {
-        View itemView = LayoutInflater.
+        final View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.card, viewGroup, false);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                // item clicked
+                Intent intent = new Intent(v.getContext(), Trip_mdsign.class);
+                intent.putExtra("key",contactList.get(i).getID());
+                intent.putExtra("label","CollectAdapter");
+                context.startActivity(intent);
+            }
+        });
 
         return new CollectViewHolder(itemView);
     }
@@ -65,7 +75,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.CollectV
         TextView time;
         ImageView img;
         CardView card;
-        CircleImageView label;
+        ImageView label;
 
         public CollectViewHolder(View v)
         {
@@ -74,7 +84,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.CollectV
             img = (ImageView) v.findViewById(R.id.placePic);
             card = (CardView) v.findViewById(R.id.card_view);
             time = (TextView) v.findViewById(R.id.addTime);
-            label = (CircleImageView) v.findViewById(R.id.circleView);
+            label = (ImageView) v.findViewById(R.id.circleView);
             card.setPreventCornerOverlap(false);
         }
     }

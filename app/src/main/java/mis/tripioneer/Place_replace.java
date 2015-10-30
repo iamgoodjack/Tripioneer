@@ -188,8 +188,8 @@ public class Place_replace extends AppCompatActivity implements AdapterView.OnIt
             }
         });
 
-        Picasso.with(this).setIndicatorsEnabled(true);
-        Picasso.with(this).setLoggingEnabled(true);
+        //Picasso.with(this).setIndicatorsEnabled(true);
+        //Picasso.with(this).setLoggingEnabled(true);
     }
 
     @Override
