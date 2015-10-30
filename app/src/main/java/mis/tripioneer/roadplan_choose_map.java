@@ -93,6 +93,8 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
     private static final String TAG ="roadplan_choose_map";
     String label;
 
+
+
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -164,6 +166,7 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
         listView2= (ListView) findViewById(R.id.listView2);
         listView2.setOnItemClickListener(this);
         //Toast.makeText(roadplan_choose_map.this, "123", Toast.LENGTH_LONG).show();
+
         locationMgr=(LocationManager) getSystemService(LOCATION_SERVICE);
 
         Bundle bundle = this.getIntent().getExtras();
@@ -333,8 +336,6 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
 
         ArrayList<LatLng> center=compareLatLng(place_Y.get(0),place_X.get(0),place_Y.get(1),place_X.get(1));
         LatLngBounds bounds = new LatLngBounds(center.get(1),center.get(0));
-
-       //map.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 15));
  
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 15));
 
@@ -500,6 +501,7 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
         Log.d("TAG", where);
     }
 
+
     public void initProvider()
     {
         int minTime = 5000;//ms
@@ -550,6 +552,8 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
             public void onProviderEnabled(String provider) {
                 Log.d("TAG", "onProviderEnabled");
                 //Toast.makeText(roadplan_choose_map.this, "onProviderEnabled", Toast.LENGTH_SHORT).show();
+
+
             }
 
             @Override
@@ -584,7 +588,6 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
                         break;
                     case GpsStatus.GPS_EVENT_FIRST_FIX:
                         Log.d("penny", "GPS_EVENT_FIRST_FIX");
-                       // Toast.makeText(roadplan_choose_map.this, "GPS_EVENT_FIRST_FIX", Toast.LENGTH_SHORT).show();
                         break;
                     case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
                         Log.d("penny", "GPS_EVENT_SATELLITE_STATUS");
@@ -612,4 +615,4 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
         Log.d("TAG", "onResume");
     }
 
-}
+

@@ -67,6 +67,7 @@ public class Search extends AppCompatActivity  {
     private static ArrayList<String> ret_total_time = new ArrayList<String>();
     private static ArrayList<String> ret_like_num = new ArrayList<String>();
 
+
     String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
     int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_ic_flag_black_32dp};
 
@@ -163,7 +164,9 @@ public class Search extends AppCompatActivity  {
                 for (int u = 0; u < ret_place_Name.size(); u++) {
                     if (marker.getTitle().equals(ret_place_Name.get(u))) // if marker source is clicked
                     {
+
                         //Toast.makeText(Search.this, marker.getTitle(), Toast.LENGTH_SHORT).show();// display toast
+
                         // changeActivity(ret_place_id.get(u));
                         Get_Releated_Trip get_releated_trip = new Get_Releated_Trip();
                         get_releated_trip.execute(ret_place_id.get(u));
