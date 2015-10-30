@@ -75,7 +75,7 @@ public class ConnectServer
                 }
 
             }
-            Log.d(request.toString(),"ELSA");
+            Log.d("TAG",request.toString());
             out.write(request.toString().getBytes());
             out.flush();
             out.close();
@@ -90,7 +90,7 @@ public class ConnectServer
             reader.close();
 
             ret = response.toString();
-            Log.d("LILY",ret);
+            Log.d("TAGGGGG",ret);
         }
         catch (Exception e)
         {

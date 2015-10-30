@@ -44,6 +44,7 @@ public class roadplan_choose_mode extends FragmentActivity implements AdapterVie
     private static ArrayList<String> sep_duration = new ArrayList<String>();
     private static ArrayList<String> ret_place_X = new ArrayList<String>();
     private static ArrayList<String> ret_place_Y = new ArrayList<String>();
+    private static ArrayList<String> ret_place_id = new ArrayList<String>();
     private static ArrayList<String> ret_place_Name = new ArrayList<String>();
     private static ArrayList<String> placelist_from_trip = new ArrayList<String>();
     private static TextView orgin;
@@ -72,9 +73,15 @@ public class roadplan_choose_mode extends FragmentActivity implements AdapterVie
 
         for (int a = 0; a < par_num; a++)
         {
+
              request_place_id_name[a]="place_id"+String.valueOf(a);
              request_place_id_value[a]=placelist_from_trip.get(a);
+            Log.d("Mandy_CC",placelist_from_trip.get(a));
         }
+        ret_place_X.clear();
+        ret_place_Y.clear();
+        ret_place_Name.clear();
+        ret_place_id.clear();
         getCheck();
         GetLatLng getlatlng = new GetLatLng();
         getlatlng.execute();
@@ -108,8 +115,8 @@ public class roadplan_choose_mode extends FragmentActivity implements AdapterVie
     {
         for (int a=0;a<request_place_id_name.length;a++)
         {
-            Log.d("TAG",request_place_id_name[a]);
-            Log.d("TAG",request_place_id_value[a]);
+            //Log.d("Mandy",request_place_id_name[a]);
+            //Log.d("Mandy",request_place_id_value[a]);
         }
     }
 
@@ -128,17 +135,46 @@ public class roadplan_choose_mode extends FragmentActivity implements AdapterVie
             ret_place_Name = parser.Parse(ret,"place_Name");
             ret_place_X = parser.Parse(ret, "place_X");
             ret_place_Y = parser.Parse(ret, "place_Y");
+            ret_place_id=parser.Parse(ret,"place_ID");
             return null;
         }
 
         @Override
         protected void onPostExecute(String result)
         {
+            for(int i=0;i<ret_place_id.size();i++) {
+                String tmp,temp_X,temp_Y,temp_Name;
+                for (int j = 0; j < ret_place_id.size(); j++) {
+                    if (ret_place_id.get(j).equals(placelist_from_trip.get(i))) {
+                        Log.d("Mandy","i="+i+"; j="+j+";");
+                        tmp = ret_place_id.get(j);
+                        temp_X=ret_place_X.get(j);
+                        temp_Y = ret_place_Y.get(j);
+                        temp_Name = ret_place_Name.get(j);
+                        Log.d("Mandy","tmp="+tmp);
+                        ret_place_id.set(j, ret_place_id.get(i));
+                        ret_place_X.set(j, ret_place_id.get(i));
+                        ret_place_Y.set(j, ret_place_Y.get(i));
+                        ret_place_Name.set(j, ret_place_Name.get(i));
+                        Log.d("Mandy", "ret_place_id=" + ret_place_id.get(j) + "=?" + ret_place_id.get(i));
+                        ret_place_id.set(i, tmp);
+                        ret_place_X.set(i, temp_X);
+                        ret_place_Y.set(i, temp_Y);
+                        ret_place_Name.set(i, temp_Name);
+                        Log.d("Mandy", "ret_place_id=" + ret_place_id.get(i) + "=?" + "tmp="+tmp);
+                    }
+                }
+            }
+            for (int j=0;j<ret_place_id.size();j++)
+            {
+                Log.d("Mandy_m",ret_place_id.get(j));
+                Log.d("Mandy_m",ret_place_Name.get(j));
+            }
 
             mode="mode=driving";
-            orgin.setText("orgin:"+ret_place_Name.get(0));
-            Log.d("TAG","show orgin");
-            destination.setText("destination:"+ret_place_Name.get((ret_place_Name.size()-1)));
+            orgin.setText("orgin:" + ret_place_Name.get(0));
+            Log.d("TAG", "show orgin");
+            destination.setText("destination:" + ret_place_Name.get((ret_place_Name.size() - 1)));
             if (ret_place_Name.size()>2)
             {
                 String pa="";
@@ -180,7 +216,7 @@ public class roadplan_choose_mode extends FragmentActivity implements AdapterVie
                     str_waypoints += ret_place_Y.get(i) + "," + ret_place_X.get(i) + "|";
                 }
 
-                parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + str_waypoints+"&"+mode;
+                parameters = str_origin + "&" + str_dest + "&" + sensor + "&" +str_waypoints+"&"+mode;
             }else
             {
                 parameters = str_origin + "&" + str_dest + "&" + sensor + "&" +"&"+mode;

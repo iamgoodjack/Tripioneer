@@ -184,7 +184,7 @@ public class Search extends FragmentActivity  {
             {
                 Log.d("TAG","haha");
                 HashMap<String,String> item = new HashMap<String,String>();
-                item.put("name", ret_pttrip_name.get(i));
+                item.put("name", ret_pttrip_name.get(i)+"("+ret_total_time.get(i)+"小時)");
                 item.put( "des", "行程總時間:"+ret_total_time.get(i)+"小時\n行程喜愛度:"+ret_like_num.get(i)+"個推薦");
                 list.add(item);
             }
@@ -294,7 +294,7 @@ public class Search extends FragmentActivity  {
 
             }
             LatLng t=new LatLng(lat,lng);
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom((t), 8));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom((t), 8));
             //map.animateCamera(CameraUpdateFactory.newLatLngZoom(bunds.getCenter(),14));
         }
     }

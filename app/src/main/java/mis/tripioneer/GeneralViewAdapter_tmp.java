@@ -97,11 +97,13 @@ public class GeneralViewAdapter_tmp extends BaseAdapter implements Swappable, Un
         } else {
             Log.w("ListViewAnimations", "Warning: swapItems called on an adapter that does not implement Swappable!");
         }
+        ((Trip_mdsign)context).swap(viewModels);
     }
 
     public void remove(int position)
     {
         viewModels.remove(position);
+        ((Trip_mdsign)context).swap(viewModels);
         this.notifyDataSetChanged();
     }
 

@@ -66,6 +66,7 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
     private ArrayList<String> replace_name_list;
     private ArrayList<String> replace_pic_list;
 
+
     String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
     int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_menu_history};
     String NAME = "Gina";//TODO:GET USER NAME
@@ -158,12 +159,18 @@ public class Trip_mdsign extends AppCompatActivity implements AdapterView.OnItem
 
         Navigation.setOnClickListener(new View.OnClickListener()
         {
+            private ArrayList<String> navi_place_id = new ArrayList<String>();
             @Override
             public void onClick(View v)
             {
+                if(!navi_place_id.isEmpty()){navi_place_id.clear();}
                 Intent intent = new Intent();
                 intent.setClass(Trip_mdsign.this, roadplan_choose_mode.class);
-                intent.putStringArrayListExtra("place_id_list", ret_place_ID);
+                for(int i=0;i<viewModels.size();i++)
+                {
+                    navi_place_id.add(viewModels.get(i).getID());
+                }
+                intent.putStringArrayListExtra("place_id_list",navi_place_id);
                 startActivity(intent);
             }
         });
@@ -484,5 +491,10 @@ Log.d(TAG,URL_PREFIX_IMAGE + URLEncoder.encode(replace_pic_list.get(i), "UTF-8")
             default:
                 break;
         }
+    }
+
+    public void swap(List<ViewModel> models_in_adapter)
+    {
+        viewModels = models_in_adapter;
     }
 }
