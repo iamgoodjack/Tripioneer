@@ -85,6 +85,7 @@ public class Search extends AppCompatActivity  {
     private static final String TAG ="mainactivity_mdsign";
     String label;
 
+    Marker loc_marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,28 +146,25 @@ public class Search extends AppCompatActivity  {
         initProvider();
         Log.d("TAG", "uuu");
 
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
-        {
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             Marker currentShown;
+
             public boolean onMarkerClick(Marker marker) {
-                if (marker.equals(currentShown))
-                {
+                if (marker.equals(currentShown)) {
                     marker.hideInfoWindow();
                     currentShown = null;
-                } else
-                {
+                } else {
                     marker.showInfoWindow();
                     currentShown = marker;
                 }
-                for(int u=0;u<ret_place_Name.size();u++)
-                {
-                    if(marker.getTitle().equals(ret_place_Name.get(u))) // if marker source is clicked
+                for (int u = 0; u < ret_place_Name.size(); u++) {
+                    if (marker.getTitle().equals(ret_place_Name.get(u))) // if marker source is clicked
                     {
-                        Toast.makeText(Search.this, marker.getTitle(), Toast.LENGTH_SHORT).show();// display toast
-                       // changeActivity(ret_place_id.get(u));
+                        //Toast.makeText(Search.this, marker.getTitle(), Toast.LENGTH_SHORT).show();// display toast
+                        // changeActivity(ret_place_id.get(u));
                         Get_Releated_Trip get_releated_trip = new Get_Releated_Trip();
                         get_releated_trip.execute(ret_place_id.get(u));
-                        Log.d("TAGTAGTAGGG",ret_place_id.get(u));
+                        Log.d("TAGTAGTAGGG", ret_place_id.get(u));
                     }
 
                 }
@@ -396,24 +394,27 @@ public class Search extends AppCompatActivity  {
             lng = location.getLongitude();
             //緯度
             lat = location.getLatitude();
-
             where = "經度: " + lng + "\n緯度: " + lat ;
+            Log.d("TAG", where);
+            if(loc_marker!=null)
+            {
+                loc_marker.remove();
+            }
+            MarkerOptions o_option = new MarkerOptions();
+            Resources resources = this.getResources();
+            final int resourceId = resources.getIdentifier("ic_v3", "drawable",
+                this.getPackageName());
+            o_option.icon(BitmapDescriptorFactory.fromResource(resourceId));
+            o_option.position(new LatLng(lat,lng));
+            Log.d("TAG","now place");
+            o_option.title("目前位置");
+            loc_marker=map.addMarker(o_option);
+            Connect_Server connect_Server = new Connect_Server();
+            connect_Server.execute(location);
         }
         else {
             where = "No location found.";
         }
-        Log.d("TAG", where);
-        MarkerOptions o_option = new MarkerOptions();
-        Resources resources = this.getResources();
-        final int resourceId = resources.getIdentifier("ic_v3", "drawable",
-                this.getPackageName());
-        o_option.icon(BitmapDescriptorFactory.fromResource(resourceId));
-        o_option.position(new LatLng(lat,lng));
-        Log.d("TAG","now place");
-        o_option.title("目前位置");
-        map.addMarker(o_option);
-        Connect_Server connect_Server = new Connect_Server();
-        connect_Server.execute(location);
     }
 
 
@@ -482,7 +483,7 @@ public class Search extends AppCompatActivity  {
         if(!locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER))
         {
             Log.d("TAG","!locmgr GPS");
-            Toast.makeText(Search.this, "請開啟GPS定位功能並重啟此APP", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Search.this, "請開啟GPS定位功能並重啟此APP", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
         }
         if(locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER))
@@ -491,16 +492,16 @@ public class Search extends AppCompatActivity  {
             locationMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,minTime,minDist,locationListener);
             locationMgr.addGpsStatusListener(gpsListener);
             locationMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, locationListener);
-            Toast.makeText(Search.this, "provider:gps", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Search.this, "provider:gps", Toast.LENGTH_SHORT).show();
         }
         else if (locationMgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
         {
             Log.d("TAG","locmgr network");
-            Toast.makeText(Search.this, "provider:network", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Search.this, "provider:network", Toast.LENGTH_SHORT).show();
             locationMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, locationListener);
         }else
         {
-            Toast.makeText(Search.this, "請開啟定位功能:", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Search.this, "請開啟定位功能:", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
         }
     }
@@ -512,19 +513,19 @@ public class Search extends AppCompatActivity  {
         {
             updateWithNewLocation(location);
             Log.d("TAG", "onLocationChanged");
-            Toast.makeText(Search.this, "onLocationChanged", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Search.this, "onLocationChanged", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onProviderDisabled(String provider) {
             Log.d("TAG", "onProviderDisabled");
-            Toast.makeText(Search.this, "定位提供者關閉，請重啟", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Search.this, "定位提供者關閉，請重啟", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onProviderEnabled(String provider) {
             Log.d("TAG","onProviderEnabled");
-            Toast.makeText(Search.this, "onProviderEnabled", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(Search.this, "onProviderEnabled", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -532,15 +533,15 @@ public class Search extends AppCompatActivity  {
             switch (status) {
                 case LocationProvider.OUT_OF_SERVICE:
                     Log.d("Jenny", "Status Changed: Out of Service");
-                    Toast.makeText(Search.this, "Status Changed: Out of Service", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Search.this, "Status Changed: Out of Service", Toast.LENGTH_SHORT).show();
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
                     Log.d("Jenny", "Status Changed: Temporarily Unavailable");
-                    Toast.makeText(Search.this, "Status Changed: Temporarily Unavailable", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(Search.this, "Status Changed: Temporarily Unavailable", Toast.LENGTH_SHORT).show();
                     break;
                 case LocationProvider.AVAILABLE:
                     Log.d("Jenny", "Status Changed: Available");
-                    Toast.makeText(Search.this, "Status Changed: Available", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(Search.this, "Status Changed: Available", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -551,15 +552,15 @@ public class Search extends AppCompatActivity  {
             switch (event) {
                 case GpsStatus.GPS_EVENT_STARTED:
                     Log.d("penny", "GPS_EVENT_STARTED");
-                    Toast.makeText(Search.this, "GPS_EVENT_STARTED", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(Search.this, "GPS_EVENT_STARTED", Toast.LENGTH_SHORT).show();
                     break;
                 case GpsStatus.GPS_EVENT_STOPPED:
                     Log.d("penny", "GPS_EVENT_STOPPED");
-                    Toast.makeText(Search.this, "GPS_EVENT_STOPPED", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(Search.this, "GPS_EVENT_STOPPED", Toast.LENGTH_SHORT).show();
                     break;
                 case GpsStatus.GPS_EVENT_FIRST_FIX:
                     Log.d("penny", "GPS_EVENT_FIRST_FIX");
-                    Toast.makeText(Search.this, "GPS_EVENT_FIRST_FIX", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Search.this, "GPS_EVENT_FIRST_FIX", Toast.LENGTH_SHORT).show();
                     break;
                 case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
                     Log.d("penny", "GPS_EVENT_SATELLITE_STATUS");

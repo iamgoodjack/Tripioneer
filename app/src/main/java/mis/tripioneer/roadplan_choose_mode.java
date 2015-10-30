@@ -331,7 +331,7 @@ public class roadplan_choose_mode extends AppCompatActivity implements AdapterVi
                         temp_Name = ret_place_Name.get(j);
                         Log.d("Mandy","tmp="+tmp);
                         ret_place_id.set(j, ret_place_id.get(i));
-                        ret_place_X.set(j, ret_place_id.get(i));
+                        ret_place_X.set(j, ret_place_X.get(i));
                         ret_place_Y.set(j, ret_place_Y.get(i));
                         ret_place_Name.set(j, ret_place_Name.get(i));
                         Log.d("Mandy", "ret_place_id=" + ret_place_id.get(j) + "=?" + ret_place_id.get(i));
@@ -391,7 +391,8 @@ public class roadplan_choose_mode extends AppCompatActivity implements AdapterVi
             {
                 for (int i = 1; i < ret_place_X.size() - 1; i++)
                 {
-                    str_waypoints += ret_place_Y.get(i) + "," + ret_place_X.get(i) + "|";
+                    str_waypoints += ret_place_Y.get(i).trim() + "," + ret_place_X.get(i).trim() + "|";
+                    Log.d("Meg",str_waypoints);
                 }
 
                 parameters = str_origin + "&" + str_dest + "&" + sensor + "&" +str_waypoints+"&"+mode;
@@ -402,7 +403,7 @@ public class roadplan_choose_mode extends AppCompatActivity implements AdapterVi
             URL = "http://maps.googleapis.com/maps/api/directions/json?"+parameters+"&language=zh-TW&alternatives=true";
         }else
         {
-            Toast.makeText(roadplan_choose_mode.this,"行程中的景點數量小於1",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(roadplan_choose_mode.this,"行程中的景點數量小於1",Toast.LENGTH_SHORT).show();
         }
         Log.d("TAG",URL);
         return URL;
@@ -434,7 +435,7 @@ public class roadplan_choose_mode extends AppCompatActivity implements AdapterVi
                     sb.append(line);
                 }
                 data = sb.toString();
-                Log.d("TAG", "DATA: "+data);
+                Log.d("TAGGG", "DATA: "+data);
                 br.close();
                 iStream.close();
                 urlConnection.disconnect();
@@ -458,7 +459,7 @@ public class roadplan_choose_mode extends AppCompatActivity implements AdapterVi
         {
             ArrayList<HashMap<String,String>> list = new ArrayList<HashMap<String,String>>();
             JSONObject jObject;
-            Log.d("TAG", "onPostExcute: " + result);
+            Log.d("TAGGG", "onPostExcute: " + result);
             json_String=result;
             switch (mode)
             {
@@ -529,7 +530,7 @@ public class roadplan_choose_mode extends AppCompatActivity implements AdapterVi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
-        Toast.makeText(roadplan_choose_mode.this, "您選的是第"+position+"個路線", Toast.LENGTH_LONG).show();
+       // Toast.makeText(roadplan_choose_mode.this, "您選的是第"+position+"個路線", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(roadplan_choose_mode.this, roadplan_choose_map.class);
         Bundle bundle = new Bundle();
         bundle.putString("json", json_String);

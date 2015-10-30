@@ -1,6 +1,7 @@
 package mis.tripioneer;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.GpsStatus;
 import android.location.Location;
@@ -39,6 +40,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -61,6 +63,7 @@ import java.util.List;
  */
 public class place_navi extends AppCompatActivity implements AdapterView.OnItemClickListener
 {
+    Marker loc_marker;
     final int DOWNLOAD_COMPLETE=1;
     final int LOCATION_GET=2;
     private static  String mode="";
@@ -361,7 +364,7 @@ public class place_navi extends AppCompatActivity implements AdapterView.OnItemC
                     downloadTask.execute(url);
                     ArrayList<LatLng> center = compareLatLng(ret_place_Y.get(0), ret_place_X.get(0), String.valueOf(lat), String.valueOf(lng));
                     LatLngBounds bounds = new LatLngBounds(center.get(1),center.get(0));
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 8));
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 8));
                 }
             }
         }
@@ -505,11 +508,15 @@ public class place_navi extends AppCompatActivity implements AdapterView.OnItemC
                 map.addMarker(dest_options);
                 Log.d("TAG", "marker");
 
+                if(loc_marker!=null)
+                {
+                    loc_marker.remove();
+                }
                 MarkerOptions pos_options = new MarkerOptions();
                 pos_options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 pos_options.position(pos);
                 pos_options.title("目前位置");
-                map.addMarker(pos_options);
+                loc_marker=map.addMarker(pos_options);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -517,6 +524,8 @@ public class place_navi extends AppCompatActivity implements AdapterView.OnItemC
             sum.setText(summary.get(0));
             dis_dur.setText(sep_distance.get(0) + "/" + sep_duration.get(0));
         }
+
+
     }
 
     private void getMap(String json) {

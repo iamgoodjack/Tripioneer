@@ -1,9 +1,16 @@
 package mis.tripioneer;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.GpsStatus;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -30,6 +37,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -63,6 +71,9 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
     private ArrayList<String> place_X;
     private ArrayList<String> place_Y;
     private ArrayList<String> place_Name;
+    private LocationManager locationMgr;
+    Marker loc_marker;
+
 
     String TITLES[] = {"推薦","訂閱","收藏庫","快選行程"};
     int ICONS[] = {R.drawable.ic_menu_recommand,R.drawable.ic_menu_channel,R.drawable.ic_menu_treasurebox,R.drawable.ic_ic_flag_black_32dp};
@@ -152,7 +163,8 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
         dis_dur=(TextView) findViewById(R.id.disdur);
         listView2= (ListView) findViewById(R.id.listView2);
         listView2.setOnItemClickListener(this);
-        Toast.makeText(roadplan_choose_map.this, "123", Toast.LENGTH_LONG).show();
+        //Toast.makeText(roadplan_choose_map.this, "123", Toast.LENGTH_LONG).show();
+        locationMgr=(LocationManager) getSystemService(LOCATION_SERVICE);
 
         Bundle bundle = this.getIntent().getExtras();
         json = bundle.getString("json");
@@ -165,6 +177,7 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
         place_Name = this.getIntent().getExtras().getStringArrayList("place_Name");
         orginLatlng = new LatLng(Double.parseDouble(place_Y.get(0)),Double.parseDouble(place_X.get(0)));
         destinationLatlng = new LatLng(Double.parseDouble(place_Y.get(place_Y.size()-1)),Double.parseDouble(place_X.get(place_X.size()-1))) ;
+        initProvider();
         for(int z=0;z<place_X.size();z++)
         {
             Log.d("TAG","z="+String.valueOf(z));
@@ -175,7 +188,7 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
         Log.d("TAG", "json:" + json);
         Log.d("TAG", "mode:" + mode);
         Log.d("TAG", "position:" + String.valueOf(position));
-        Toast.makeText(roadplan_choose_map.this, mode, Toast.LENGTH_LONG).show();
+        //Toast.makeText(roadplan_choose_map.this, mode, Toast.LENGTH_LONG).show();
         getMap(json, position);
         getPlan(json, position);
         drawPoint();
@@ -320,7 +333,11 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
 
         ArrayList<LatLng> center=compareLatLng(place_Y.get(0),place_X.get(0),place_Y.get(1),place_X.get(1));
         LatLngBounds bounds = new LatLngBounds(center.get(1),center.get(0));
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 15));
+
+       //map.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 15));
+ 
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 15));
+
     }
 
     private ArrayList<LatLng> compareLatLng(String a_Y , String a_X, String b_Y , String b_X )
@@ -453,11 +470,146 @@ public class roadplan_choose_map  extends AppCompatActivity implements AdapterVi
         map.addPolyline(lineOptions);
     }
 
+    private void updateWithNewLocation(Location location)
+    {
+        double lat=0,lng=0;
+        Log.d("TAG", "updateNewLocation");
+        String where = "";
+        if (location != null) {
+            //經度
+            lng = location.getLongitude();
+            //緯度
+            lat = location.getLatitude();
+            where = "經度: " + lng + "\n緯度: " + lat;
+            if(loc_marker!=null)
+            {
+                loc_marker.remove();
+            }
+            MarkerOptions o_option = new MarkerOptions();
+            Resources resources = this.getResources();
+            final int resourceId = resources.getIdentifier("ic_v3", "drawable",
+                this.getPackageName());
+            o_option.icon(BitmapDescriptorFactory.fromResource(resourceId));
+            o_option.position(new LatLng(lat, lng));
+            Log.d("TAG", "now place");
+            o_option.title("目前位置");
+        loc_marker = map.addMarker(o_option);
+        } else {
+            where = "No location found.";
+        }
+        Log.d("TAG", where);
+    }
 
+    public void initProvider()
+    {
+        int minTime = 5000;//ms
+        int minDist = 1000;//meter
+        Log.d("TAG", "iniProvider");
+        if(!locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            Log.d("TAG","!locmgr GPS");
+           // Toast.makeText(roadplan_choose_map.this, "請開啟GPS定位功能並重啟此APP", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        }
+        if(locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            Log.d("TAG","locmgr GPS");
+            locationMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,minTime,minDist,locationListener);
+            locationMgr.addGpsStatusListener(gpsListener);
+            locationMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, locationListener);
+            //Toast.makeText(roadplan_choose_map.this, "provider:gps", Toast.LENGTH_SHORT).show();
+        }
+        else if (locationMgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+        {
+            Log.d("TAG","locmgr network");
+            //Toast.makeText(roadplan_choose_map.this, "provider:network", Toast.LENGTH_SHORT).show();
+            locationMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, locationListener);
+        }else
+        {
+            //Toast.makeText(roadplan_choose_map.this, "請開啟定位功能:", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        }
+    }
 
+    LocationListener locationListener = new LocationListener()
+    {
+        @Override
+        public void onLocationChanged(Location location) {
+            updateWithNewLocation(location);
+            Log.d("TAG", "onLocationChanged");
+            //Toast.makeText(roadplan_choose_map.this, "onLocationChanged", Toast.LENGTH_SHORT).show();
+        }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Log.d("TAG", "onProviderDisabled");
+               // Toast.makeText(roadplan_choose_map.this, "定位提供者關閉，請重啟", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                Log.d("TAG", "onProviderEnabled");
+                //Toast.makeText(roadplan_choose_map.this, "onProviderEnabled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                switch (status) {
+                    case LocationProvider.OUT_OF_SERVICE:
+                        Log.d("Jenny", "Status Changed: Out of Service");
+                        //Toast.makeText(roadplan_choose_map.this, "Status Changed: Out of Service", Toast.LENGTH_SHORT).show();
+                        break;
+                    case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                        Log.d("Jenny", "Status Changed: Temporarily Unavailable");
+                       // Toast.makeText(roadplan_choose_map.this, "Status Changed: Temporarily Unavailable", Toast.LENGTH_SHORT).show();
+                        break;
+                    case LocationProvider.AVAILABLE:
+                        Log.d("Jenny", "Status Changed: Available");
+                       // Toast.makeText(roadplan_choose_map.this, "Status Changed: Available", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        };
+        GpsStatus.Listener gpsListener = new GpsStatus.Listener() {
+            @Override
+            public void onGpsStatusChanged(int event) {
+                switch (event) {
+                    case GpsStatus.GPS_EVENT_STARTED:
+                        Log.d("penny", "GPS_EVENT_STARTED");
+                       // Toast.makeText(roadplan_choose_map.this, "GPS_EVENT_STARTED", Toast.LENGTH_SHORT).show();
+                        break;
+                    case GpsStatus.GPS_EVENT_STOPPED:
+                        Log.d("penny", "GPS_EVENT_STOPPED");
+                       // Toast.makeText(roadplan_choose_map.this, "GPS_EVENT_STOPPED", Toast.LENGTH_SHORT).show();
+                        break;
+                    case GpsStatus.GPS_EVENT_FIRST_FIX:
+                        Log.d("penny", "GPS_EVENT_FIRST_FIX");
+                       // Toast.makeText(roadplan_choose_map.this, "GPS_EVENT_FIRST_FIX", Toast.LENGTH_SHORT).show();
+                        break;
+                    case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+                        Log.d("penny", "GPS_EVENT_SATELLITE_STATUS");
+                        break;
+                }
+            }
+        };
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }
+
+    protected void onPause() {
+        Log.d("TAG", "onpause");
+        locationMgr.removeUpdates(locationListener);
+        locationMgr.removeGpsStatusListener(gpsListener);
+        super.onPause();
+    }
+
+    protected void onResume()
+    {
+        super.onResume();
+        initProvider();
+        Log.d("TAG", "onResume");
+    }
+
 }
